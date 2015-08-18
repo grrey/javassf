@@ -1,0 +1,14 @@
+{Rows:[
+   <#list p.content as board>
+   {
+     "id":"${board.id}",
+     "title":"${board.title!?html}",
+     "name":"${board.name!?html}",
+     "mobile":"${board.mobile!?html}",
+     "email":"${board.email!}",
+     "show":"${board.show?string("<span style='color:blue'>公开</span>","<span style='color:red'>不公开</span>")}",
+     "createTime":"${board.createTime!?string('yyyy-MM-dd HH:mm:ss')}"
+   }<#if board_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

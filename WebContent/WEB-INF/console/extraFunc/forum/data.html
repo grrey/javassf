@@ -1,0 +1,14 @@
+{Rows:[
+   <#list p.content as forum>
+   {
+     "id":"${forum.id}",
+     "name":"<a id='forum${forum.id!}' href='${forum.url!}' target='_blank'>${forum.name!}</a>",
+     "priority":"${forum.priority!}",
+     "themeTotal":"${forum.themeTotal!}",
+     "replyTotal":"${forum.replyTotal!}",
+     "themeToday":"${forum.themeToday!}",
+     "replyToday":"${forum.replyToday!}"
+   }<#if forum_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

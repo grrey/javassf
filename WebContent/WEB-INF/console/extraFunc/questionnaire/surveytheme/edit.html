@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../../liger.html"/>
+<script language="javascript">
+var l = 4;
+$(function (){
+	$("#questionnaireForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+	
+	if($("input[name='surveyType']:checked").val()==1){
+	    $("tr[id^='sel']").show();
+	    $("#fillin1").hide();
+	}else{
+		$("tr[id^='sel']").hide();
+	    $("#fillin1").show();
+	}
+});
+
+function showdm(){
+	if($("input[name='surveyType']:checked").val()==1){
+	    $("tr[id^='sel']").show();
+	    $("#fillin1").hide();
+	}else{
+		$("tr[id^='sel']").hide();
+	    $("#fillin1").show();
+	}
+}
+
+function addItem(){
+	$("#itemsContent").append($.format($("#itemsAdd").html(),l++));
+}
+</script>
+</head>
+<body>
+<div class="blk c">
+	<h2>问卷调查管理/修改</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="questionnaireForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>调查名称：</td>
+              <td colspan="3">
+              <input name="title" type="text" id="title" size="25" value="${surveyTheme.title!}" vld="{required:true,maxlength:50,messages:{required:'问卷名称不能为空!',maxlength:$.format('问卷名称长度不能超过{0}!')}}"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>调查类型：</td>
+              <td colspan="3">
+                <input type="radio" name="surveyType" value="1" onclick="showdm()" <#if surveyTheme.surveyType==1>checked="checked"</#if>/>选择类&nbsp;
+                <input type="radio" name="surveyType" value="2" onclick="showdm()" <#if surveyTheme.surveyType==2>checked="checked"</#if>/>填写类
+              </td>
+            </tr>
+            <tr id="sel1">
+              <td class="ftit">最大可选数：</td>
+              <td>
+              <input type="text" name="totalCount" id="totalCount" value="${surveyTheme.totalCount!}"/>
+              </td>
+              <td class="ftit">显示形式：</td>
+              <td>
+              <select name="showType1">
+                <option value="1" <#if surveyTheme.showType==1>selected="selected"</#if>>单复选框显示</option>
+                <option value="2" <#if surveyTheme.showType==2>selected="selected"</#if>>下拉框显示</option>
+              </select>
+              </td>
+            </tr>
+            <tr id="sel2">
+              <td class="ftit">选项：</td>
+              <td colspan="3">
+              <div id="itemsContent">
+				<#list surveyTheme.items as item>
+				<div class="items">
+				标题: <input type="text" name="names" style="width:300px" value="${item.name!}"/>
+				&nbsp; 票数: <input type="text" name="votes" style="width:50px" value="${item.votes!}"/>
+				&nbsp; 排序: <input type="text" name="prioritys" style="width:30px" value="${item.priority!}"/>
+				&nbsp; <a href="javascript:void(0);" onclick="$(this).parent().remove();"><img src="${base}/skin/sys/img/admin/del.gif"/></a>
+				</div>
+				</#list>
+			  </div>
+			  <li><input type="button" name="addLine" value="添加选项" onclick="addItem()" class="l-button"/></li>
+              </td>
+            </tr>
+            <tr id="fillin1" style="display:none">
+              <td class="ftit">最大字数：</td>
+              <td>
+              <input type="text" name="maxlength" size="25" id="maxlength" value="${surveyTheme.maxlength!}"/>
+              </td>
+              <td class="ftit">显示形式：</td>
+              <td>
+              <select name="showType2">
+                <option value="4" <#if surveyTheme.showType==4>selected="selected"</#if>>下划线显示</option>
+                <option value="3" <#if surveyTheme.showType==3>selected="selected"</#if>>普通输入框显示</option>
+                <option value="5" <#if surveyTheme.showType==5>selected="selected"</#if>>文本区域显示</option>
+              </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">排序：</td>
+              <td colspan="3">
+              <input type="text" name="priority" size="25" id="priority" value="${surveyTheme.priority!}"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <input type="hidden" name="id" value="${surveyTheme.id!}"/>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+
+<div style="display:none" id="itemsAdd">
+<div class="items">
+标题: <input type="text" name="names" style="width:300px"/>
+&nbsp; 票数: <input type="text" name="votes" value="0" style="width:50px"/>
+&nbsp; 排序: <input type="text" name="prioritys" style="width:30px"/>
+&nbsp; <a href="javascript:void(0);" onclick="$(this).parent().remove();"><img src="${base}/skin/sys/img/admin/del.gif"/></a>
+</div>
+</div>
+</body>
+</html>

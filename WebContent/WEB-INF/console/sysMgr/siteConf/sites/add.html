@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../../liger.html"/>
+<script language="javascript">
+var setting = {
+		async : {enable : true,url : "../depart/v_chnltree.do",type:"get"},
+		check: {enable: true}
+};
+$(function (){
+	$("#siteForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+	
+});
+
+var art1;
+var ztree = null;
+
+function showChannel(){
+	art1 = $.dialog({
+		title : '选择栏目:',
+		content : $('#channelTree').html(),
+		padding : "0px 0px",
+		ok:function(){addids();art1.hide();}
+	});
+	ztree = $.fn.zTree.init($("#tree1"), setting);
+}
+
+function addids(){
+	var nodes = ztree.getCheckedNodes(true);
+	var str = "";
+	for(var i=0;i<nodes.length;i++){
+		if(nodes[i].id!=null){
+		    str += "<input type='hidden' name='channelIds' value='" +nodes[i].id+ "'/>";
+		}
+	}
+	$("#allids").empty().append(str);
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>子站添加</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="siteForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>站点名称：</td>
+              <td><input name="name" type="text" id="name" vld="{required:true,messages:{required:'站点名称不能为空!'}}"/></td>
+              <td class="ftit">站点简称：</td>              
+              <td><input name="shortName" type="text" id="shortName"/></td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>站点域名：</td>
+              <td><input name="domain" type="text" id="domain" vld="{required:true,messages:{required:'站点域名不能为空!'}}"/></td>
+              <td class="ftit"><span>*</span>资源路径：</td>              
+              <td><input name="path" type="text" id="path" vld="{required:true,messages:{required:'站点资源不能为空!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">部署路径：</td>
+              <td><ul class="items"><li class="t2"><input name="contextPath" type="text" id="contextPath" /></li></ul></td>
+              <td class="ftit">端口：</td>              
+              <td><ul class="items"><li class="t2"><input name="port" type="text" id="port" vld="{digits:true,messages:{digits:'端口号必须为数字!'}}"/></li></ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">站点风格：</td>
+              <td><ul class="items"><li class="t2"><input name="tplStyle" type="text" id="tplStyle"/></li></ul></td>
+              <td class="ftit">静态页后缀：</td>
+              <td><ul class="items">
+              <input id="staticSuffix_0" type="radio" name="staticSuffix" value="1" checked="checked"/><label for="staticSuffix_0">有</label> 
+              <input id="staticSuffix_1" type="radio" name="staticSuffix" value="0"/><label for="staticSuffix_1">无</label>
+              </ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">栏目静态页方案：</td>              
+              <td><ul class="items">
+              <input id="staticChannel_0" type="radio" name="staticChannel" value="0"/><label for="staticChannel_0">全部不生成</label> 
+              <input id="staticChannel_1" type="radio" name="staticChannel" value="1" checked="checked"/><label for="staticChannel_1">全部生成</label>
+              <input id="staticChannel_2" type="radio" name="staticChannel" value="2"/><label for="staticChannel_2">按照栏目设置</label>
+              </ul></td>
+              <td class="ftit">内容静态页方案：</td>              
+              <td><ul class="items">
+              <input id="staticDoc_0" type="radio" name="staticDoc" value="0"/><label for="staticDoc_0">全部不生成</label> 
+              <input id="staticDoc_1" type="radio" name="staticDoc" value="1" checked="checked"/><label for="staticDoc_1">全部生成</label>
+              <input id="staticDoc_2" type="radio" name="staticDoc" value="2"/><label for="staticDoc_2">按照栏目设置</label>
+              </ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">栏目拷贝：</td>
+              <td colspan="3">
+              <li><input type="button" name="copyChannel" value="选择栏目" onclick="showChannel();" class="l-button"/></li>
+              <div style="display:none;" id="allids"></div>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">SEO标题：</td>
+              <td colspan="3"><ul class="items"><li class="t2"><input name="title" type="text" id="title" size="70" maxlength="100"/></li></ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">SEO关键字：</td>
+              <td colspan="3"><ul class="items"><li class="t2"><input name="keywords" type="text" id="keywords" size="70" maxlength="100"/></li></ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">SEO描述：</td>
+              <td colspan="3">
+               <ul class="items">
+               <li class="t2">
+               <textarea cols="70" rows="5" name="description" maxlength="255"></textarea>
+               </li>
+               </ul>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:sites:save">
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+
+<div id="channelTree" class="menuContent" style="display:none; width:260px; position:absolute; background:#fff; border:1px solid #ccc;">
+<ul id="tree1" class="ztree" style="height:180px;width:210px;overflow-y:scroll;">
+</ul>
+</div>
+</body>
+</html>

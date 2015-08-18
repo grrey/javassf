@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+var inter;
+var art;
+function createProgress() {
+	$.post("o_backup_progress.do",{},function(data){
+		if(data.tablename!=""){
+			$("#progress").html("正在备份表："+data.tablename);
+			$(".progress_bar").animate({width:data.percent},100);
+			$('.progress_bar').attr("title",data.percent);
+		}else{
+			$("#progress").html("备份完成！");
+			window.clearInterval(inter);
+			art.close();
+		}
+	},"json");
+}
+
+function beginBackup() {
+	$.post("o_backup.do",{},function(data){
+		if(data.status==1){
+			inter=window.setInterval("createProgress()",100);
+			art = $.dialog({title:'进度条',content:$('#backprogress').html(),padding:10,lock: true});
+		}
+	},"json");
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>数据库备份/手动备份</h2>
+	<div class="c">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:dbconfig:oexp">
+                <input type="button" value="备份" class="l-button" onclick="beginBackup()"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+	</div>
+</div>
+
+<div id="backprogress" style="display:none">
+	<div class="progress_container"><div class="progress_bar tip" title="0%"></div></div>
+	<div id="progress"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+	<section class="top-search-wrap s b">
+		<h1><a href="${base}/">javassf资讯门户网</a></h1>
+        <div class="top-search fr">
+			<div id="search">
+				<form action="${base}/query.jsp" name="search" id="search" method="post" onsubmit="return checkval();">
+                    <div id="search">
+                        <div class="bar">
+                            <div class="item" id="item"> <span>新闻</span>
+                                <ul>
+                                    [@ModelList]
+                                    [#assign mId1 = list[0].id]
+                                    [#list list as model]
+                                    <li id="model${model.id}">${model.name!}</li>
+                                    [/#list]
+                                    [/@ModelList]
+                                </ul>
+                            </div>
+                            <div class="sText"><input type="text" value="请输入关键词" onfocus="if(this.value=='请输入关键词')this.value=''" onblur="if(this.value=='')this.value='请输入关键词'" autocomplete="off" name="q"/></div>
+                        </div>
+                        <input type="hidden" name="mId" id="mId" value="${mId1!}"/>
+                        <div class="sSubmit"><input type="submit" value=""/></div>
+                    </div>
+                </form>
+            </div>
+		</div>
+    </section>

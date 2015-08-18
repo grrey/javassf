@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>文档列表</title>
+<#include "../../liger.html"/>
+<script type="text/javascript">
+var grid = null;
+var m = false;
+var d = false;
+var docId = null;
+var t = 0;
+<#assign add = false>
+<#assign modify = false>
+<#assign del = false>
+<#assign cycle = false>
+<#assign reduct = false>
+<#assign check = false>
+<#assign commentlist = false>
+<@Perm perm="admin:doc:add">
+<#assign add = true>
+</@Perm>
+<@Perm perm="admin:doc:edit">
+<#assign modify = true>
+</@Perm>
+<@Perm perm="admin:doc:delete">
+<#assign del = true>
+</@Perm>
+<@Perm perm="admin:doc:cycle">
+<#assign cycle = true>
+</@Perm>
+<@Perm perm="admin:doc:reduct">
+<#assign reduct = true>
+</@Perm>
+<@Perm perm="admin:doc:check">
+<#assign check = true>
+</@Perm>
+<@Perm perm="admin:comment:list">
+<#assign commentlist = true>
+</@Perm>
+$(function () {
+ grid = $("#maingrid").ligerGrid({
+	columns : [ {
+		display : "ID",
+		name : "id",
+		width : 45
+	},{
+		display : "文档标题",
+		name : "title",
+		width : 450,
+		align : "left"
+	},{
+		display : "文档类型",
+		name : "style",
+		width : 150
+	},{
+		display : "录入员",
+		name : "inputUser",
+		width : 150,
+		isSort : false
+	},{
+		display : "状态",
+		name : "status",
+		width : 70
+	},{
+		display : "录入时间",
+		name : "releaseDate",
+		width : 150
+	}],
+	dataAction : 'server',
+	pageSize : 15,
+	pageSizeOptions : [10,15,20,25,30],
+	toolbar : {},
+	url : '../doc/jsonData.do',
+	parms : [{name:"chnlId",value:"${chnlId!}"}],
+	width : '100%',
+	height : '100%',
+	rowHeight: 25,
+	headerRowHeight:27,
+	checkbox : true,
+	selectRowButtonOnly:true
+ });
+ 
+ var menu = $.ligerMenu({ top: 100, left: 100, width: 120, items:
+     [<#list modelList as model>
+      { id:'${model.id!}',text: '${model.name!}',click: addChannel,icon:'${model.modelIcon!}' }<#if model_has_next>,</#if>
+      </#list>
+     ]
+ });
+ 
+ var menuc = null;
+ 
+ <#if !del&&!cycle>
+ var menud = null;
+ <#else>
+ <#assign first = true>
+ var menud = $.ligerMenu({ top: 100, left: 100, width: 160, items:
+	    [<#if del><#assign first = false>
+	     { id:'delete',text: '删除文档',click: f_delete,icon:'delete' }</#if><#if cycle><#if !first>,</#if>
+	     { id:'cycle',text: '放入回收站',click: f_cycle,icon:'calendar' }</#if>
+	    ]
+ });
+ </#if>
+ 
+ <#if !del&&!add&&!modify>
+ var items = null;
+ <#else>
+ <#assign first = true>
+ var items = [<#if add><#assign first = false>{click: toolbarBtnItemClick,text: '新增',id:'add',icon:'add'}</#if><#if modify><#if !first>,<#else><#assign first = false></#if>
+              {click: toolbarBtnItemClick,text: '修改',id:'modify',icon:'modify'}</#if><#if del><#if !first>,</#if>
+              {click: toolbarBtnItemClick,text: '删除',id:'delete',icon:'delete'}</#if>];
+ </#if>
+ 
+ grid.toolbarManager.set('items', items);
+ 
+//工具条事件
+ function toolbarBtnItemClick(item) {
+     switch (item.id) {
+         case "add":
+        	 m = true;
+             break;
+         case "modify":
+             var selected = grid.getSelected();
+             if (!selected) { $.ligerDialog.error("请选择要修改的文档!"); return }
+             closeall();
+             top.f_addTab("modifyDoc", '修改文档信息', 'doc/v_edit.do?id=' + selected.id);
+             break;
+         case "delete":
+        	 var selected = grid.getCheckedRows();
+        	 if (selected!=null&&selected.length>0) {
+        		 d = true;
+             }else{
+        		 $.ligerDialog.error("请选择要删除的文档!");
+        	 }
+             break;
+     }
+ };
+ 
+ $(document).bind("click", function (e){
+	 if(m){
+	     menu.show({ top: e.pageY, left: e.pageX });
+	 }
+	 if(d){
+		 t = 0;
+		 menud.show({ top: e.pageY, left: e.pageX });
+	 }
+	 if(m||d){
+		 m = false;
+		 d = false;
+		 return false;
+	 }
+ });
+ 
+ <#if modify>
+ grid.bind('dblClickRow', function (rowdata, rowindex, rowDomElement){
+	 closeall();
+	 top.f_addTab("modifyDoc", '修改文档信息', 'doc/v_edit.do?id=' + rowdata.id);
+ });
+ </#if>
+ 
+ grid.bind('contextmenu', function (parm, e){
+	 docId = parm.data.id;
+	 closeall();
+	 t = 1;
+	 menuc = $.ligerMenu({ top: 100, left: 100, width: 160});
+	 if(parm.data.status1==3){
+		 <#if reduct>
+		 menuc.addItem({ id:'reduct',text: '还原文档',click: docReduct,icon:'back' });
+		 </#if>
+		 <#if del>
+		 menuc.addItem({ id:'docDel',text: '删除文档',click: f_delete,icon:'delete' });
+		 </#if>
+	 }else{
+		 <#if check>
+		 if(parm.data.status1==2){
+			 menuc.addItem({ id:'docCheck',text: '取消审核',click: docCheck,icon:'config' });
+		 }else{
+			 menuc.addItem({ id:'docCheck',text: '审核',click: docCheck,icon:'config' });
+		 }
+		 </#if>
+		 <#if cycle>
+		 menuc.addItem({ id:'docCycle',text: '放入回收站',click: f_cycle,icon:'calendar'});
+		 </#if>
+		 <#if del>
+		 menuc.addItem({ id:'docDel',text: '删除',click: f_delete,icon:'delete' });
+		 </#if>
+		 <#if commentlist>
+		 menuc.addItem({ id:'commentList',text: '查看评论',click: showComment,icon:'comment' });
+		 </#if>
+	 }
+	 menuc.show({ top: e.pageY, left: e.pageX });
+	 return false;
+ });
+ 
+ function f_reload() {
+     grid.loadData();
+ };
+ 
+ function showComment(item){
+	 closeall();
+	 top.f_addTab("commentMgr", '评论管理', 'comment/v_list.do?docId=' + docId);
+ }
+ 
+ function addChannel(item){
+	 closeall();
+	 <#if chnlId??>
+	 top.f_addTab("addArticle", '添加文档', 'doc/v_add.do?modelId=' + item.id +'&cid='+${chnlId!});
+	 <#else>
+	 top.f_addTab("addArticle", '添加文档', 'doc/v_add.do?modelId=' + item.id);
+	 </#if>
+ }
+ 
+ function docCheck(item){
+	 closeall();
+	 jQuery.ligerDialog.confirm('确定审核吗?', function (confirm) {
+        if (confirm){
+       	 var ids = [];
+         ids[0] = docId;
+       	 JP.ajax({
+                url: '../doc/o_check.do',
+                loading: '正在审核中...',
+                data: { ids: ids },
+                success: function () {
+               	 f_reload();
+                },
+                error: function () {
+               	 $.ligerDialog.error("审核文档失败!");
+                }
+            });
+        }
+    });
+ }
+ 
+ function docReduct(){
+	 closeall();
+	 jQuery.ligerDialog.confirm('确定要还原文档吗?', function (confirm) {
+        if (confirm){
+       	 var ids = [];
+         ids[0] = docId;
+       	 JP.ajax({
+                url: '../doc/o_ajax_reduct.do',
+                loading: '正在还原中...',
+                data: { ids: ids },
+                success: function () {
+               	 f_reload();
+                },
+                error: function () {
+               	   $.ligerDialog.error("文档还原失败!");
+                }
+            });
+        }
+    });
+ }
+ 
+ function f_delete() {
+	 closeall();
+	 jQuery.ligerDialog.confirm('确定删除吗?', function (confirm) {
+     if (confirm){
+     var selected = grid.getCheckedRows();
+     var ids = [];
+     if(t==0){
+         for(var i=0;i<selected.length;i++){
+        	 ids[i] = selected[i].id;
+         }
+     }else{
+    	 ids[0] = docId;
+     }
+     JP.ajax({
+         url: '../doc/o_ajax_delete.do',
+         loading: '正在删除中...',
+         data: { ids: ids },
+         success: function () {
+        	 f_reload();
+         },
+         error: function () {
+        	 $.ligerDialog.error("删除文档失败!");
+         }
+     });
+     }
+     });
+ };
+ 
+ function f_cycle() {
+	 closeall();
+	 jQuery.ligerDialog.confirm('确定要放入回收站吗?', function (confirm) {
+	 if (confirm){
+     var selected = grid.getCheckedRows();
+     var ids = [];
+	 if(t==0){
+         for(var i=0;i<selected.length;i++){
+        	 ids[i] = selected[i].id;
+         }
+     }else{
+    	 ids[0] = docId;
+     }
+     JP.ajax({
+         url: '../doc/o_ajax_cycle.do',
+         loading: '正放入回收站中...',
+         data: { ids: ids },
+         success: function () {
+        	 f_reload();
+         },
+         error: function () {
+        	 $.ligerDialog.error("放入回收站失败!");
+         }
+     });
+	 }
+     });
+ };
+ 
+ function closeall(){
+	 if(menu!=null){
+		menu.hide();
+	 }
+	 if(menud!=null){
+	    menud.hide();
+	 }
+	 if(menuc!=null){
+	    menuc.hide();
+	 }
+ }
+ 
+ <#if msg??>
+ $.ligerDialog.success('${msg}');
+ </#if>
+ 
+});
+
+function f_search() {
+	 var title = $("#title").val();
+	 var parms = new Array();
+	 var m = 0;
+	 parms[0] = {name:"title",value:title};
+	 $(":checkbox[name='statuss']:checked").each(function(i){
+		 m++;
+		 parms[i+1] = {name:"status",value:$(this).val()};
+	 });
+	 $(":checkbox[name='typeIds']:checked").each(function(i){
+		 m++;
+		 parms[m] = {name:"typeIds",value:$(this).val()};
+	 });
+	 $(":checkbox[name='modelIds']:checked").each(function(i){
+		 m++;
+		 parms[m] = {name:"modelIds",value:$(this).val()};
+	 });
+	 parms[m+1] = {name:"top",value:$("#topval").val()};
+	 parms[m+2] = {name:"recommend",value:$("#recval").val()};
+	 if($(":radio[name='docchnl']:checked").val()!=""){
+		 parms[m+3] = {name:"chnlId",value:$(":radio[name='docchnl']:checked").val()};
+	 }
+	 grid.set('parms', parms);
+	 grid.set('newPage',1);
+	 grid.loadData();
+}
+</script>
+</head>
+<body style="padding:2px;overflow:hidden;">
+<div id="mainsearch">
+    <div class="searchtitle">
+        <span>搜索</span><img src="${base}/skin/sys/img/admin/searchtool.gif" />
+        <div class="togglebtn"></div>
+    </div>
+    <div class="searchbox">
+    	<form id="formsearch">
+    	<ul class="sform">
+    	<li class="t">文档标题：</li>
+    	<li><input type="text" name="title" id="title"/></li>
+    	<li class="t">文档状态：</li>
+    	<li>
+    	   <input type="checkbox" name="statuss" value="2"/>已审核
+    	   <input type="checkbox" name="statuss" value="1"/>未审核
+    	   <input type="checkbox" name="statuss" value="3"/>回收站
+        </li>
+        <li class="t">文档类型：</li>
+    	<li>
+    	   <#list typeList as type>
+    	   <input type="checkbox" name="typeIds" value="${type.id}"/>${type.name!}
+           </#list>
+        </li>
+        </ul>
+        <ul class="sform">
+        <li class="t">文档栏目：</li>
+    	<li>
+    	   <input type="radio" name="docchnl" value="" checked="checked"/>所有栏目
+    	   <input type="radio" name="docchnl" value="${chnlId!}"/>当前栏目
+        </li>
+        <li class="t">文档属性：</li>
+    	<li>
+    	   <input type="checkbox" name="top" value="1" onclick="$('#topval').val(this.checked)"/>置顶<input type="hidden" id="topval" value="false"/>
+    	   <input type="checkbox" name="recommend" id="recommend" value="1" onclick="$('#recval').val(this.checked)"/>推荐<input type="hidden" id="recval" value="false"/>
+        </li>
+        <li class="t">文档模型：</li>
+    	<li>
+    	   <#list allModel as model>
+    	   <input type="checkbox" name="modelIds" value="${model.id}"/>${model.name!}
+    	   </#list>
+        </li>
+        <li><input type="button" name="search" value="搜索" onclick="f_search();" class="l-button"/></li>
+        </ul>
+        </form>
+    </div>
+</div>
+<div id="maingrid" style="margin:5px;overflow:hidden;"></div>
+</body>
+</html>

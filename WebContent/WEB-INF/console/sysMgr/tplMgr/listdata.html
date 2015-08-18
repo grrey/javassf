@@ -1,0 +1,14 @@
+{Rows:[
+   <#list list as tpl>
+   {
+     "name" : "${tpl.name!}",
+     "nameurl" : "${tpl.name!?url}",
+     "directory" : "${tpl.directory?string('true','false')}",
+     "fileimg" : "<img src='${base}/skin/comm/img/file/${tpl.directory?string("folder","html")}.gif' style='padding-top:3px;'/>",
+     "filename":"${tpl.filename}",
+     "filesize":"${tpl.size} KB",
+     "modifytime":"${tpl.lastModifiedDate?string('yyyy-MM-dd HH:mm:ss')}"
+   }<#if tpl_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

@@ -1,0 +1,1337 @@
+<script language="javascript">
+var znodes = [{id:"admin:workspace:index,admin:workspace:right",name:"所有权限",open:true
+		      <#if perms??&&perms?seq_contains("admin:workspace:index")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workspace:mgr",name:"我的工作台",pId:"admin:workspace:index,admin:workspace:right"
+		      <#if perms??&&perms?seq_contains("admin:workspace:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workspace:infoopt",name:"个人资料",pId:"admin:workspace:mgr"
+		      <#if perms??&&perms?seq_contains("admin:workspace:infoopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workspace:info",name:"查看",pId:"admin:workspace:infoopt"
+		      <#if perms??&&perms?seq_contains("admin:workspace:info")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workspace:infoupdate",name:"提交",pId:"admin:workspace:infoopt"
+		      <#if perms??&&perms?seq_contains("admin:workspace:infoupdate")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workspace:passopt",name:"修改密码",pId:"admin:workspace:mgr"
+		      <#if perms??&&perms?seq_contains("admin:workspace:passopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workspace:passedit",name:"查看",pId:"admin:workspace:passopt"
+		      <#if perms??&&perms?seq_contains("admin:workspace:passedit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workspace:passupdate",name:"提交",pId:"admin:workspace:passopt"
+		      <#if perms??&&perms?seq_contains("admin:workspace:passupdate")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doccenter",name:"文档中心",pId:"admin:workspace:index,admin:workspace:right"
+		      <#if perms??&&perms?seq_contains("admin:doccenter")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:mgr",name:"栏目管理",pId:"admin:doccenter"
+		      <#if perms??&&perms?seq_contains("admin:channel:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:addopt",name:"添加",pId:"admin:channel:mgr"
+		      <#if perms??&&perms?seq_contains("admin:channel:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:add",name:"查看",pId:"admin:channel:addopt"
+		      <#if perms??&&perms?seq_contains("admin:channel:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:save",name:"提交",pId:"admin:channel:addopt"
+		      <#if perms??&&perms?seq_contains("admin:channel:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:editopt",name:"修改",pId:"admin:channel:mgr"
+		      <#if perms??&&perms?seq_contains("admin:channel:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:edit",name:"查看",pId:"admin:channel:editopt"
+		      <#if perms??&&perms?seq_contains("admin:channel:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:update",name:"提交",pId:"admin:channel:editopt"
+		      <#if perms??&&perms?seq_contains("admin:channel:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:list",name:"列表",pId:"admin:channel:mgr"
+		      <#if perms??&&perms?seq_contains("admin:channel:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:priority",name:"排序",pId:"admin:channel:mgr"
+		      <#if perms??&&perms?seq_contains("admin:channel:priority")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:channel:delete",name:"删除",pId:"admin:channel:mgr"
+		      <#if perms??&&perms?seq_contains("admin:channel:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:mgr",name:"文档管理",pId:"admin:doccenter"
+		      <#if perms??&&perms?seq_contains("admin:doc:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:addopt",name:"添加",pId:"admin:doc:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doc:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:add",name:"查看",pId:"admin:doc:addopt"
+		      <#if perms??&&perms?seq_contains("admin:doc:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:save",name:"提交",pId:"admin:doc:addopt"
+		      <#if perms??&&perms?seq_contains("admin:doc:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:editopt",name:"修改",pId:"admin:doc:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doc:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:edit",name:"查看",pId:"admin:doc:editopt"
+		      <#if perms??&&perms?seq_contains("admin:doc:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:update",name:"提交",pId:"admin:doc:editopt"
+		      <#if perms??&&perms?seq_contains("admin:doc:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:list",name:"列表",pId:"admin:doc:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doc:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:delete",name:"删除",pId:"admin:doc:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doc:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:cycle",name:"放入回收站",pId:"admin:doc:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doc:cycle")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:reduct",name:"还原",pId:"admin:doc:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doc:reduct")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:check",name:"审核",pId:"admin:doc:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doc:check")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:move",name:"移动",pId:"admin:doc:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doc:move")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doc:empty",name:"清空",pId:"admin:doc:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doc:empty")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:docconfig,admin:model:mgr",name:"模型管理",pId:"admin:doccenter"
+		      <#if perms??&&perms?seq_contains("admin:model:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:model:addopt",name:"添加",pId:"admin:docconfig,admin:model:mgr"
+		      <#if perms??&&perms?seq_contains("admin:model:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:model:add",name:"查看",pId:"admin:model:addopt"
+		      <#if perms??&&perms?seq_contains("admin:model:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:model:save",name:"提交",pId:"admin:model:addopt"
+		      <#if perms??&&perms?seq_contains("admin:model:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:model:editopt",name:"修改",pId:"admin:docconfig,admin:model:mgr"
+		      <#if perms??&&perms?seq_contains("admin:model:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:model:edit",name:"查看",pId:"admin:model:editopt"
+		      <#if perms??&&perms?seq_contains("admin:model:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:model:update",name:"提交",pId:"admin:model:editopt"
+		      <#if perms??&&perms?seq_contains("admin:model:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:model:list",name:"列表",pId:"admin:docconfig,admin:model:mgr"
+		      <#if perms??&&perms?seq_contains("admin:model:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:model:delete",name:"删除",pId:"admin:docconfig,admin:model:mgr"
+		      <#if perms??&&perms?seq_contains("admin:model:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:mgr",name:"模型字段管理",pId:"admin:docconfig,admin:model:mgr"
+		      <#if perms??&&perms?seq_contains("admin:field:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:addopt",name:"添加",pId:"admin:field:mgr"
+		      <#if perms??&&perms?seq_contains("admin:field:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:add",name:"查看",pId:"admin:field:addopt"
+		      <#if perms??&&perms?seq_contains("admin:field:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:save",name:"提交",pId:"admin:field:addopt"
+		      <#if perms??&&perms?seq_contains("admin:field:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:editopt",name:"修改",pId:"admin:field:mgr"
+		      <#if perms??&&perms?seq_contains("admin:field:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:edit",name:"查看",pId:"admin:field:editopt"
+		      <#if perms??&&perms?seq_contains("admin:field:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:update",name:"提交",pId:"admin:field:editopt"
+		      <#if perms??&&perms?seq_contains("admin:field:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:list",name:"列表",pId:"admin:field:mgr"
+		      <#if perms??&&perms?seq_contains("admin:field:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:priority",name:"排序",pId:"admin:field:mgr"
+		      <#if perms??&&perms?seq_contains("admin:field:priority")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:single,admin:field:show",name:"布局",pId:"admin:field:mgr"
+		      <#if perms??&&perms?seq_contains("admin:field:single")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:field:delete",name:"删除",pId:"admin:field:mgr"
+		      <#if perms??&&perms?seq_contains("admin:field:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:docconfig,admin:doctype:mgr",name:"文档类型管理",pId:"admin:doccenter"
+		      <#if perms??&&perms?seq_contains("admin:doctype:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doctype:addopt",name:"添加",pId:"admin:docconfig,admin:doctype:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doctype:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doctype:add",name:"查看",pId:"admin:doctype:addopt"
+		      <#if perms??&&perms?seq_contains("admin:doctype:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doctype:save",name:"提交",pId:"admin:doctype:addopt"
+		      <#if perms??&&perms?seq_contains("admin:doctype:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doctype:editopt",name:"修改",pId:"admin:docconfig,admin:doctype:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doctype:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doctype:edit",name:"查看",pId:"admin:doctype:editopt"
+		      <#if perms??&&perms?seq_contains("admin:doctype:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doctype:update",name:"提交",pId:"admin:doctype:editopt"
+		      <#if perms??&&perms?seq_contains("admin:doctype:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doctype:list",name:"列表",pId:"admin:docconfig,admin:doctype:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doctype:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:doctype:delete",name:"删除",pId:"admin:docconfig,admin:doctype:mgr"
+		      <#if perms??&&perms?seq_contains("admin:doctype:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:docconfig,admin:workflow:mgr",name:"工作流管理",pId:"admin:doccenter"
+		      <#if perms??&&perms?seq_contains("admin:workflow:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workflow:addopt",name:"添加",pId:"admin:docconfig,admin:workflow:mgr"
+		      <#if perms??&&perms?seq_contains("admin:workflow:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workflow:add",name:"查看",pId:"admin:workflow:addopt"
+		      <#if perms??&&perms?seq_contains("admin:workflow:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workflow:save",name:"提交",pId:"admin:workflow:addopt"
+		      <#if perms??&&perms?seq_contains("admin:workflow:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workflow:editopt",name:"修改",pId:"admin:docconfig,admin:workflow:mgr"
+		      <#if perms??&&perms?seq_contains("admin:workflow:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workflow:edit",name:"查看",pId:"admin:workflow:editopt"
+		      <#if perms??&&perms?seq_contains("admin:workflow:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workflow:update",name:"提交",pId:"admin:workflow:editopt"
+		      <#if perms??&&perms?seq_contains("admin:workflow:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workflow:list",name:"列表",pId:"admin:docconfig,admin:workflow:mgr"
+		      <#if perms??&&perms?seq_contains("admin:workflow:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:workflow:delete",name:"删除",pId:"admin:docconfig,admin:workflow:mgr"
+		      <#if perms??&&perms?seq_contains("admin:workflow:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:extrafunc",name:"功能组件",pId:"admin:workspace:index,admin:workspace:right"
+		      <#if perms??&&perms?seq_contains("admin:extrafunc")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:comment:mgr",name:"评论管理",pId:"admin:extrafunc"
+		      <#if perms??&&perms?seq_contains("admin:comment:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:comment:addopt",name:"添加",pId:"admin:comment:mgr"
+		      <#if perms??&&perms?seq_contains("admin:comment:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:comment:add",name:"查看",pId:"admin:comment:addopt"
+		      <#if perms??&&perms?seq_contains("admin:comment:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:comment:save",name:"提交",pId:"admin:comment:addopt"
+		      <#if perms??&&perms?seq_contains("admin:comment:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:comment:editopt",name:"修改",pId:"admin:comment:mgr"
+		      <#if perms??&&perms?seq_contains("admin:comment:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:comment:edit",name:"查看",pId:"admin:comment:editopt"
+		      <#if perms??&&perms?seq_contains("admin:comment:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:comment:update",name:"提交",pId:"admin:comment:editopt"
+		      <#if perms??&&perms?seq_contains("admin:comment:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:comment:list",name:"列表",pId:"admin:comment:mgr"
+		      <#if perms??&&perms?seq_contains("admin:comment:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:comment:delete",name:"删除",pId:"admin:comment:mgr"
+		      <#if perms??&&perms?seq_contains("admin:comment:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:board:mgr",name:"留言管理",pId:"admin:extrafunc"
+		      <#if perms??&&perms?seq_contains("admin:board:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:board:addopt",name:"添加",pId:"admin:board:mgr"
+		      <#if perms??&&perms?seq_contains("admin:board:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:board:add",name:"查看",pId:"admin:board:addopt"
+		      <#if perms??&&perms?seq_contains("admin:board:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:board:save",name:"提交",pId:"admin:board:addopt"
+		      <#if perms??&&perms?seq_contains("admin:board:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:board:editopt",name:"修改",pId:"admin:board:mgr"
+		      <#if perms??&&perms?seq_contains("admin:board:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:board:edit",name:"查看",pId:"admin:board:editopt"
+		      <#if perms??&&perms?seq_contains("admin:board:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:board:update",name:"提交",pId:"admin:board:editopt"
+		      <#if perms??&&perms?seq_contains("admin:board:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:board:list",name:"列表",pId:"admin:board:mgr"
+		      <#if perms??&&perms?seq_contains("admin:board:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:board:delete",name:"删除",pId:"admin:board:mgr"
+		      <#if perms??&&perms?seq_contains("admin:board:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:messageType:mgr",name:"留言分类",pId:"admin:board:mgr"
+		      <#if perms??&&perms?seq_contains("admin:messageType:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:messageType:addopt",name:"添加",pId:"admin:messageType:mgr"
+		      <#if perms??&&perms?seq_contains("admin:messageType:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:messageType:add",name:"查看",pId:"admin:messageType:addopt"
+		      <#if perms??&&perms?seq_contains("admin:messageType:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:messageType:save",name:"提交",pId:"admin:messageType:addopt"
+		      <#if perms??&&perms?seq_contains("admin:messageType:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:messageType:editopt",name:"修改",pId:"admin:messageType:mgr"
+		      <#if perms??&&perms?seq_contains("admin:messageType:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:messageType:edit",name:"查看",pId:"admin:messageType:editopt"
+		      <#if perms??&&perms?seq_contains("admin:messageType:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:messageType:update",name:"提交",pId:"admin:messageType:editopt"
+		      <#if perms??&&perms?seq_contains("admin:messageType:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:messageType:list",name:"列表",pId:"admin:messageType:mgr"
+		      <#if perms??&&perms?seq_contains("admin:messageType:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:messageType:delete",name:"删除",pId:"admin:messageType:mgr"
+		      <#if perms??&&perms?seq_contains("admin:messageType:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:mgr",name:"问卷调查管理",pId:"admin:extrafunc"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:surveytheme:mgr",name:"投票项管理",pId:"admin:questionnaire:mgr"
+		      <#if perms??&&perms?seq_contains("admin:surveytheme:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:surveytheme:addopt",name:"添加",pId:"admin:surveytheme:mgr"
+		      <#if perms??&&perms?seq_contains("admin:surveytheme:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:surveytheme:add",name:"查看",pId:"admin:surveytheme:addopt"
+		      <#if perms??&&perms?seq_contains("admin:surveytheme:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:surveytheme:save",name:"提交",pId:"admin:surveytheme:addopt"
+		      <#if perms??&&perms?seq_contains("admin:surveytheme:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:surveytheme:editopt",name:"修改",pId:"admin:surveytheme:mgr"
+		      <#if perms??&&perms?seq_contains("admin:surveytheme:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:surveytheme:edit",name:"查看",pId:"admin:surveytheme:editopt"
+		      <#if perms??&&perms?seq_contains("admin:surveytheme:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:surveytheme:update",name:"提交",pId:"admin:surveytheme:editopt"
+		      <#if perms??&&perms?seq_contains("admin:surveytheme:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:surveytheme:list",name:"列表",pId:"admin:surveytheme:mgr"
+		      <#if perms??&&perms?seq_contains("admin:surveytheme:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:surveytheme:delete",name:"删除",pId:"admin:surveytheme:mgr"
+		      <#if perms??&&perms?seq_contains("admin:surveytheme:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:addopt",name:"添加",pId:"admin:questionnaire:mgr"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:add",name:"查看",pId:"admin:questionnaire:addopt"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:save",name:"提交",pId:"admin:questionnaire:addopt"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:editopt",name:"修改",pId:"admin:questionnaire:mgr"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:edit",name:"查看",pId:"admin:questionnaire:editopt"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:update",name:"提交",pId:"admin:questionnaire:editopt"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:list",name:"列表",pId:"admin:questionnaire:mgr"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:result",name:"查看投票结果",pId:"admin:questionnaire:mgr"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:result")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:questionnaire:delete",name:"删除",pId:"admin:questionnaire:mgr"
+		      <#if perms??&&perms?seq_contains("admin:questionnaire:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advert:mgr",name:"广告管理",pId:"admin:extrafunc"
+		      <#if perms??&&perms?seq_contains("admin:advert:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advert:addopt",name:"添加",pId:"admin:advert:mgr"
+		      <#if perms??&&perms?seq_contains("admin:advert:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advert:add",name:"查看",pId:"admin:advert:addopt"
+		      <#if perms??&&perms?seq_contains("admin:advert:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advert:save",name:"提交",pId:"admin:advert:addopt"
+		      <#if perms??&&perms?seq_contains("admin:advert:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advert:editopt",name:"修改",pId:"admin:advert:mgr"
+		      <#if perms??&&perms?seq_contains("admin:advert:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advert:edit",name:"查看",pId:"admin:advert:editopt"
+		      <#if perms??&&perms?seq_contains("admin:advert:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advert:update",name:"提交",pId:"admin:advert:editopt"
+		      <#if perms??&&perms?seq_contains("admin:advert:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advert:list",name:"列表",pId:"admin:advert:mgr"
+		      <#if perms??&&perms?seq_contains("admin:advert:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advert:delete",name:"删除",pId:"admin:advert:mgr"
+		      <#if perms??&&perms?seq_contains("admin:advert:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advertSlot:mgr",name:"广告位管理",pId:"admin:advert:mgr"
+		      <#if perms??&&perms?seq_contains("admin:advertSlot:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advertSlot:addopt",name:"添加",pId:"admin:advertSlot:mgr"
+		      <#if perms??&&perms?seq_contains("admin:advertSlot:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advertSlot:add",name:"查看",pId:"admin:advertSlot:addopt"
+		      <#if perms??&&perms?seq_contains("admin:advertSlot:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advertSlot:save",name:"提交",pId:"admin:advertSlot:addopt"
+		      <#if perms??&&perms?seq_contains("admin:advertSlot:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advertSlot:editopt",name:"修改",pId:"admin:advertSlot:mgr"
+		      <#if perms??&&perms?seq_contains("admin:advertSlot:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advertSlot:edit",name:"查看",pId:"admin:advertSlot:editopt"
+		      <#if perms??&&perms?seq_contains("admin:advertSlot:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advertSlot:update",name:"提交",pId:"admin:advertSlot:editopt"
+		      <#if perms??&&perms?seq_contains("admin:advertSlot:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advertSlot:list",name:"列表",pId:"admin:advertSlot:mgr"
+		      <#if perms??&&perms?seq_contains("admin:advertSlot:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:advertSlot:delete",name:"删除",pId:"admin:advertSlot:mgr"
+		      <#if perms??&&perms?seq_contains("admin:advertSlot:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:links:mgr",name:"友情链接管理",pId:"admin:extrafunc"
+		      <#if perms??&&perms?seq_contains("admin:links:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:links:addopt",name:"添加",pId:"admin:links:mgr"
+		      <#if perms??&&perms?seq_contains("admin:links:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:links:add",name:"查看",pId:"admin:links:addopt"
+		      <#if perms??&&perms?seq_contains("admin:links:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:links:save",name:"提交",pId:"admin:links:addopt"
+		      <#if perms??&&perms?seq_contains("admin:links:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:links:editopt",name:"修改",pId:"admin:links:mgr"
+		      <#if perms??&&perms?seq_contains("admin:links:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:links:edit",name:"查看",pId:"admin:links:editopt"
+		      <#if perms??&&perms?seq_contains("admin:links:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:links:update",name:"提交",pId:"admin:links:editopt"
+		      <#if perms??&&perms?seq_contains("admin:links:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:links:list",name:"列表",pId:"admin:links:mgr"
+		      <#if perms??&&perms?seq_contains("admin:links:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:links:delete",name:"删除",pId:"admin:links:mgr"
+		      <#if perms??&&perms?seq_contains("admin:links:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:linksType:mgr",name:"链接类型",pId:"admin:links:mgr"
+		      <#if perms??&&perms?seq_contains("admin:linksType:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:linksType:addopt",name:"添加",pId:"admin:linksType:mgr"
+		      <#if perms??&&perms?seq_contains("admin:linksType:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:linksType:add",name:"查看",pId:"admin:linksType:addopt"
+		      <#if perms??&&perms?seq_contains("admin:linksType:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:linksType:save",name:"提交",pId:"admin:linksType:addopt"
+		      <#if perms??&&perms?seq_contains("admin:linksType:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:linksType:editopt",name:"修改",pId:"admin:linksType:mgr"
+		      <#if perms??&&perms?seq_contains("admin:linksType:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:linksType:edit",name:"查看",pId:"admin:linksType:editopt"
+		      <#if perms??&&perms?seq_contains("admin:linksType:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:linksType:update",name:"提交",pId:"admin:linksType:editopt"
+		      <#if perms??&&perms?seq_contains("admin:linksType:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:linksType:list",name:"列表",pId:"admin:linksType:mgr"
+		      <#if perms??&&perms?seq_contains("admin:linksType:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:linksType:delete",name:"删除",pId:"admin:linksType:mgr"
+		      <#if perms??&&perms?seq_contains("admin:linksType:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:category:mgr",name:"论坛分类管理",pId:"admin:extrafunc"
+		      <#if perms??&&perms?seq_contains("admin:category:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:category:addopt",name:"添加",pId:"admin:category:mgr"
+		      <#if perms??&&perms?seq_contains("admin:category:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:category:add",name:"查看",pId:"admin:category:addopt"
+		      <#if perms??&&perms?seq_contains("admin:category:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:category:save",name:"提交",pId:"admin:category:addopt"
+		      <#if perms??&&perms?seq_contains("admin:category:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:category:editopt",name:"修改",pId:"admin:category:mgr"
+		      <#if perms??&&perms?seq_contains("admin:category:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:category:edit",name:"查看",pId:"admin:category:editopt"
+		      <#if perms??&&perms?seq_contains("admin:category:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:category:update",name:"提交",pId:"admin:category:editopt"
+		      <#if perms??&&perms?seq_contains("admin:category:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:category:list",name:"列表",pId:"admin:category:mgr"
+		      <#if perms??&&perms?seq_contains("admin:category:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:category:delete",name:"删除",pId:"admin:category:mgr"
+		      <#if perms??&&perms?seq_contains("admin:category:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:forum:mgr",name:"版块管理",pId:"admin:extrafunc"
+		      <#if perms??&&perms?seq_contains("admin:forum:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:forum:addopt",name:"添加",pId:"admin:forum:mgr"
+		      <#if perms??&&perms?seq_contains("admin:forum:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:forum:add",name:"查看",pId:"admin:forum:addopt"
+		      <#if perms??&&perms?seq_contains("admin:forum:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:forum:save",name:"提交",pId:"admin:forum:addopt"
+		      <#if perms??&&perms?seq_contains("admin:forum:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:forum:editopt",name:"修改",pId:"admin:forum:mgr"
+		      <#if perms??&&perms?seq_contains("admin:forum:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:forum:edit",name:"查看",pId:"admin:forum:editopt"
+		      <#if perms??&&perms?seq_contains("admin:forum:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:forum:update",name:"提交",pId:"admin:forum:editopt"
+		      <#if perms??&&perms?seq_contains("admin:forum:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:forum:list",name:"列表",pId:"admin:forum:mgr"
+		      <#if perms??&&perms?seq_contains("admin:forum:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:forum:delete",name:"删除",pId:"admin:forum:mgr"
+		      <#if perms??&&perms?seq_contains("admin:forum:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:usermgr",name:"用户中心",pId:"admin:workspace:index,admin:workspace:right"
+		      <#if perms??&&perms?seq_contains("admin:usermgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:mgr",name:"会员管理",pId:"admin:usermgr"
+		      <#if perms??&&perms?seq_contains("admin:member:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:addopt",name:"添加",pId:"admin:member:mgr"
+		      <#if perms??&&perms?seq_contains("admin:member:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:add",name:"查看",pId:"admin:member:addopt"
+		      <#if perms??&&perms?seq_contains("admin:member:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:save",name:"提交",pId:"admin:member:addopt"
+		      <#if perms??&&perms?seq_contains("admin:member:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:editopt",name:"修改",pId:"admin:member:mgr"
+		      <#if perms??&&perms?seq_contains("admin:member:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:edit",name:"查看",pId:"admin:member:editopt"
+		      <#if perms??&&perms?seq_contains("admin:member:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:update",name:"提交",pId:"admin:member:editopt"
+		      <#if perms??&&perms?seq_contains("admin:member:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:list",name:"列表",pId:"admin:member:mgr"
+		      <#if perms??&&perms?seq_contains("admin:member:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:updatePass",name:"修改密码",pId:"admin:member:mgr"
+		      <#if perms??&&perms?seq_contains("admin:member:updatePass")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:member:delete",name:"删除",pId:"admin:member:mgr"
+		      <#if perms??&&perms?seq_contains("admin:member:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:mgr",name:"会员组管理",pId:"admin:usermgr"
+		      <#if perms??&&perms?seq_contains("admin:group:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:addopt",name:"添加",pId:"admin:group:mgr"
+		      <#if perms??&&perms?seq_contains("admin:group:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:add",name:"查看",pId:"admin:group:addopt"
+		      <#if perms??&&perms?seq_contains("admin:group:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:save",name:"提交",pId:"admin:group:addopt"
+		      <#if perms??&&perms?seq_contains("admin:group:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:editopt",name:"修改",pId:"admin:group:mgr"
+		      <#if perms??&&perms?seq_contains("admin:group:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:edit",name:"查看",pId:"admin:group:editopt"
+		      <#if perms??&&perms?seq_contains("admin:group:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:update",name:"提交",pId:"admin:group:editopt"
+		      <#if perms??&&perms?seq_contains("admin:group:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:list",name:"列表",pId:"admin:group:mgr"
+		      <#if perms??&&perms?seq_contains("admin:group:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:priority",name:"排序",pId:"admin:group:mgr"
+		      <#if perms??&&perms?seq_contains("admin:group:priority")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:group:delete",name:"删除",pId:"admin:group:mgr"
+		      <#if perms??&&perms?seq_contains("admin:group:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:mgr",name:"管理员管理",pId:"admin:usermgr"
+		      <#if perms??&&perms?seq_contains("admin:admin:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:addopt",name:"添加",pId:"admin:admin:mgr"
+		      <#if perms??&&perms?seq_contains("admin:admin:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:add",name:"查看",pId:"admin:admin:addopt"
+		      <#if perms??&&perms?seq_contains("admin:admin:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:save",name:"提交",pId:"admin:admin:addopt"
+		      <#if perms??&&perms?seq_contains("admin:admin:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:editopt",name:"修改",pId:"admin:admin:mgr"
+		      <#if perms??&&perms?seq_contains("admin:admin:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:edit",name:"查看",pId:"admin:admin:editopt"
+		      <#if perms??&&perms?seq_contains("admin:admin:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:update",name:"提交",pId:"admin:admin:editopt"
+		      <#if perms??&&perms?seq_contains("admin:admin:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:list",name:"列表",pId:"admin:admin:mgr"
+		      <#if perms??&&perms?seq_contains("admin:admin:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:updatePass",name:"修改密码",pId:"admin:admin:mgr"
+		      <#if perms??&&perms?seq_contains("admin:admin:updatePass")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:admin:delete",name:"删除",pId:"admin:admin:mgr"
+		      <#if perms??&&perms?seq_contains("admin:admin:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:role:mgr",name:"角色管理",pId:"admin:usermgr"
+		      <#if perms??&&perms?seq_contains("admin:role:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:role:addopt",name:"添加",pId:"admin:role:mgr"
+		      <#if perms??&&perms?seq_contains("admin:role:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:role:add",name:"查看",pId:"admin:role:addopt"
+		      <#if perms??&&perms?seq_contains("admin:role:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:role:save",name:"提交",pId:"admin:role:addopt"
+		      <#if perms??&&perms?seq_contains("admin:role:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:role:editopt",name:"修改",pId:"admin:role:mgr"
+		      <#if perms??&&perms?seq_contains("admin:role:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:role:edit",name:"查看",pId:"admin:role:editopt"
+		      <#if perms??&&perms?seq_contains("admin:role:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:role:update",name:"提交",pId:"admin:role:editopt"
+		      <#if perms??&&perms?seq_contains("admin:role:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:role:list",name:"列表",pId:"admin:role:mgr"
+		      <#if perms??&&perms?seq_contains("admin:role:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:role:delete",name:"删除",pId:"admin:role:mgr"
+		      <#if perms??&&perms?seq_contains("admin:role:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:depart:mgr",name:"部门管理",pId:"admin:usermgr"
+		      <#if perms??&&perms?seq_contains("admin:depart:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:depart:addopt",name:"添加",pId:"admin:depart:mgr"
+		      <#if perms??&&perms?seq_contains("admin:depart:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:depart:add",name:"查看",pId:"admin:depart:addopt"
+		      <#if perms??&&perms?seq_contains("admin:depart:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:depart:save",name:"提交",pId:"admin:depart:addopt"
+		      <#if perms??&&perms?seq_contains("admin:depart:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:depart:editopt",name:"修改",pId:"admin:depart:mgr"
+		      <#if perms??&&perms?seq_contains("admin:depart:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:depart:edit",name:"查看",pId:"admin:depart:editopt"
+		      <#if perms??&&perms?seq_contains("admin:depart:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:depart:update",name:"提交",pId:"admin:depart:editopt"
+		      <#if perms??&&perms?seq_contains("admin:depart:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:depart:list",name:"列表",pId:"admin:depart:mgr"
+		      <#if perms??&&perms?seq_contains("admin:depart:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:depart:delete",name:"删除",pId:"admin:depart:mgr"
+		      <#if perms??&&perms?seq_contains("admin:depart:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:datacenter",name:"数据中心",pId:"admin:workspace:index,admin:workspace:right"
+		      <#if perms??&&perms?seq_contains("admin:datacenter")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:keyword:mgr",name:"关键词管理",pId:"admin:datacenter"
+		      <#if perms??&&perms?seq_contains("admin:keyword:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:keyword:addopt",name:"添加",pId:"admin:keyword:mgr"
+		      <#if perms??&&perms?seq_contains("admin:keyword:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:keyword:add",name:"查看",pId:"admin:keyword:addopt"
+		      <#if perms??&&perms?seq_contains("admin:keyword:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:keyword:save",name:"提交",pId:"admin:keyword:addopt"
+		      <#if perms??&&perms?seq_contains("admin:keyword:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:keyword:editopt",name:"修改",pId:"admin:keyword:mgr"
+		      <#if perms??&&perms?seq_contains("admin:keyword:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:keyword:edit",name:"查看",pId:"admin:keyword:editopt"
+		      <#if perms??&&perms?seq_contains("admin:keyword:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:keyword:update",name:"提交",pId:"admin:keyword:editopt"
+		      <#if perms??&&perms?seq_contains("admin:keyword:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:keyword:list",name:"列表",pId:"admin:keyword:mgr"
+		      <#if perms??&&perms?seq_contains("admin:keyword:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:keyword:delete",name:"删除",pId:"admin:keyword:mgr"
+		      <#if perms??&&perms?seq_contains("admin:keyword:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sensitivity:mgr",name:"敏感词管理",pId:"admin:datacenter"
+		      <#if perms??&&perms?seq_contains("admin:sensitivity:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sensitivity:addopt",name:"添加",pId:"admin:sensitivity:mgr"
+		      <#if perms??&&perms?seq_contains("admin:sensitivity:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sensitivity:add",name:"查看",pId:"admin:sensitivity:addopt"
+		      <#if perms??&&perms?seq_contains("admin:sensitivity:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sensitivity:save",name:"提交",pId:"admin:sensitivity:addopt"
+		      <#if perms??&&perms?seq_contains("admin:sensitivity:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sensitivity:editopt",name:"修改",pId:"admin:sensitivity:mgr"
+		      <#if perms??&&perms?seq_contains("admin:sensitivity:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sensitivity:edit",name:"查看",pId:"admin:sensitivity:editopt"
+		      <#if perms??&&perms?seq_contains("admin:sensitivity:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sensitivity:update",name:"提交",pId:"admin:sensitivity:editopt"
+		      <#if perms??&&perms?seq_contains("admin:sensitivity:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sensitivity:list",name:"列表",pId:"admin:sensitivity:mgr"
+		      <#if perms??&&perms?seq_contains("admin:sensitivity:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sensitivity:delete",name:"删除",pId:"admin:sensitivity:mgr"
+		      <#if perms??&&perms?seq_contains("admin:sensitivity:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sysmgr",name:"系统管理",pId:"admin:workspace:index,admin:workspace:right"
+		      <#if perms??&&perms?seq_contains("admin:sysmgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:mgr",name:"模板管理",pId:"admin:sysmgr"
+		      <#if perms??&&perms?seq_contains("admin:tpl:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:addopt",name:"添加",pId:"admin:tpl:mgr"
+		      <#if perms??&&perms?seq_contains("admin:tpl:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:add",name:"查看",pId:"admin:tpl:addopt"
+		      <#if perms??&&perms?seq_contains("admin:tpl:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:save",name:"提交",pId:"admin:tpl:addopt"
+		      <#if perms??&&perms?seq_contains("admin:tpl:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:editopt",name:"修改",pId:"admin:tpl:mgr"
+		      <#if perms??&&perms?seq_contains("admin:tpl:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:edit",name:"查看",pId:"admin:tpl:editopt"
+		      <#if perms??&&perms?seq_contains("admin:tpl:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:update",name:"提交",pId:"admin:tpl:editopt"
+		      <#if perms??&&perms?seq_contains("admin:tpl:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:list",name:"列表",pId:"admin:tpl:mgr"
+		      <#if perms??&&perms?seq_contains("admin:tpl:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:createdir",name:"新建目录",pId:"admin:tpl:mgr"
+		      <#if perms??&&perms?seq_contains("admin:tpl:createdir")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:rename",name:"重命名",pId:"admin:tpl:mgr"
+		      <#if perms??&&perms?seq_contains("admin:tpl:rename")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:tpl:delete",name:"删除",pId:"admin:tpl:mgr"
+		      <#if perms??&&perms?seq_contains("admin:tpl:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:mgr",name:"资源管理",pId:"admin:sysmgr"
+		      <#if perms??&&perms?seq_contains("admin:res:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:addopt",name:"添加",pId:"admin:res:mgr"
+		      <#if perms??&&perms?seq_contains("admin:res:addopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:add",name:"查看",pId:"admin:res:addopt"
+		      <#if perms??&&perms?seq_contains("admin:res:add")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:save",name:"提交",pId:"admin:res:addopt"
+		      <#if perms??&&perms?seq_contains("admin:res:save")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:editopt",name:"修改",pId:"admin:res:mgr"
+		      <#if perms??&&perms?seq_contains("admin:res:editopt")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:edit",name:"查看",pId:"admin:res:editopt"
+		      <#if perms??&&perms?seq_contains("admin:res:edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:update",name:"提交",pId:"admin:res:editopt"
+		      <#if perms??&&perms?seq_contains("admin:res:update")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:list",name:"列表",pId:"admin:res:mgr"
+		      <#if perms??&&perms?seq_contains("admin:res:list")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:createdir",name:"新建目录",pId:"admin:res:mgr"
+		      <#if perms??&&perms?seq_contains("admin:res:createdir")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:rename",name:"重命名",pId:"admin:res:mgr"
+		      <#if perms??&&perms?seq_contains("admin:res:rename")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:swfupload",name:"上传",pId:"admin:res:mgr"
+		      <#if perms??&&perms?seq_contains("admin:res:swfupload")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:res:delete",name:"删除",pId:"admin:res:mgr"
+		      <#if perms??&&perms?seq_contains("admin:res:delete")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sites:mgr",name:"系统设置",pId:"admin:sysmgr"
+		      <#if perms??&&perms?seq_contains("admin:sites:mgr")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sites:sys_edit",name:"查看",pId:"admin:sites:mgr"
+		      <#if perms??&&perms?seq_contains("admin:sites:sys_edit")>,
+			  checked:true
+			  </#if>
+		      },
+		      {id:"admin:sites:sys_update",name:"提交",pId:"admin:sites:mgr"
+		      <#if perms??&&perms?seq_contains("admin:sites:sys_update")>,
+			  checked:true
+			  </#if>
+		      }];
+</script>

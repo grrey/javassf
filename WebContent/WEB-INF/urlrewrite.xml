@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+<!-- 链接分发过滤配置：使用 正则表达式 -->
+<urlrewrite>
+    <rule>
+        <note>
+        </note>
+        <from>^/([a-zA-Z0-9]+)/$</from>
+        <to type="forward">/$1/index.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/([a-zA-Z0-9]+)_([0-9]+)/$</from>
+        <to type="forward">/$1/index_$2.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/([a-zA-Z0-9]+)/index.html$</from>
+        <to type="forward" encode="true">/$1/index.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/([a-zA-Z0-9]+)/index_([0-9]+).html$</from>
+        <to type="forward" encode="true">/$1/index_$2.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/([a-zA-Z0-9]+)/([0-9]+)/$</from>
+        <to type="forward">/doc/$2.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/([a-zA-Z0-9]+)/([0-9]+)_([0-9]+)/$</from>
+        <to type="forward">/doc/$2_$3.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/([a-zA-Z0-9]+)/([0-9]+).html$</from>
+        <to type="forward">/doc/$2.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/([a-zA-Z0-9]+)/([0-9]+)_([0-9]+).html$</from>
+        <to type="forward">/doc/$2_$3.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/comment-([0-9]+).html$</from>
+        <to type="forward">/comment-$1.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/comment-([0-9]+)_([0-9]+).html$</from>
+        <to type="forward">/comment-$1_$2.jsp</to>
+    </rule>
+    <rule>
+        <note>
+        </note>
+        <from>^/search-(.*).html$</from>
+        <to type="forward">/search-$1.jsp</to>
+    </rule> 
+</urlrewrite>

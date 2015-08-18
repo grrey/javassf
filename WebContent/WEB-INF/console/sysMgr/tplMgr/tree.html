@@ -1,0 +1,41 @@
+<#if isRoot>
+[{
+	"name": "模板",
+	"click":"f_addTab('tplMgr','模板管理','tpl/v_list.do')",
+	"open": true
+	<#if tplList?size gt 0>,
+	"isParent": true,
+	"children": [
+	<#list tplList as tpl>
+		{
+		"path": "${tpl.name}",
+		"name": "${tpl.filename}",
+		"click":"f_addTab('tplMgr','模板管理','${tpl.directory?string("tpl/v_list.do?path=${tpl.name!}","tpl/v_edit.do?name=${tpl.name!?url}")}')",
+		<#if tpl.directory>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if tpl_has_next>,</#if>
+	</#list>
+	]
+	</#if>
+}]
+<#else>
+	[
+	<#list tplList as tpl>
+		{
+		"path": "${tpl.name}",
+		"name": "${tpl.filename}",
+		"click":"f_addTab('tplMgr','模板管理','${tpl.directory?string("tpl/v_list.do?path=${tpl.name!}","tpl/v_edit.do?name=${tpl.name!?url}")}')",
+		<#if tpl.directory>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if tpl_has_next>,</#if>
+	</#list>
+	]
+</#if>

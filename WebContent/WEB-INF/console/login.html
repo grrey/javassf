@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>javassf门户网站管理系统</title>
+<link href="${base}/skin/sys/css/login.css" rel="stylesheet" type="text/css"/>
+<script src="${base}/skin/comm/js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+if(top!=this) {
+	top.location=this.location;
+}
+$(function() {
+	$("#username").focus();
+	$("#jvForm").validate();
+	
+	<#if msg??>
+	alert('${msg}');
+	</#if>
+});
+</script>
+</head>
+
+<body>
+<form id="jvForm" action="login.do" method="post">
+<#if returnUrl??><input type="hidden" name="returnUrl" value="${returnUrl}"/></#if>
+<#if processUrl??><input type="hidden" name="processUrl" value="${processUrl}"/></#if>
+<table width="960" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top:20px;">
+  <tr>
+    <td width="562">
+    <table width="562" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><img src="${base}/skin/sys/img/login/bg_01.jpg"/></td>
+        <td><img src="${base}/skin/sys/img/login/bg_02.jpg"/></td>
+      </tr>
+      <tr>
+        <td><img src="${base}/skin/sys/img/login/bg_03.jpg"/></td>
+        <td><img src="${base}/skin/sys/img/login/bg_04.jpg"/></td>
+      </tr>
+      <tr>
+        <td><img src="${base}/skin/sys/img/login/bg_05.jpg"/></td>
+        <td><img src="${base}/skin/sys/img/login/bg_06.jpg"/></td>
+      </tr>
+    </table></td>
+    <td><table width="350" border="0" align="center" cellpadding="0" cellspacing="3">
+      <tr>
+        <td width="112" height="35" align="right">帐　户：</td>
+        <td width="229" align="left"><input id="username" name="username" type="text" vld="{required:true}" maxlength="100" class="in ubg"/></td>
+      </tr>
+      <tr>
+        <td height="35" align="right">密　码：</td>
+        <td align="left"><input name="password" type="password" id="password" maxlength="32" vld="{required:true}" class="in pbg"/></td>
+      </tr>
+      <tr>
+        <td height="45" colspan="2" align="center">
+        <input type="image" src="${base}/skin/sys/img/login/login.jpg" name="submit" />&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="image" src="${base}/skin/sys/img/login/reset.jpg" onclick="document.forms[0].reset()"/>
+        </td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td height="50" colspan="2" align="center" style="background:url(${base}/skin/sys/img/login/fbg.jpg) top center no-repeat">
+    Copyright &copy; 2013-2014 www.javassf.com  All rights reserved
+    </td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

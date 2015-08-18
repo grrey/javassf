@@ -1,0 +1,12 @@
+{Rows:[
+   <#list list as model>
+   {
+     "id":"${model.id}",
+     "name":"${model.name!?html}",
+     "icon":"<img src='${base}/skin/sys${model.icon!}'/>",
+     "priority":"${model.priority!}",
+     "disabled":"${model.disabled?string("<span style='color:red'>禁用</span>","<span style='color:blue'>正常</span>")}"
+   }<#if model_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

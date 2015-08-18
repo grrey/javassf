@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script src="${base}/plugin/swfupload/swfupload.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/swfupload.queue.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/fileprogress.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/handlers.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/jquery.progressbar.min.js" type="text/javascript"></script>
+<link href="${base}/plugin/swfupload/process.css" rel="stylesheet" type="text/css"/>
+<script language="javascript">
+$(function (){
+	$("#advertSlotForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+
+function showdm(){
+	if($("#advtype").attr("checked")==true){
+	    $("#dmshow").show();
+	    $("#ggtshow").hide();
+	}else{
+		$("#dmshow").hide();
+		$("#ggtshow").show();
+	}
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>宣传管理/添加</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="advertForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>宣传名称：</td>
+              <td colspan="3"> 
+              <input name="name" type="text" id="name" value="${advert.name!}" size="25" vld="{required:true,maxlength:50,messages:{required:'广告位名称不能为空!',maxlength:$.format('广告位名称长度不能超过{0}!')}}"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>目标宣传位：</td>
+              <td>
+              <select name="slotId">
+              <#list slotList as slot>
+              <option value="${slot.id!}" <#if advert.slot.id==slot.id>selected="selected"</#if>>${slot.name!}</option>
+              </#list>
+              </select>
+              </td>
+              <td class="ftit"><span>*</span>展示类型：</td>
+              <td>
+              <input type="checkbox" id="advtype" onclick="showdm()" name="advtype" value="1" <#if advert.advType=="js">checked="checked"</#if>/>代码模式
+              </td>
+            </tr>
+            <tr id="ggtshow" <#if advert.advType=="js">style="display:none"</#if>>
+              <td class="ftit">宣传图：</td>
+              <td colspan="3">
+              <span id="ggtxq"></span>
+			  <span id="spanButtonPlaceHolder"></span>
+			  <#if advert.attrUrl??><span onclick="">宣传预览</span></#if>
+              </td>
+            </tr>
+            <tr <#if advert.advType!="js">style="display:none"</#if> id="dmshow">
+              <td class="ftit">JS代码：</td>
+              <td colspan="3">
+              <textarea cols="80" rows="5" name="jsstring" class="l-textarea" vld="{maxlength:500,messages:{maxlength:$.format('说明长度不能超过{0}!')}}">${advert.jsstring!}</textarea>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>URL地址：</td>
+              <td colspan="3">
+              <input type="text" name="url" value="${advert.url!}" size="25" vld="{required:true,maxlength:50,messages:{required:'URL地址不能为空!',maxlength:$.format('URL地址长度不能超过{0}!')}}"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">投放时间：</td>
+              <td>
+              <input type="text" name="startTime" size="25" readonly="readonly" <#if advert.startTime??>value="${advert.startTime?string('yyyy-MM-dd')}"</#if> onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+              </td>
+              <td class="ftit">结束时间：</td>
+              <td>
+              <input type="text" name="endTime" size="25" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" <#if advert.endTime??>value="${advert.endTime?string('yyyy-MM-dd')}"</#if>/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">权重：</td>
+              <td>
+              <input type="text" name="weights" value="${advert.weights!}" size="25" vld="{digits:true,messages:{digits:'权重必须为数字!'}}"/>
+              </td>
+              <td class="ftit">展现次数：</td>
+              <td>
+              <input type="text" name="showTimes" value="${advert.showTimes!}" size="25" vld="{digits:true,messages:{digits:'展现次数必须为数字!'}}"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">说明：</td>
+              <td colspan="3">
+              <textarea cols="80" rows="5" name="aexplain" class="l-textarea" vld="{maxlength:500,messages:{maxlength:$.format('说明长度不能超过{0}!')}}">${advert.aexplain!}</textarea>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">是否启用：</td>
+              <td colspan="3">
+              <select name="enable">
+              <option value="1" <#if advert.enable>selected="selected"</#if>>启用</option>
+              <option value="0" <#if !advert.enable>selected="selected"</#if>>关闭</option>
+              </select>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:advert:update">
+                <input type="hidden" name="id" value="${advert.id}"/>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+<ul id="atthtml" style="display:none">
+   <li id="att{0}"><span id="attname{0}"></span>
+	   <span class="progressBar" id="attpb{0}"></span>
+	   <input type="hidden" name="attrUrl" id="atturl{0}"/>
+	   <a href="javascript:void(0);" id="attdel{0}" onclick="swfu.cancelQueue();" title="删除">
+	   <img src="${base}/skin/sys/img/admin/del.gif"/></a>
+   </li>
+</ul>
+<span style="display:none"><input id="btnCancel" type="button" value="取消" onclick="swfu.cancelQueue();" disabled="disabled" /></span>
+<#include "attupload.html"/>
+</body>
+</html>

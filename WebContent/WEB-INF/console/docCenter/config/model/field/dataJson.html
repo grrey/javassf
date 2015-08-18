@@ -1,0 +1,16 @@
+{Rows:[
+   <#list list as field>
+   {
+     "id":"${field.id}",
+     "name":"${field.name!}",
+     "label":"${field.label!}",
+     "dataType":"${field.dataTypeString!}",
+     "priority" : "<select name='priority' onchange='updatepri(${field.id},this.value)'><#list 1..list?size as i><option value='${i}' <#if i==field.priority>selected='selected'</#if>>${i!}</option></#list></select>",
+     "economy":"${field.economy?string("<span style='color:red'>系统</span>","<span style='color:blue'>自定义</span>")}",
+     "economy1":"${field.economy?string("true","false")}",
+     "single":"<a href='javascript:void(0)' onclick='updatesingle(${field.id});' id='single${field.id}'>${field.single?string("<span style='color:red'>是</span>","<span style='color:blue'>否</span>")}</a>",
+     "show":"<a href='javascript:void(0)' onclick='updateshow(${field.id},${field.required?string("true","false")});' id='show${field.id}'>${field.show?string("<span style='color:red'>是</span>","<span style='color:blue'>否</span>")}</a>"
+   }<#if field_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

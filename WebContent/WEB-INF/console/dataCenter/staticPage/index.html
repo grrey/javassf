@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>静态页生成</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+var setting = {async : {enable : true,url : "../channel/v_seltree.do",autoParam : ["parentId"]},
+		check: {enable: false}
+};
+
+$(function (){
+	$.fn.zTree.init($("#channelTree1"), setting);
+	$.fn.zTree.init($("#channelTree2"), setting);
+	
+	$("#tab").ligerTab();
+});
+
+var i = 1;
+
+function staticindexSubmit() {
+	$("#indexButton").attr("disabled","disabled");
+	$.post("o_static_index.do", {
+	}, function(data) {
+		if(data.i==1){
+			$.ligerDialog.success("首页静态页生成成功!");
+		}else if(data.i==0){
+			$.ligerDialog.error("首页模板未选择，请在站点配置中选择首页模板!");
+		}else if(data.i==-1){
+			$.ligerDialog.error("首页模板出错，生成失败，请检查模板!");
+		}else if(data.i==-2){
+			$.ligerDialog.error("IO异常，生成失败!");
+		}else if(data.i==-3){
+			$.ligerDialog.error("首页模板不存在或者已删除，生成失败!");
+		}else{
+			$.ligerDialog.error("未知错误，生成失败!");
+		}
+		$("#indexButton").removeAttr("disabled");
+	}, "json");
+}
+
+function staticchannelSubmit() {
+	$("#channelButton").attr("disabled","disabled");
+	$.post("o_static_channel.do", {
+		"chnlId" : $("#chnlId1").val()
+	}, function(data) {
+		$.ligerDialog.success(data);
+		$("#channelButton").removeAttr("disabled");
+	}, "html");
+}
+
+function staticarticleSubmit() {
+	$("#articleButton").attr("disabled","disabled");
+	$.post("o_static_article.do", {
+		"chnlId" : $("#chnlId2").val()
+	}, function(data) {
+		$.ligerDialog.success(data.msg);
+		$("#articleButton").removeAttr("disabled");
+	}, "json");
+}
+
+function setChannele(name,id) {
+	$("#menuContent"+i).fadeOut("fast");
+	$("#selectchannelId"+i).val(name);
+	$("#chnlId"+i).val(id);
+}
+
+function changeval(o){
+	i = o;
+}
+
+function oncheckc(){
+	showMenuset('selectchannelId1','menuContent1',0,0);
+	i = 1;
+}
+
+function onchecka(){
+	showMenuset('selectchannelId2','menuContent2',0,0);
+	i = 2;
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>页面静态化</h2>
+	<div class="c">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+		    <td valign="top">
+				<form method="post" id="indexstaticForm">
+		        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">            
+		            <tr>
+		              <td class="ftit4">首页静态化</td>
+		            </tr>
+		            <tr>
+		              <td class="fctrl">
+		                <@Perm perm="admin:static:index">
+		                <input type="button" value="生成" id="indexButton" class="l-button" onclick="staticindexSubmit()"/>
+		                </@Perm>
+		              </td>
+		            </tr>
+		        </table>
+		        </form>
+			</td>
+		    <td width="10">&nbsp;</td>
+		    <td valign="top">
+				<form method="post" id="staticForm">
+		        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+		            <tr>
+		              <td class="ftit4">栏目页静态化</td>
+		            </tr>
+		            <tr>
+						<td class="fctrl">
+			                <ul class="pms-comboBox" style="margin:0 auto;">
+								<li><input type="text" name="selectchannelId" id="selectchannelId1" onclick="oncheckc()" readonly="readonly" value="所有栏目"/></li>
+							    <li class="pms-trigger" onclick="oncheckc()"><div class="pms-trigger-icon"></div></li>
+							</ul>
+							<input type="hidden" name="chnlId" id="chnlId1"/>
+							<div id="menuContent1" class="menuContent" style="display:none; width:180px; position:absolute; background:#fff; border:1px solid #ccc;">
+								<ul id="channelTree1" class="ztree" style="height:180px;width:170px;overflow-y:scroll;"></ul>
+							</div>
+						</td> 
+		            <tr>
+		                <td class="fctrl">   
+			                <@Perm perm="admin:static:channel">
+			                <input type="button" value="提交" id="channelButton" class="l-button" onclick="staticchannelSubmit()"/> 
+			                </@Perm>
+			            </td> 
+		            </tr>
+		        </table>
+		        </form>
+			</td>
+		    <td width="10">&nbsp;</td>
+		    <td valign="top">
+				<form method="post" id="articleForm">
+		        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+		            <tr>
+		              <td class="ftit4">内容页静态化</td>
+		            </tr>
+		            <tr>
+		              <td class="fctrl">
+			                <ul class="pms-comboBox" style="margin:0 auto;">
+							<li><input type="text" name="selectchannelId" id="selectchannelId2" onclick="onchecka()" readonly="readonly" value="所有栏目"/></li>
+						    <li class="pms-trigger" onclick="onchecka()"><div class="pms-trigger-icon"></div></li>
+							</ul>
+							<input type="hidden" name="chnlId" id="chnlId2"/>
+							<div id="menuContent2" class="menuContent" style="display:none; width:180px; position:absolute; background:#fff; border:1px solid #ccc;">
+								<ul id="channelTree2" class="ztree" style="height:180px;width:170px;overflow-y:scroll;"></ul>
+							</div>
+		  			   </td>
+		            </tr>
+		            <tr>
+		              <td class="fctrl">
+			                <@Perm perm="admin:static:article">
+			                <input type="button" value="提交" id="articleButton" class="l-button" onclick="staticarticleSubmit()"/> 
+			                </@Perm>
+		                </td>
+		            </tr>
+		        </table>
+		        </form>
+			</td>
+		  </tr>
+		</table>
+	</div>
+</div>	
+</body>
+</html>

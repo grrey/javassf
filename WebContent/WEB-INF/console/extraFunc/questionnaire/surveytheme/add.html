@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../../liger.html"/>
+<script language="javascript">
+var l = 4;
+$(function (){
+	$("#questionnaireForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+
+function showdm(){
+	if($("input[name='surveyType']:checked").val()==1){
+	    $("tr[id^='sel']").show();
+	    $("#fillin1").hide();
+	}else{
+		$("tr[id^='sel']").hide();
+	    $("#fillin1").show();
+	}
+}
+
+function addItem(){
+	$("#itemsContent").append($.format($("#itemsAdd").html(),l++));
+	var m = l - 1;
+	$("#priority"+m).val(l);
+}
+</script>
+</head>
+<body>
+<div class="blk c">
+	<h2>调查项管理/添加</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="questionnaireForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>问题标题：</td>
+              <td colspan="3">
+              <input name="title" type="text" id="title" size="25" vld="{required:true,maxlength:50,messages:{required:'问卷名称不能为空!',maxlength:$.format('问卷名称长度不能超过{0}!')}}"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>问题类型：</td>
+              <td colspan="3">
+                <input type="radio" name="surveyType" value="1" checked="checked" onclick="showdm()"/>选择类&nbsp;
+                <input type="radio" name="surveyType" value="2" onclick="showdm()"/>填写类
+              </td>
+            </tr>
+            <tr id="sel1">
+              <td class="ftit">最大可选数：</td>
+              <td>
+              <input type="text" name="totalCount" id="totalCount"/>
+              </td>
+              <td class="ftit">显示形式：</td>
+              <td>
+              <select name="showType1">
+                <option value="1">单复选框显示</option>
+                <option value="2">下拉框显示</option>
+              </select>
+              </td>
+            </tr>
+            <tr id="sel2">
+              <td class="ftit">选项：</td>
+              <td colspan="3">
+              <div id="itemsContent">
+				<#list 0..3 as i>
+				<div class="items{i}">
+				标题: <input type="text" name="names" style="width:300px"/>
+				&nbsp; 票数: <input type="text" name="votes" value="0" style="width:50px"/>
+				&nbsp; 排序: <input type="text" name="prioritys" value="${i+1}" style="width:30px"/>
+				&nbsp; <a href="javascript:void(0);" onclick="$(this).parent().remove();"><img src="${base}/skin/sys/img/admin/del.gif"/></a>
+				</div>
+				</#list>
+			  </div>
+			  <li><input type="button" name="addLine" value="添加选项" onclick="addItem()" class="l-button"/></li>
+              </td>
+            </tr>
+            <tr id="fillin1" style="display:none">
+              <td class="ftit">最大字数：</td>
+              <td>
+              <input type="text" name="maxlength" size="25" id="maxlength"/>
+              </td>
+              <td class="ftit">显示形式：</td>
+              <td>
+              <select name="showType2">
+                <option value="4">下划线显示</option>
+                <option value="3">普通输入框显示</option>
+                <option value="5">文本区域显示</option>
+              </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">排序：</td>
+              <td colspan="3">
+              <input type="text" name="priority" size="25" id="priority" value="10"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <input type="hidden" name="naireId" value="${naireId!}"/>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+
+<div style="display:none" id="itemsAdd">
+<div class="items{0}">
+标题: <input type="text" name="names" style="width:300px"/>
+&nbsp; 票数: <input type="text" name="votes" value="0" style="width:50px"/>
+&nbsp; 排序: <input type="text" name="prioritys" id="priority{0}" style="width:30px"/>
+&nbsp; <a href="javascript:void(0);" onclick="$(this).parent().remove();"><img src="${base}/skin/sys/img/admin/del.gif"/></a>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<footer class="s mt5">
+<a href="http://www.javassf.com">关于我们</a> | <a href="http://www.javassf.com/download/index.jsp">服务条款</a> | <a href="http://www.javassf.com">开放平台</a> | <a href="http://www.javassf.com">广告服务</a> | <a href="http://www.javassf.com">人才招聘</a> | <a href="http://www.javassf.com">客服中心</a> | <a href="${base}/guide/index.jsp">网站导航</a><br/>
+ICP备案号：赣ICP备11006121号-1 &nbsp; Copyright &copy; 2013 - 2014 <a href="http://www.javassf.com" target="_blank">www.javassf.com All Rights Reserved </a>
+<script type="text/javascript">
+  document.write(unescape("%3Cscript src='${base}/visitViews.jsp%3Furl%3D")+document.location.href+unescape("' type='text/javascript'%3E%3C/script%3E"));
+</script>
+</footer>
+<script language="javascript">
+$(function() {
+	$.get("${base}/jslogin.jsp",{},function(data){
+		$("#loginhtml").html(data);
+	},"html");
+})
+</script>

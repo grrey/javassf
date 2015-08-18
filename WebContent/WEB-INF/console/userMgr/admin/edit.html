@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>管理员修改</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+var setting = {async : {enable : true,url : "../depart/v_addtree.do",autoParam : ["parentId"]},
+		check: {enable: false}
+};
+var csetting = {
+		async : {enable : true,url : "../admin/v_chnltree.do?adminId=${admin.id}",type:"get"},
+		check: {enable: true}
+};
+
+$(function (){
+	$("#adminForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	$.fn.zTree.init($("#departTree"), setting);
+	ztree = $.fn.zTree.init($("#tree1"), csetting);
+	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+
+function setDepart(name,id) {
+	$("#menuContent").fadeOut("fast");
+	$("#selectdepartId").val(name);
+	$("#departId").val(id);
+	$.get("../role/v_roleop.do",{"departId":$("#departId").val()},function(data) {
+		$("#roleId").html(data);
+	});
+}
+
+function checksubmit(){
+	var nodes = ztree.getCheckedNodes(true);
+	var str = "";
+	for(var i=0;i<nodes.length;i++){
+		if(nodes[i].id!=null){
+		    str += "<input type='hidden' name='channelIds' value='" +nodes[i].id+ "'/>";
+		}
+	}
+	$("#allids").empty().append(str);
+	$("#adminForm").submit();
+}
+
+function showchannel(){
+	if($(":radio[name='takeDepart']:checked").val()=="true"){
+		$("#channelshow").hide();
+	}else{
+		$("#channelshow").show();
+	}
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>管理员/修改</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="adminForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>用户名：</td>
+              <td>${admin.username!}</td>
+              <td class="ftit">电子邮箱：</td>
+              <td><input name="email" type="text" id="email" ltype="text" size="25" value="${admin.user.email!}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">真实姓名：</td>
+              <td><input name="realName" type="text" id="realName" ltype="text" size="25" value="${admin.user.realName!}"/>
+              </td>
+              <td class="ftit"><span>*</span>所属部门：</td>
+              <td>
+				<ul class="pms-comboBox">
+				<li><input type="text" name="selectdepartId" onclick="showMenu('selectdepartId','menuContent')" id="selectdepartId" readonly="readonly" <#if depart??>value="${depart.name!}"</#if> vld="{required:true,messages:{required:'所在部门不能为空!'}}"/></li>
+			    <li class="pms-trigger" onclick="showMenu('selectdepartId','menuContent')"><div class="pms-trigger-icon"></div></li>
+				</ul>
+				<input type="hidden" name="departId" id="departId" <#if depart??>value="${depart.id!}"</#if>/>
+				<div id="menuContent" class="menuContent" style="display:none; width:180px; position:absolute; background:#fff; border:1px solid #ccc;">
+					<ul id="departTree" class="ztree" style="height:180px;width:170px;overflow-y:scroll;"></ul>
+				</div>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">手机：</td>
+              <td><input name="mobile" type="text" id="mobile" ltype="text" size="25" value="${admin.user.mobile!}" vld="{digits:true,messages:{digits:'手机号码必须为数字!'}}"/></td>
+              <td class="ftit">电话：</td>
+              <td><input name="phone" type="text" id="phone" ltype="text" size="25" value="${admin.user.phone!}"/>
+              </td>
+            </tr>
+            <#if user.username=="admin">
+            <tr>
+              <td class="ftit"><span>*</span>管理员属性：</td>
+              <td colspan="3">
+				<input id="manageStatus_1" type="radio" value="1" name="manageStatus" <#if manageStatus==1>checked="checked"</#if>><label for="manageStatus_1">自身数据</label>
+				<input id="manageStatus_2" type="radio" value="2" name="manageStatus" <#if manageStatus==2>checked="checked"</#if>><label for="manageStatus_2">审核数据</label>
+				<input id="manageStatus_3" type="radio" value="3" name="manageStatus" <#if manageStatus==3>checked="checked"</#if>><label for="manageStatus_3">部门数据</label>
+				<input id="manageStatus_4" type="radio" value="4" name="manageStatus" <#if manageStatus==4>checked="checked"</#if>><label for="manageStatus_4">所有数据</label>
+              </td>
+            </tr>
+            <#else>
+            <input type="hidden" name="manageStatus" value="${manageStatus!}"/>
+            </#if>
+            <tr>
+              <td class="ftit"><span>*</span>管理员角色：</td>
+              <td>
+	              <select name="roleId" id="roleId" vld="{required:true,messages:{required:'请选择角色!'}}">
+	              	<#list roleList as role>
+					<option value="${role.id!}" <#if roleId==role.id>selected="selected"</#if>>${role.name!}</option>
+					</#list>
+	              </select>
+              </td>
+              <td class="ftit"><span>*</span>采用部门栏目权限：</td>
+              <td>
+	              <input id="takeDepart_0" type="radio" name="takeDepart" value="true" onclick="showchannel()" <#if admin.getTakeDepart(site.id)>checked="checked"</#if>/>是 
+                  <input id="takeDepart_1" type="radio" name="takeDepart" value="false" onclick="showchannel()" <#if !admin.getTakeDepart(site.id)>checked="checked"</#if>/>否
+              </td>
+            </tr>
+            <tr id="channelshow" <#if admin.getTakeDepart(site.id)>style="display:none"</#if>>
+              <td class="ftit">栏目权限：</td>
+              <td colspan="3">
+              <div class="l-scroll" style="height:300px;overflow-y:scroll;">
+              <ul id="tree1" class="ztree">
+              </ul>
+              </div>
+              <div style="display:none;" id="allids"></div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:admin:update">
+                <input type="hidden" name="id" value="${admin.id}"/>
+                <input type="button" value="提交" class="l-button" onclick="checksubmit()"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>文档列表</title>
+<script type="text/javascript">
+
+</script>
+</head>
+<body style="padding:2px;overflow:hidden;">
+<div id="mainsearch">
+    <div class="searchtitle">
+        <span>搜索</span><img src="${base}/skin/sys/img/admin/searchtool.gif" />
+        <div class="togglebtn"></div>
+    </div>
+    <div class="navline"></div>
+    <div class="searchbox">
+    	<form id="formsearch">
+    	<ul class="sform">
+    	<li class="t">文档标题：</li>
+    	<li><input type="text" name="title" id="title"/></li>
+    	<li class="t">文档状态：</li>
+    	<li>
+    	   <input type="checkbox" name="statuss" value="2"/>已审核
+    	   <input type="checkbox" name="statuss" value="1"/>未审核
+    	   <input type="checkbox" name="statuss" value="3"/>回收站
+        </li>
+        <li class="t">文档类型：</li>
+    	<li>
+    	   <#list typeList as type>
+    	   <input type="checkbox" name="typeIds" value="${type.id}"/>${type.name!}
+           </#list>
+        </li>
+        </ul>
+        <ul class="sform">
+        <li class="t">文档栏目：</li>
+    	<li>
+    	   <input type="radio" name="docchnl" value="" checked="checked"/>所有栏目
+    	   <input type="radio" name="docchnl" value="${chnlId!}"/>当前栏目
+        </li>
+        <li class="t">文档属性：</li>
+    	<li>
+    	   <input type="checkbox" name="top" value="1" onclick="$('#topval').val(this.checked)"/>置顶<input type="hidden" id="topval" value="false"/>
+    	   <input type="checkbox" name="recommend" id="recommend" value="1" onclick="$('#recval').val(this.checked)"/>推荐<input type="hidden" id="recval" value="false"/>
+        </li>
+        <li class="t">文档模型：</li>
+    	<li>
+    	   <#list allModel as model>
+    	   <input type="checkbox" name="modelIds" value="${model.id}"/>${model.name!}
+    	   </#list>
+        </li>
+        <li><input type="button" name="search" value="搜索" onclick="f_search();" class="l-button"/></li>
+        </ul>
+        </form>
+    </div>
+</div>
+<div id="maingrid">
+<#list p.content as article>
+${article.id!}     ${article.title!}      
+</#list>
+</div>
+</body>
+</html>

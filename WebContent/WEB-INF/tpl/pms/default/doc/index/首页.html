@@ -1,0 +1,525 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${site.name} - Powered by javassf</title>
+<meta content="${site.keywords!}" name="keywords" />
+<meta content="${site.description!}" name="description" />
+<meta name="author" content="javassf"/>
+<meta name="copyright" content="Copyright &copy; 2013 - 2014 javassf.com All Rights Reserved."/>
+<link rel="shortcut icon" href="/${skin}/img/favicon.ico">
+<link href="/${skin}/css/style.css" rel="stylesheet"/>
+<script src="${comm}/js/jquery-1.8.3.js"></script>
+<script src="/${skin}/js/com.js"></script>
+<!--[if IE]><script src="/${skin}/js/html5.js"></script><![endif]-->
+<script language="javascript">
+$(function() {
+	var oItem = document.getElementById('item');
+	var oSpan = oItem.getElementsByTagName('span')[0];
+	var oUl = oItem.getElementsByTagName('ul')[0];
+	var aLi =oUl.getElementsByTagName('li');
+	oItem.onmouseover=function(){
+		oUl.style.display = 'block';
+		for(var i=0;i<aLi.length;i++){
+			aLi[i].index = i;
+			aLi[i].onmouseover=function(){
+				this.style.background = '#C8E1EA';
+				if(this.index!=aLi.length-1){
+					this.style.color ='#ff3300';
+				}
+			}
+			aLi[i].onmouseout=function(){
+				this.style.background = 'none';
+				this.style.color ='';
+			}
+			aLi[i].onclick=function(){
+				if(this.index!=aLi.length){
+					oSpan.innerHTML = this.innerHTML;
+					oUl.style.display = 'none';
+					var idstr = $(this).attr("id");
+					var id = idstr.substring(5);
+					$("#mId").val(id);
+				}
+			}
+		}
+	}
+	oItem.onmouseout=function(){
+		oUl.style.display = 'none';
+	}
+  
+  var scrtime;
+  $(".comList").hover(function(){
+	  clearInterval(scrtime);
+	 },function(){
+	  scrtime = setInterval(function(){
+	  var $ul = $(".comList");
+	  var liHeight = $ul.find("li:last").height();
+	  $ul.animate({marginTop : liHeight+20 +"px"},1000,function(){
+	  $ul.find("li:last").prependTo($ul);
+	  $ul.find("li:first").hide();
+	  $ul.css({marginTop:0});
+	  $ul.find("li:first").fadeIn(1000);
+	  }); 
+	 },3000);
+  }).trigger("mouseleave");
+})
+
+function checkval(){
+	if($("input[name='q']").val()=="请输入关键词"){
+		 alert("请输入关键词!");
+	   	 $("input[name='q']").focus();
+	   	 return false;
+	}
+	return true;
+}
+</script>
+</head>
+
+<body>
+<!--header-->
+<header>
+	<!--top-->
+	[#include "../include/顶栏.html"/]
+	<!--/top-->
+    
+    <!-- top_search -->
+    [#include "../include/搜索栏.html"/]
+    <!-- /top_search -->
+
+	<!-- nav -->
+	[#include "../include/导航栏.html"/]
+    <!-- /nav -->
+</header>
+<!--/header--> 
+
+<!--ad_1-->
+[@Advert id='1'/]
+<!--ad_1-->
+
+<!--main_1-->
+<section class="s mt5 b">
+	<div class="ml">
+        <!--jdt-->
+		[@DocList tId='3' count='5' recommend='1']
+        <div class="focus-pic" id="focus-pic">
+            <div data-scro="list" log-type="toppic">
+                <ul>
+                    [#list list as a]
+                    <li class="item"[#if a_index == 0] style="left:0;"[/#if]>
+                        <a href="${a.url}" target="_blank" title="${a.title!}"><img src="${base}${a.getPicStyle('3')!}" alt="${a.title!}'/]"/></a>
+                        <h3><a href="${a.url}" target="_blank">[@StrLimit s=a.title l='16' r='<br/>'/]</a></h3>
+                        <div></div>
+                    </li>
+                    [/#list]
+                </ul>
+            </div>
+          
+            <div class="controler" data-scro="controler">
+            [#list list as b]<b[#if b_index == 0] class="down"[/#if]>${b_index+1}</b>[/#list]</div>
+            <div class="controler2" data-scro="controler2"><a href="javascript:;" class="prev"><i></i></a><a href="javascript:;" class="next"><i></i></a></div>  
+        </div>
+		<script src="/${skin}/js/focus.js"></script>
+        [/@DocList]
+        <!--/jdt-->
+        <div class="bor1 mt10">
+    		<div class="tit1"><h2>最新热评</h2></div>
+            <div class="h_comList mt5 mb5">
+                [@Comment count='10' checked='1']
+                <ul class="w96 comList">
+                [#list page.content as c]
+                <li onmouseover="this.style.background='#E6EFFD';" onmouseout="this.style.background='#F2F6FD';">
+                  <dl>
+                    <dt><a href="#" class="user">${(c.user.username)!"javassf网友"}</a><a href="${base}/comment-${c.doc.id!}.jsp" target="_blank" class='ico'></a>评论<a title="${c.doc.title}" href="${c.doc.url}" target="_blank" class="blue">#[@StrLimit s=c.doc.title l='20'/]#</a> </dt>
+                    <dd class="pic">
+                    <img [#if c.user??&&c.user.member??&&c.user.member.avatar??]src="${base}${c.user.member.avatar!}"[#else]src="/${skin}/img/face.png"[/#if]/></dd>
+                    <dd>[@StrLimit s=c.content?html l='40'/]</dd>
+                  </dl>
+                </li>
+                [/#list]
+                </ul>
+                [/@Comment]
+            </div>
+        </div>
+	</div>
+	<div class="mc">
+    	<div class="tit2"><h2>最新要闻</h2></div>
+		<div class="tt w96">
+			[@DocList tId='4' count='3' orderBy='2']
+			[#if list?size gt 0]
+        	[#assign a=list[0]]
+			<h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></h2>
+            <p>
+            [#list list as a]
+        	[#if a_index gt 0]
+            [<a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='14'/]</a>][/#if][/#list]
+            </p>
+            [/#if]
+			[/@DocList]
+		</div>
+        [@DocList count='18']
+        <ul class="nlist w96">
+			[#list list as a]
+            <li><a href="${a.url}" title="${a.title!}" target="_blank">[@StrLimit s=a.title l='22'/]</a></li>
+            [#if a_has_next && (a_index+1)%6 = 0]<li class="bb2"></li>[/#if]
+            [/#list]
+		</ul>
+		[/@DocList]
+	</div>
+	<div class="mr">
+    	<a href="http://www.javassf.com/help/index.jsp" target="_blank" title="javassf系统说明专题讲解"><img src="/${skin}/img/topic.jpg" alt="javassf系统说明专题讲解"/></a>
+        <a href="${base}/questionList.jsp" target="_blank" title="javassf问卷调查"><img src="/${skin}/img/wjdc.jpg" alt="javassf问卷调查" class="mt5"/></a>
+  		<div class="bor mt10">
+            <div class="tit"><h2>视频快讯</h2><em>[@Channel id='48']<a href="${bean.url}" target="_blank">[/@Channel]更多 &raquo;</a></em></div>
+            <div class="cont">
+            [@DocList mId='4' count='5' orderBy='2' callLevel='1']
+            [#if list?size gt 0]
+            [#assign a=list[0]]
+            <div class="twlist w92 mt5 pb5">
+              <a href="${a.url}" title="${a.title}" target="_blank" class="video"><img src="${base}${a.getPicStyle('0')!}"/><i></i></a>
+              <div class="in_text">
+                <h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></h2>
+                <p>[@StrLimit s=a.description l='14'/]<a href="${a.url}" target="_blank" class="blue">[详情]</a></p>
+              </div>
+            </div>
+            <ul class="nlist2 w92 pb5">
+            [#list list as a]
+            [#if a_index gt 0]
+                <li class="m4"><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='16'/]</a></li>
+            [/#if]
+            [/#list]
+            </ul>
+            [/#if]
+            [/@DocList]
+            </div>
+        </div>
+        <div class="bor mt10">
+            <div class="tit"><h2>热点排行</h2></div>
+            <div class="cont">
+                [@DocList count='6' orderBy='4']
+                <ol class="ph2 w92">
+                [#list list as a]
+                    <li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></li>
+                [/#list]
+                </ol>
+                [/@DocList]
+            </div>
+		</div> 		          
+    </div>
+</section>
+<!--/main_1-->
+
+<!--ad_2-->
+<section class="s mt10">
+	<a href="http://www.javassf.com" target="_blank" title="javassf建站套餐"><img width="1000" src="/${skin}/img/ad.jpg" alt="javassf建站套餐"/></a>
+</section>
+<!--/ad_2-->
+
+<!--main_2-->
+<section class="s b mt10">
+	<div class="ml">
+		<div class="bor1">
+			<div class="tit1"><h2>[@Channel id='2']<a href="${bean.url}" target="_blank">[/@Channel]体育</a></h2></div>
+            <div class="cont">
+				[@DocList cId='2' tId='2' count='2' orderBy='2' callLevel='1']
+				[#list list as a]
+				<div class="twlist2 mt10 mb5 w94">
+					<a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.getPicStyle('0')!site.defImg}" alt="${a.title}"/></a>
+					<div class="in_text">
+						<h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='22'/]</a></h2>
+						<p>[@StrLimit s=a.description l='38'/]<a href="${a.url}" target="_blank" class="red">[详情]</a></p>
+					</div>
+				</div>
+				[/#list]
+				[/@DocList]
+				[@DocList cId='2' count='7' orderBy='2' callLevel='1']
+				<ul class="nlist2 w94 pb5">
+					[#list list as a]
+					[#if a_index gt 1]
+					<li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='22'/]</a></li>
+					[/#if]
+					[/#list]
+				</ul>
+				[/@DocList]
+            </div>
+		</div>
+    </div>
+	<div class="mc">    	
+    	<div class="tit2"><h2>[@Channel id='1']<a href="${bean.url}" target="_blank">[/@Channel]新闻</a></h2></div>
+		<div class="tt w96">
+			[@DocList cId='1' tId='4' count='3' orderBy='2' callLevel='1']
+			[#if list?size gt 0]
+        	[#assign a=list[0]]
+			<h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></h2>
+            <p>
+            [#list list as a]
+        	[#if a_index gt 0]
+            [<a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='14'/]</a>][/#if][/#list]
+            </p>
+            [/#if]
+			[/@DocList]
+		</div>
+        [@DocList cId='1' count='10' orderBy='2' callLevel='1']
+        <ul class="nlist w96">
+			[#list list as a]
+            <li><a href="${a.url}" title="${a.title!}" target="_blank">[@StrLimit s=a.title l='22'/]</a></li>
+            [#if a_has_next && (a_index+1)%5 = 0]<li class="bb2"></li>[/#if]
+            [/#list]
+		</ul>
+		[/@DocList]
+    </div>
+	<div class="mr">
+        <div class="bor">
+    		<div class="tit"><h2>[@Channel id='3']<a href="${bean.url}" target="_blank">[/@Channel]娱乐</a></h2></div>
+            <div class="cont">
+                [@DocList cId='3' count='5' orderBy='2' callLevel='1']
+				[#if list?size gt 0]
+				[#assign a=list[0]]
+				<div class="twlist mt10 mb5 w92">
+					<a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.getPicStyle('0')!site.defImg}"/></a>
+					<div class="in_text">
+						<h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='16'/]</a></h2>
+						<p>[@StrLimit s=a.description l='14'/]<a href="${a.url}" target="_blank" class="red">[详情]</a></p>
+					</div>
+				</div>
+				<ul class="nlist2 w92 pb5">
+					[#list list as a]
+					[#if a_index gt 0]
+					<li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='16'/]</a></li>
+					[/#if]
+					[/#list]
+				</ul>
+				[/#if]
+				[/@DocList]
+            </div>
+        </div>
+        <div class="bor mt10">
+    		<div class="tit"><h2>精彩推荐</h2></div>
+            <div class="cont">
+            [@DocList count='4' recommend='1']
+            <ul class="nlist2 w92 pb5">
+            [#list list as a]
+                <li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='16'/]</a></li>
+            [/#list]
+            </ul>
+            [/@DocList]
+            </div>
+        </div>
+    </div>
+</section>
+<!--/main_2-->
+
+<!--ad_3-->
+<section class="s mt10">
+	<a href="http://www.javassf.com" target="_blank" title="javassf建站套餐"><img width="1000" src="/${skin}/img/ad.jpg" alt="javassf建站套餐"/></a>
+</section>
+<!--/ad_3-->
+
+<!--main_3-->
+<section class="s b mt10">
+	<div class="ml">
+    	<div class="bor1">
+    		<div class="tit1"><h2>[@Channel id='4']<a href="${bean.url}" target="_blank">[/@Channel]财经</a></h2></div>
+			[@DocList cId='4' tId='2' count='2' orderBy='2' callLevel='1']
+			[#list list as a]
+			<div class="twlist2 mt10 mb5 w94">
+				<a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.getPicStyle('0')!site.defImg}" alt="${a.title}"/></a>
+				<div class="in_text">
+					<h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='22'/]</a></h2>
+					<p>[@StrLimit s=a.description l='38'/]<a href="${a.url}" target="_blank" class="red">[详情]</a></p>
+				</div>
+			</div>
+			[/#list]
+			[/@DocList]
+			[@DocList cId='4' count='7' orderBy='2' callLevel='1']
+			<ul class="nlist2 w94 pb5">
+				[#list list as a]
+				[#if a_index gt 1]
+				<li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='22'/]</a></li>
+				[/#if]
+				[/#list]
+			</ul>
+			[/@DocList]
+		</div>
+    </div>
+	<div class="mc">    	
+    	<div class="tit2"><h2>[@Channel id='13']<a href="${bean.url}" target="_blank">[/@Channel]科技</a></h2></div>
+		<div class="w96 mt10 mb5 b">
+        	[@DocList cId='13' tId='2' count='2' orderBy='2' callLevel='1']
+			[#list list as a]
+			<div class="twlist3">
+            	<a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.getPicStyle('0')!site.defImg}" alt="${a.title}"/></a>
+            	<p class="titlebg"></p>
+            	<p class="title"><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></p>
+			</div>
+			[/#list]
+			[/@DocList]
+		</div>
+        [@DocList cId='13' count='7' orderBy='2' callLevel='1']
+        <ul class="nlist w96">
+        	<li class="bb2"></li>
+			[#list list as a]
+            <li><a href="${a.url}" title="${a.title!}" target="_blank">[@StrLimit s=a.title l='22'/]</a></li>
+            [/#list]
+		</ul>
+		[/@DocList]
+    </div>
+	<div class="mr">
+        <div class="bor">
+    		<div class="tit"><h2>健康</h2></div>
+            <div class="cont">
+                [@DocList cId='14' count='11' orderBy='3' callLevel='1']
+				[#if list?size gt 0]
+				[#assign a=list[0]]
+				<div class="twlist mt10 mb5 w92">
+					<a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.getPicStyle('0')!site.defImg}"/></a>
+					<div class="in_text">
+						<h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='18'/]</a></h2>
+						<p>[@StrLimit s=a.description l='14'/]<a href="${a.url}" target="_blank" class="red">[详情]</a></p>
+					</div>
+				</div>
+				<ul class="nlist2 w92 mt10 pb5">
+					[#list list as a]
+					[#if a_index gt 0]
+					<li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='16'/]</a></li>
+					[/#if]
+					[/#list]
+				</ul>
+				[/#if]
+				[/@DocList]
+            </div>
+        </div>
+    </div>
+</section>
+<!--/main_3-->
+
+<!--ad_4-->
+<section class="s mt10">
+	<a href="http://www.javassf.com" target="_blank" title="javassf建站套餐"><img width="1000" src="/${skin}/img/ad.jpg" alt="javassf建站套餐"/></a>
+</section>
+<!--/ad_4-->
+
+<!--main_4-->
+<section class="s b mt10">
+	<div class="ml">
+    	<div class="bor1">
+    		<div class="tit1"><h2>[@Channel id='15']<a href="${bean.url}" target="_blank">[/@Channel]时尚</a></h2></div>
+			[@DocList cId='15' tId='2' count='2' orderBy='2' callLevel='1']
+			[#list list as a]
+			<div class="twlist2 mt10 mb5 w94">
+				<a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.getPicStyle('0')!site.defImg}" alt="${a.title}"/></a>
+				<div class="in_text">
+					<h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='22'/]</a></h2>
+					<p>[@StrLimit s=a.description l='38'/]<a href="${a.url}" target="_blank" class="red">[详情]</a></p>
+				</div>
+			</div>
+			[/#list]
+			[/@DocList]
+			[@DocList cId='15' count='7' orderBy='2' callLevel='1']
+			<ul class="nlist2 w94 pb5">
+				[#list list as a]
+				[#if a_index gt 1]
+				<li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='22'/]</a></li>
+				[/#if]
+				[/#list]
+			</ul>
+			[/@DocList]
+		</div>
+    </div>
+	<div class="mc">    	
+    	<div class="tit2"><h2>[@Channel id='20']<a href="${bean.url}" target="_blank">[/@Channel]旅游</a></h2></div>
+		<div class="w96 mt10 mb5 b">
+        	[@DocList cId='20' tId='2' count='2' orderBy='2' callLevel='1']
+			[#list list as a]
+			<div class="twlist3">
+            	<a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.getPicStyle('0')!site.defImg}" alt="${a.title}"/></a>
+            	<p class="titlebg"></p>
+            	<p class="title"><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></p>
+			</div>
+			[/#list]
+			[/@DocList]
+		</div>
+        [@DocList cId='20' count='7' orderBy='2' callLevel='1']
+        <ul class="nlist w96">
+        	<li class="bb2"></li>
+			[#list list as a]
+            <li><a href="${a.url}" title="${a.title!}" target="_blank">[@StrLimit s=a.title l='22'/]</a></li>
+            [/#list]
+		</ul>
+		[/@DocList]
+    </div>
+	<div class="mr">
+        <div class="bor">
+    		<div class="tit"><h2>[@Channel id='211']<a href="${bean.url}" target="_blank">[/@Channel]房产</a></h2></div>
+            <div class="cont">
+                [@DocList cId='211' count='11' orderBy='2' callLevel='1']
+				[#if list?size gt 0]
+				[#assign a=list[0]]
+				<div class="twlist mt10 mb5 w92">
+					<a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.getPicStyle('0')!site.defImg}"/></a>
+					<div class="in_text">
+						<h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='16'/]</a></h2>
+						<p>[@StrLimit s=a.description l='14'/]<a href="${a.url}" target="_blank" class="red">[详情]</a></p>
+					</div>
+				</div>
+				<ul class="nlist2 w92 mt10 pb5">
+					[#list list as a]
+					[#if a_index gt 0]
+					<li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='16'/]</a></li>
+					[/#if]
+					[/#list]
+				</ul>
+				[/#if]
+				[/@DocList]
+            </div>
+        </div>
+    </div>
+</section>
+<!--/main_4-->
+
+<!--main_4-->
+<section class="s mt10 bor1 b">
+	<div class="tit1"><h2>精彩图集</h2></div>
+    <div class="cont">
+      <div class="mt5 w98 b">
+      	[@DocList mId='3' count='7' orderBy='2']
+        [#if list?size gt 0]
+        [#assign a=list[0]]
+    	<div class="cl">
+          <div class="flashshow"><a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.cover!}" alt="${a.title}"/></a>
+            <p class="flashtext"></p>
+            <p class="flash_tit"><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></p>
+          </div>
+        </div>
+        <div class="cm b">
+          [#list list as a]
+          [#if a_index gt 0]
+          <div class="flashshow"><a href="${a.url}" title="${a.title}" target="_blank"><img src="${base}${a.cover!}" alt="${a.title}" [#if a_index==1 || a_index==5]width="285"[#else]width="180"[/#if] height="165" /></a>
+            <p class="flashtext"></p>
+            <p class="flash_tit"><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></p>
+          </div>
+          [/#if]
+          [/#list]
+        </div>
+        [/#if]
+        [/@DocList]
+      </div>
+    </div>
+</section>
+<!--/main_4-->
+
+<!--flink-->
+[#include "../include/友情链接栏.html"/]
+<!--flink-->
+
+<!--footer--> 
+[#include "../include/页脚.html"/] 
+<!--/footer-->
+
+<!--duilian-->
+[@Advert id='4'/]
+<!--/duilian-->
+<!--piaofu-->
+[@Advert id='5'/]
+<!--/piaofu-->
+</body>
+</html>

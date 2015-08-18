@@ -1,0 +1,98 @@
+[#if bean??&&bean.slot??]
+<!-- 固定位置 -->
+[#if bean.slot.slotType==1]
+<div class="ad-${bean.id}">
+<a href="${bean.url!}" target="_blank" title="${bean.aexplain!}">
+<img src="${base}${bean.attrUrl!}" width="${bean.slot.width!}" height="${bean.slot.height!}" alt="${bean.aexplain!}"/>
+</a>
+</div>
+<!-- 漂浮广告 -->
+[#elseif bean.slot.slotType==2]
+<div id="pfad" class="ad-${bean.id}" style="position:absolute">
+<a href="${bean.url!}" title="${bean.aexplain!}" target="_blank"><img src="${base}${bean.attrUrl!}" width="${bean.slot.width!}" height="${bean.slot.height!}" alt="${bean.aexplain!}"/></a>
+<div onClick="hidead();" style="font-size:12px;cursor:pointer;" align="right">关闭×</div>
+</div>
+<script>
+var x = 50,y = 60
+var xin = true, yin = true
+var step = 1
+var delay = 30
+var obj=document.getElementById("pfad")
+function floatAD() {
+var L=T=0
+var R= document.body.clientWidth-obj.offsetWidth
+var B = document.body.clientHeight-obj.offsetHeight
+obj.style.left = x + document.body.scrollLeft
+obj.style.top = y + document.body.scrollTop
+x = x + step*(xin?1:-1)
+if (x < L) { xin = true; x = L}
+if (x > R){ xin = false; x = R}
+y = y + step*(yin?1:-1)
+if (y < T) { yin = true; y = T }
+if (y > B) { yin = false; y = B }
+}
+var itl= setInterval("floatAD()", delay)
+obj.onmouseover=function(){clearInterval(itl)}
+obj.onmouseout=function(){itl=setInterval("floatAD()", delay)}
+function hidead()
+{document.getElementById("pfad").style.display="none";}
+</script>
+<!-- 弹窗广告 -->
+[#elseif bean.slot.slotType==3]
+
+
+<!-- 对联广告 -->
+[#else]
+<div id="leftDiv" style="position:absolute;top:60px;left:2%">
+  <div><a href="${bean.url!}" target="_blank" title="${bean.aexplain!}"><img src="${base}${bean.attrUrl!}" alt="${bean.aexplain!}"/></a></div>
+  <span style="font-size:12px;color:red;cursor:pointer;" onclick="close_duilian()">关闭×</span>
+</div>
+<div id="rightDiv" style="position:absolute;top:60px;right:2%;">
+  <div><a href="${bean.url!}" target="_blank" title="${bean.aexplain!}"><img src="${base}${bean.attrUrl!}" alt="${bean.aexplain!}"/></a></div>
+  <span style="font-size:12px;color:red;cursor:pointer;text-align:right;" onclick="close_duilian()">关闭×</span>
+</div>
+<script type="text/javascript">
+<!-- 
+lastScrollY = 0;
+function heartBeat(){ 
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+ diffY = document.documentElement.scrollTop;
+else if (document.body)
+ diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+ 
+percent=.1*(diffY-lastScrollY); 
+if(percent>0)percent=Math.ceil(percent); 
+else percent=Math.floor(percent); 
+document.getElementById("leftDiv").style.top = parseInt(document.getElementById("leftDiv").style.top)+percent+"px";
+document.getElementById("rightDiv").style.top = parseInt(document.getElementById("leftDiv").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent; 
+}
+
+//下面这段删除后，对联将不跟随屏幕而移动。
+window.setInterval("heartBeat()",20);
+function close_duilian(){
+  var l=document.getElementById("leftDiv");
+  var r=document.getElementById("rightDiv");
+   l.style.display="none";
+   r.style.display="none";
+}
+//-->
+</script>
+[/#if]
+[#elseif list??&&list?size gt 0]
+[#assign adv=list[0]]
+<script type="text/javascript">
+$(document).ready(function(){
+    $(function(){
+        $("body").floatAd({
+            imgSrc : '${base}${adv.attrUrl!}',
+            url:'${adv.url!}',
+            id : '${adv.id!}'
+        });
+    })
+});
+</script>
+[/#if]

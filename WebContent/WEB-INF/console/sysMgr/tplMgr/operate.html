@@ -1,0 +1,94 @@
+<div id="insertart" style="display:none;">
+  <table width="99%" class="pmsTable">
+    <tr>
+      <td class="ftit">所属栏目：</td>
+      <td width="460" colspan="3">
+        <input type="text" name="chnlname1" value="不限制栏目" readonly="readonly"/>
+        <input type="button" class="l-button" value="选择栏目" onclick="showChannel()"/>
+      </td>
+    </tr>
+    <tr>
+      <td class="ftit">显示样式：</td>
+      <td colspan="3">
+         <select id="showstyle" onchange="changestyle()">
+           <option value="doc_normal">普通列表</option>
+           <option value="doc_headline">第一条头条显示</option>
+           <option value="doc_graphic">第一条图文显示</option>
+           <option value="doc_title_dir">标题滚动显示</option>
+           <option value="">图文显示</option>
+           <option value="doc_img_dir">图文滚动显示</option>
+           <option value="">自定义</option>
+         </select>
+         <span id="showdir"></span>
+         <input type="button" class="l-button" value="样式预览"/>
+      </td>
+    </tr>
+    <tr>
+      <td class="ftit">文档模型：</td>
+      <td colspan="3">
+         <#list modelList as model>
+         <input type="checkbox" name="artmodel" value="${model.id!}"/>${model.name!}
+         </#list>&nbsp;&nbsp;&nbsp;&nbsp;不选则不限制
+      </td>
+    </tr>
+    <tr>
+      <td class="ftit">文档属性：</td>
+      <td colspan="3">
+         <#list typeList as type>
+         <input type="checkbox" name="arttype" value="${type.id!}"/>${type.name!}
+         </#list>
+         <input type="checkbox" id="recommend" />推荐&nbsp;&nbsp;&nbsp;&nbsp;不选则不限制
+      </td>
+    </tr>
+    <tr>
+      <td class="ftit">是否分页：</td>
+      <td>
+         <input type="checkbox" id="artpage"/>是
+      </td>
+      <td class="ftit">显示数量：</td>
+      <td>
+         <select id="artcount">
+           <option value="10">10</option>
+           <option value="15">15</option>
+           <option value="20">20</option>
+           <option value="25">25</option>
+           <option value="30">30</option>
+         </select>&nbsp;条
+      </td>
+    </tr>
+    <tr>
+      <td class="ftit">排序方式：</td>
+      <td>
+         <select id="artorder">
+           <option value="0">发布时间倒序</option>
+           <option value="2">置顶排前</option>
+           <option value="3">推荐排前</option>
+           <option value="4">访问统计降序</option>
+           <option value="5">评论数量降序</option>
+         </select>
+      </td>
+      <td class="ftit">时间样式：</td>
+      <td>
+         <select id="timestyle">
+           <option value="0">不显示</option>
+           <option value="yyyy-MM-dd HH:mm:ss">yyyy-MM-dd HH:mm:ss</option>
+           <option value="yyyy-MM-dd HH:mm">yyyy-MM-dd HH:mm</option>
+           <option value="yyyy-MM-dd">yyyy-MM-dd</option>
+           <option value="MM-dd">MM-dd</option>
+         </select>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" class="fctrl">
+        <input type="button" value="插入" class="l-button" onclick="resultArt()"/>
+      </td>
+    </tr>
+  </table>
+</div>
+<div id="divdirection" style="display:none">
+翻滚方式：<select id="direction"><option value="0">从右向左</option><option value="1">从下往上</option></select>
+</div>
+<input type="hidden" id="channelId" value=""/>
+<div id="menuContento" class="menuContent" style="display:none; width:260px; position:absolute; background:#fff; border:1px solid #ccc;">
+	<ul id="channelTree" class="ztree" style="height:180px;width:210px;overflow-y:scroll;"></ul>
+</div>

@@ -1,0 +1,504 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>栏目修改</title>
+<#include "../../liger.html"/>
+<script charset="utf-8" src="${base}/plugin/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="${base}/plugin/kindeditor/lang/zh_CN.js"></script>
+<script language="javascript">
+var settinge = {async : {enable : true,url : "../channel/v_edittree.do?channelId=${channel.id}",autoParam : ["parentId"]},
+		check: {enable: false}
+};
+var dirsetting = {
+		async : {enable : true,url : "../tpl/v_tpl_dirtree.do",autoParam : ["path"],type:"get"},
+		check: {enable: false}
+};
+var editor;
+KindEditor.ready(function(K) {
+	editor = K.create('#txt',{cssPath :'../plugins/code/prettify.css',uploadJson : '../kind/o_upload_file.do',allowFileManager : true});
+});
+$(function (){
+	$("#chnlForm").validate({
+		errorPlacement : function(lable, element) {
+			element.ligerTip({
+				content : lable.html(),
+				target : element[0]
+			});
+		},
+		success : function(lable) {
+			lable.ligerHideTip();
+			lable.remove();
+		}
+	});
+	
+    $("#tab").ligerTab();
+    $("img[id^='aimg']").autoZoomLoadImage(150, 150);
+
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	refush();
+	</#if>
+	<#if msge??>
+	$.ligerDialog.error('${msge}');
+	</#if>
+	
+	$.fn.zTree.init($("#editTree"), settinge);
+	$.fn.zTree.init($("#dirList"), dirsetting);
+});
+
+function refush(){
+	var ztree = self.parent.chnltree;
+	<#if channel.parent??>
+	var node = ztree.getNodeByParam("parentId","${channel.parent.id!}");
+	<#else>
+	var node = null;
+	</#if>
+	if(node!=null){
+	if(node.isParent==false){
+		ztree.reAsyncChildNodes(node.getParentNode(),"refresh",!node.getParentNode().open);
+	}else{
+	if(node.children!=null){
+	    ztree.reAsyncChildNodes(node, "refresh",!node.open);
+	}
+	}}else{
+		ztree.reAsyncChildNodes(null, "refresh");
+	}
+	var aztree = self.parent.artitree;
+	<#if channel.parent??>
+	var anode = aztree.getNodeByParam("parentId","${channel.parent.id!}");
+	<#else>
+	var anode = null;
+	</#if>
+	if(anode!=null){
+	if(anode.isParent==false){
+		aztree.reAsyncChildNodes(anode.getParentNode(),"refresh",!anode.getParentNode().open);
+	}else{
+	if(anode.children!=null){
+		aztree.reAsyncChildNodes(anode, "refresh",!anode.open);
+	}}}else{
+		aztree.reAsyncChildNodes(null, "refresh");
+	}
+}
+
+var art1;
+var dig;
+var tmid;
+var setting;
+var m = 0;
+
+function showTpl(idstr){
+    $("#tplid").val(idstr);
+    dig = $.ligerDialog.open({
+    	title:"选择模板",
+    	width:650,
+    	target: $("#target")
+    });
+}
+
+function editTpl(idstr){
+    var tpl = $("#tpl"+idstr+"_url").val();
+    if(tpl!=null&&tpl.length>0){
+        top.f_addTab("modifyTpl", '修改模板', 'tpl/v_edit.do?name=' + tpl);
+    }
+}
+
+function checkTpl(tpl,tplurl){
+	var id = "tpl" + $("#tplid").val();
+	dig.hidden();
+	$("#"+id).val(tpl);
+	$("#"+id+"_url").val(tplurl);
+}
+
+function loadTpl(path){
+	var filesetting = {
+			async : {enable : true,url : "../tpl/v_tpl_filetree.do?path="+path,type:"get"},
+			check: {enable: false}
+	};
+	$.fn.zTree.init($("#tplList"), filesetting);
+}
+
+function setChannele(name,id) {
+	if(m==0){
+		$("#menuContent").fadeOut("fast");
+		$("#selectchannelId").val(name);
+		$("#parentId").val(id);
+		$("#selectchannelId").focus();
+	}else{
+		$("#chnlName0").val(name);
+		$("#chnl0").val(id);
+		m = 0;
+		art1.close();
+	}
+}
+
+function setChannel(name,id) {
+	$("#chnlName"+tmid).val(name);
+	$("#chnl"+tmid).val(id);
+	art1.close();
+}
+
+function showtxt(){
+	if($("#alone").attr("checked")==true){
+		$("#aloneval").val(true);
+	    $("#txtshow").show();
+	}else{
+		editor.html('');
+		$("#aloneval").val(false);
+		$("#txtshow").hide();
+	}
+}
+
+function showChannel(mid){
+	tmid = mid;
+	setting = {async : {enable : true,url : "../doc/v_addtree.do?modelId="+mid+"&chnlId=${channel.id!}",autoParam : ["parentId"]},
+			check: {enable: false}
+	};
+	art1 = $.dialog({
+		title : '选择栏目:',
+		content : $('#menuContento').html(),
+		padding : "0px 0px"
+	});
+	$.fn.zTree.init($("#channelTree"), setting);
+}
+
+function showChanneld(){
+	m = 1;
+	art1 = $.dialog({
+		title : '选择栏目:',
+		content : $('#menuContento').html(),
+		padding : "0px 0px"
+	});
+	$.fn.zTree.init($("#channelTree"), settinge);
+}
+
+var art;
+
+function moveDoc(){
+    $("input[id^='chnlName']").val("");
+    $("input[id^='chnl']").val("");
+	art = $.dialog({title:'移动文档:',content:$('#moveDoc').html(),padding:"0px 0px"});
+}
+
+function delChannel(){
+    $("#chnlName0").val("");
+    $("#chnl0").val("");
+	art = $.dialog({title:'删除栏目:',content:$('#delChannel').html(),padding:"0px 0px"});
+}
+
+function formSubmit(){
+	$("#moveForm").ajaxSubmit({
+		"success" : function(data) {
+			$.ligerDialog.success('成功移动'+data.count+'篇文档!');
+		},
+		"dataType" : "json"
+	});
+	art.close();
+}
+
+function emptyDoc(){
+	jQuery.ligerDialog.confirm('确定要清空所有文档吗?', function (confirm) {
+        if (confirm){
+        	$.post("../doc/o_empty.do",{
+        		chnlId:${channel.id}
+        	},function(data){
+        		$.ligerDialog.success('成功清空'+data.count+'篇文档!');
+        	},"json");
+        }
+	});
+}
+</script>
+</head>
+<body>
+<#include "attupload.html"/>
+	<div class="blk c">
+		<h2>栏目/修改</h2>
+		<div class="c">
+			<ul class="items c">
+			    <@Perm perm="admin:channel:add">
+			    <li><input type="button" name="addChild" value="增加子栏目" onclick="javascript:top.f_addTab('addChannel', '添加栏目信息', 'channel/v_add.do?parentId=${channel.id}')" class="l-button"/></li>
+			    </@Perm>
+			    <@Perm perm="admin:channel:list">
+			    <#if channel.child?size gt 0>
+			    <li><input type="button" name="childList" value="子栏目列表" onclick="javascript:top.f_addTab('chnlMgr','栏目管理','channel/v_list.do?parentId=${channel.id}')" class="l-button"/></li>
+				</#if>
+				</@Perm>
+				<@Perm perm="admin:doc:move">
+				<li><input type="button" name="moveDoc" value="移动文档" onclick="moveDoc();" class="l-button"/></li>
+				</@Perm>
+				<@Perm perm="admin:doc:empty">
+				<li><input type="button" name="emptyDoc" value="清空文档" onclick="emptyDoc();" class="l-button"/></li>
+				</@Perm>
+				<@Perm perm="admin:channel:delete">
+				<li><input type="button" name="delChannel" value="删除栏目" onclick="delChannel()" class="l-button"/></li>
+				</@Perm>
+			</ul>
+			<form action="o_update.do" name="chnlsave" id="chnlForm" method="post" class="mt5">
+			<div id="tab">
+                    <div title="基本属性">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+						  <tr>
+						    <td class="ftit">上级栏目:</td>
+						    <td colspan="3">
+						        <ul class="pms-comboBox">
+									<li><input type="text" name="selectchannelId" id="selectchannelId" onclick="showMenuset('selectchannelId','menuContent',-8,-86)" readonly="readonly" <#if channel.parent??>value="${channel.parent.name!}"<#else>value="根栏目"</#if>/></li>
+								    <li class="pms-trigger" onclick="showMenuset('selectchannelId','menuContent',-8,-86)"><div class="pms-trigger-icon"></div></li>
+								</ul>
+								<input type="hidden" name="parentId" id="parentId" <#if channel.parent??>value="${channel.parent.id!}"</#if>/>
+								<div id="menuContent" class="menuContent" style="display:none; width:180px; position:absolute; background:#fff; border:1px solid #ccc;">
+									<ul id="editTree" class="ztree" style="height:180px;width:170px;overflow-y:scroll;"></ul>
+								</div>
+						    </td>
+						  </tr>
+						  <tr>
+						    <td class="ftit"><span>*</span>栏目名称:</td>
+						    <td><input type="text" name="name" value="${channel.name!}" size="35" maxlength="50" vld="{required:true,messages:{required:'栏目名称不能为空!'}}"/></td>
+						    <td class="ftit"><span>*</span>访问路径:</td>
+						    <td><input type="text" name="path" value="${channel.path!}" size="35" maxlength="30" vld="{required:true,messages:{required:'栏目路径不能为空!'}}"/></td>
+						  </tr>
+						  <tr>
+						    <td class="ftit">meta标题:</td>
+						    <td><input type="text" name="title" value="${channel.title!}" size="35" maxlength="50" /></td>
+						    <td class="ftit">meta关键字:</td>
+						    <td><input type="text" name="keywords" value="${channel.keywords!}" size="35" maxlength="50" /></td>
+						  </tr>
+						  <tr>
+						    <td class="ftit">meta描述:</td>
+						    <td colspan="3"><textarea cols="70" rows="3" name="description" maxlength="255">${channel.description!}</textarea></td>
+						  </tr>
+						  <tr>
+						    <td class="ftit">排列顺序:</td>
+						    <td><input type="text" name="priority" value="${channel.priority!}" size="35" maxlength="10" vld="{digits:true,messages:{digits:'排列顺序只能是数字!'}}"/></td>
+						    <td class="ftit">打开方式:</td>
+						    <td>
+						    <input type="radio" name="blank" value="1" <#if channel.blank>checked="checked"</#if>/>新窗口打开
+						    <input type="radio" name="blank" value="0" <#if !channel.blank>checked="checked"</#if>/>原窗口打开
+						    </td>
+						  </tr>
+						  <tr id="linkurl">
+						    <td class="ftit">外部链接:</td>
+						    <td><input type="text" name="link" value="${channel.link!}" size="35" maxlength="75" /></td>
+						    <td class="ftit">单页:</td>
+						    <td><input type="checkbox" id="alone" onclick="showtxt();" <#if channel.alone>checked="checked"</#if>/>是
+						    <input type="hidden" id="aloneval" name="alone" value="${channel.alone?string('true','false')}"/>
+						    </td>
+						  </tr>
+						  <tr>
+						    <td class="ftit">栏目图片:</td>
+						    <td colspan="3">
+							   <span id="spanButtonPlaceHolder2"></span><br/>
+							   <span id="aimgshow">
+							   <#if channel.imgSrc??>
+							   <dl id="aimgList1" class="thumbnail">
+								<dt><div class="ver_pic"><div class="subpic"><img id="aimg1" src="${base}${channel.imgSrc!}"/></div>
+								</div><input type="hidden" name="imgSrc" value="${channel.imgSrc!}" id="aimgpath1"/></dt>
+								<dd class="ctrl">
+									<a href="javascript:void(0);" title="修改"><img src="${base}/skin/sys/img/admin/update.gif"/></a>
+									<a href="javascript:void(0);" id="aimgdel1" onclick="delimg1();" title="删除"><img src="${base}/skin/sys/img/admin/del.gif"/></a>
+								</dd>
+							   </dl>
+							   </#if>
+							   </span>
+				            </td>
+						  </tr>
+						  <tr id="txtshow" <#if !channel.alone>style="display:none"</#if>>
+						    <td class="ftit">内容:</td>
+						    <td colspan="3">
+						    <textarea name="txtval" cols="90" rows="8" id="txt" style="width:100%;height:300px;" class="l-textarea">${channel.txtValue!}</textarea>
+						    </td>
+						  </tr>
+						</table>
+                    </div>
+                    <div title="高级属性">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+						  <tr>
+						    <td class="ftit">启用工作流：</td>
+				            <td>
+				             <select name="flowId">
+				                <option value="" <#if !channel.flow??>selected="selected"</#if>>不启用</option>
+				                <#list flowList as flow>
+				                <option value="${flow.id}" <#if channel.flow??&&flow.id==channel.flow.id>selected="selected"</#if>>${flow.name!}</option>
+				                </#list>
+				              </select>
+				            </td>
+						    <td class="ftit">导航栏显示:</td>
+						    <td>
+						    <input type="radio" name="show" value="1" <#if channel.show>checked="checked"</#if>/>是
+						    <input type="radio" name="show" value="0" <#if !channel.show>checked="checked"</#if>/>否
+						    </td>
+						  </tr>
+						  <tr>
+						    <td class="ftit">浏览权限:</td>
+						    <td>
+						    <#list viewGroups as group>
+                            <label><input type="checkbox" value="${group.id}" name="viewGroupIds" <#if viewGroupIds??&&viewGroupIds?seq_contains(group.id)>checked="checked"</#if>/>${group.name!}</label>
+                            </#list>
+						    </td>
+						    <td class="ftit">投稿权限:</td>
+						    <td>
+						    <#list contriGroups as group>
+                            <label><input type="checkbox" value="${group.id}" name="contriGroupIds" <#if contriGroupIds??&&contriGroupIds?seq_contains(group.id)>checked="checked"</#if>/>${group.name!}</label>
+                            </#list>
+						    </td>
+						  </tr>
+						  <tr>
+						    <td class="ftit">栏目静态页:</td>
+						    <td>
+						       <input type="radio" name="staticChannel" value="1" <#if channel.staticChannelSuper??&&channel.staticChannelSuper>checked="checked"</#if>/>开启
+						       <input type="radio" name="staticChannel" value="0" <#if channel.staticChannelSuper??&&!channel.staticChannelSuper>checked="checked"</#if>/>关闭
+						    </td>
+						    <td class="ftit">内容静态页:</td>
+						    <td><input type="radio" name="staticDoc" value="1" <#if channel.staticDoc??&&channel.staticDoc>checked="checked"</#if>/>开启
+						    <input type="radio" name="staticDoc" value="0" <#if channel.staticDoc??&&!channel.staticDoc>checked="checked"</#if>/>关闭
+						    </td>
+						  </tr>
+						  <tr>
+						    <td class="ftit">评论控制:</td>
+						    <td>
+						       <input type="radio" name="commentControl" value="1" <#if channel.commentControl??&&channel.commentControl>checked="checked"</#if>/>开启评论
+						       <input type="radio" name="commentControl" value="0" <#if channel.commentControl??&&!channel.commentControl>checked="checked"</#if>/>关闭评论
+						    </td>
+						    <td class="ftit">顶踩控制:</td>
+						    <td>
+						    <input type="radio" name="updownControl" value="1" <#if channel.updownControl??&&channel.updownControl>checked="checked"</#if>/>开启
+						    <input type="radio" name="updownControl" value="0" <#if channel.updownControl??&&!channel.updownControl>checked="checked"</#if>/>关闭
+						    </td>
+						  </tr>
+						  <tr>
+						    <td class="ftit">是否需签收:</td>
+						    <td colspan="3">
+						       <input type="radio" name="sign" value="1" <#if channel.sign??&&channel.sign>checked="checked"</#if>/>是
+						       <input type="radio" name="sign" value="0" <#if channel.sign??&&!channel.sign>checked="checked"</#if>/>否
+						    </td>
+						  </tr>
+						</table>
+                    </div>
+                    <div title="模板选择">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+						  <tr>
+						    <td class="ftit">栏目页模板:</td>
+						    <td colspan="3">
+						        <ul class="items">
+						    		<li class="t2">
+						    		<input name="tplChannel" type="text" id="tplChannel" value="${channel.tplChannel!}" size="35" maxlength="50"/>
+						    		<input type="hidden" id="tplChannel_url" value="${channel.tplChannel!?url}"/>
+						    		</li>
+						            <li><a href="javascript:void(0);" onclick="showTpl('Channel')" class="abtn"><img src="${base}/skin/sys/img/admin/search.gif"/> <b>浏览</b></a></li>
+						            <@Perm perm="admin:tpl:edit">
+						            <li><a href="javascript:void(0);" onclick="editTpl('Channel')" class="abtn"><img src="${base}/skin/sys/img/admin/edit.gif"/> <b>编辑</b></a></li>
+						            </@Perm>
+						    	</ul>
+						    </td>
+						  </tr>
+						  <tr>
+						    <td class="ftit"><b>请选择内容模型</b></td>
+						    <td colspan="3"><b>请选择内容页模板</b></td>
+						  </tr>
+						  <#list modelList as model>
+						  <tr>
+						    <td class="ftit"><input type="checkbox" name="modelIds" value="${model.id}" <#if modelIds??&&modelIds?seq_contains(model.id)>checked="checked"</#if>/>${model.name!}:</td>
+						    <td>
+						        <ul class="items">
+						    		<li class="t2">
+						    		<input type="text" name="tpl_${model.id}" id="tpl${model_index+1}" value="${channel.getTplDoc(model.id)!}" size="35" maxlength="50"/>
+						    		<input type="hidden" id="tpl${model_index+1}_url" value="${channel.getTplDoc(model.id)!?url}"/>
+						    		</li>
+						            <li><a href="javascript:void(0);" onclick="showTpl('${model_index+1}')" class="abtn"><img src="${base}/skin/sys/img/admin/search.gif"/> <b>浏览</b></a></li>
+						            <@Perm perm="admin:tpl:edit">
+						            <li><a href="javascript:void(0);" onclick="editTpl('${model_index+1}')" class="abtn"><img src="${base}/skin/sys/img/admin/edit.gif"/> <b>编辑</b></a></li>
+						            </@Perm>
+						    	</ul>
+						    </td>
+						  </tr>
+						  </#list>
+						</table>
+                    </div>
+                </div>
+                <div class="fbtn">
+                    <input type="hidden" name="id" value="${channel.id!}"/>
+                    <@Perm perm="admin:channel:update">
+					<input type="submit" value="提交" class="l-button"/>
+					<input type="button" value="取消" class="l-button" onClick="JP.f_cancel()"/>
+					</@Perm>
+				</div>
+			</form>
+		</div>
+		
+		<div id="target" style="margin:3px;overflow:hidden;display:none;">
+		    <div style="width:290px;height:400px;margin:5px;float:left;border:1px solid #ccc;overflow:auto;">
+	            <ul id="dirList" class="ztree">
+	            </ul>
+	        </div>
+	        <div style="width:290px;height:400px;margin:5px;float:right;border:1px solid #ccc;overflow:auto;">
+	            <ul id="tplList" class="ztree">
+	            </ul>
+	        </div>
+	        <input type="hidden" id="tplid" />
+	    </div>
+	    
+	    <div id="moveDoc" style="display:none">
+		<form method="post" action="../doc/o_move.do" id="moveForm">
+		  <table class="pmsTable m5">
+		    <#list chnlmodelList as model>
+		    <tr>
+		      <td class="ftit3">模型名称：</td>
+		      <td>${model.name!}</td>
+		      <td class="ftit3">移动到：</td>
+		      <td>
+		        <ul class="items">
+		        <li class="t"><input type="hidden" name="chnl_${model.id}" id="chnl${model.id}"/><input type="text" name="chnlName" id="chnlName${model.id}" readonly="readonly"/></li>
+		        <li><input type="button" class="l-button" value="选择栏目" onclick="showChannel('${model.id}')"/><input type="hidden" name="modelIds" value="${model.id}"/></li>
+              	</ul>
+              </td>
+		    </tr>
+		    </#list>
+		    <tr>
+		      <td colspan="4" class="fctrl">
+		        <input type="hidden" name="chnlId" value="${channel.id}"/>
+		        <input type="button" value="提交" class="l-button" onclick="formSubmit()"/>
+		        <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+		      </td>
+		    </tr>
+		  </table>
+		</form>
+		</div>
+		<#include "divc.html"/>
+		
+		<div id="delChannel" style="display:none">
+		<form method="post" action="../channel/o_delchnl.do" id="delForm">
+		  <table class="pmsTable m5">
+		    <#if channel.child?size gt 0>
+		    <tr>
+		      <td class="ftit3"><span>*</span>子栏目：</td>
+		      <td>
+		      <input type="radio" name="del" value="1" checked="checked"/>直接删除
+		      <input type="radio" name="del" value="0"/>移动到：
+		      <input type="text" name="cname" id="chnlName0" readonly="readonly"/>
+		      <input type="hidden" name="cid" id="chnl0"/>
+		      <input type="button" class="l-button" value="选择栏目" onclick="showChanneld()"/>
+              </td>
+		    </tr>
+		    <#else>
+		    <tr>
+		    <td colspan="4">
+		             你确定要删除该栏目吗？
+		    </td>
+		    </tr>
+		    </#if>
+		    <tr>
+		      <td colspan="4" class="fctrl">
+		        <input type="hidden" name="chnlId" value="${channel.id}"/>
+		        <input type="submit" value="提交" class="l-button"/>
+		        <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+		      </td>
+		    </tr>
+		  </table>
+		</form>
+		</div>
+		
+		<div id="menuContento" class="menuContent" style="display:none; width:260px; position:absolute; background:#fff; border:1px solid #ccc;">
+			<ul id="channelTree" class="ztree" style="height:180px;width:210px;overflow-y:scroll;">
+			</ul>
+		</div>
+	</div>
+</body>
+</html>

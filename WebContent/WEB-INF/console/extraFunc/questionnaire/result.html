@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+</head>
+<body>
+<div class="blk c">
+	<h2>${question.name!}调查结果</h2>
+	<div class="c">
+		<dl class="survey mt10">
+			<#list themeList as theme>
+			<dt>Q${theme_index+1}、${theme.title!}</dt>
+			<#if theme.surveyType==NORMAL>
+			<dd>
+				<ul>
+					<#list theme.items as item>
+					<li>a${item_index+1}、${item.name!} -- ${item.votes!} 票</li>
+					</#list>
+				</ul>
+			</dd>
+			<#else>
+			<dd>
+				<ul>
+					<@SurveyDetail sId=theme.id count='10'>
+					<#list page.content as detail>
+					<li>a${detail_index+1}、${detail.content!}</li>
+					</#list>
+					</@SurveyDetail>
+				</ul>
+			</dd>
+			</#if>
+			</#list>
+		</dl>
+	</div>
+</div>
+</body>
+</html>

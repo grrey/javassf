@@ -1,0 +1,42 @@
+<#if isRoot>
+[{
+	"name": "模板文件夹",
+	"open": true
+	<#if tplList?size gt 0>,
+	"isParent": true,
+	"children": [
+	<#list tplList as tpl>
+		{
+		"path": "${tpl.name}",
+		"name": "${tpl.filename}",
+		"click":"loadTpl('${tpl.name!}')",
+		<#if !tpl.leaf>
+		"isParent": true,
+		"open": false
+		<#else>
+		"open": false,
+		"icon":"${base}/plugin/ligerui/ligerUI/skins/Aqua/images/tree/folder.gif"
+		</#if>
+		}<#if tpl_has_next>,</#if>
+	</#list>
+	]
+	</#if>
+}]
+<#else>
+	[
+	<#list tplList as tpl>
+		{
+		"path": "${tpl.name}",
+		"name": "${tpl.filename}",
+		"click":"loadTpl('${tpl.name!}')",
+		<#if !tpl.leaf>
+		"isParent": true,
+		"open": false
+		<#else>
+		"open": false,
+		"icon":"${base}/plugin/ligerui/ligerUI/skins/Aqua/images/tree/folder.gif"
+		</#if>
+		}<#if tpl_has_next>,</#if>
+	</#list>
+	]
+</#if>

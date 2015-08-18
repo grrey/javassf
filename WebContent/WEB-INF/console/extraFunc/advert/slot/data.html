@@ -1,0 +1,14 @@
+{Rows:[
+   <#list p.content as slot>
+   {
+     "id":"${slot.id}",
+     "name":"${slot.name!}",
+     "slotType":"${slot.slotTypeString!}",
+     "width":"${slot.width!}",
+     "height":"${slot.height!}",
+     "remain":"${slot.remain!}",
+     "idleholder":"${slot.idleholder?string("<span style='color:red'>占用</span>","<span style='color:blue'>不占用</span>")}"
+   }<#if slot_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

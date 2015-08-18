@@ -1,0 +1,12 @@
+<#list wf.flowSteps as step>
+<li id="step${step.step}">第${step.step!}步:<input type="hidden" name="step" value="${step.step!}" />
+  <select name="roleIds">
+    <#list list as role>
+	<option value="${role.id}" <#if step.role.id==role.id>selected="selected"</#if>>${role.name!}</option>
+	</#list>
+  </select>&nbsp;<#if step.step==1>发布<#elseif step.step==wf.stepCount>终审<#else>审核</#if>
+  <#if step.step gt 2>
+  <a href="javascript:void(0);" onclick="delStep(${step.step})"><img src="${base}/skin/sys/img/admin/del.gif"/></a>
+  </#if>
+</li>
+</#list>

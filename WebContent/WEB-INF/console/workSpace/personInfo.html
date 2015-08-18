@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../liger.html"/>
+<script language="javascript">
+$(function (){
+	$("#infoForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+<body>
+<div class="blk c">
+	<h2>个人资料</h2>
+	<div class="c">
+    	<form method="post" action="o_info_update.do" id="infoForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit">用户名：</td>
+              <td>${user.username!}</td>
+              <td class="ftit">角色：</td>
+              <td>${user.admin.getRole(siteId).name!}</td>
+            </tr>
+            <tr>
+              <td class="ftit">最后登录时间：</td>
+              <td><#if user.admin.lastLoginTime??>${user.admin.lastLoginTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+              <td class="ftit">最后登录IP：</td>
+              <td>${user.admin.lastLoginIp!}</td>
+            </tr>
+            <tr>
+              <td class="ftit">真实姓名：</td>
+              <td><input name="realName" type="text" id="realName" size="35" maxlength="50" value="${user.realName!}"/></td>
+              <td class="ftit">电子邮箱：</td>
+              <td><input name="email" type="text" id="email" size="35" maxlength="50" value="${user.email!}" vld="{email:true,messages:{email:'邮箱格式错误!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">固定电话：</td>
+              <td><input name="phone" type="text" id="phone" size="35" maxlength="50" value="${user.phone!}"/></td>
+              <td class="ftit" width="20%">手机号码：</td>
+              <td><input name="mobile" type="text" id="mobile" size="35" maxlength="50" value="${user.mobile!}" vld="{digits:true,messages:{digits:'手机号码必须为数字!'}}"/></td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <input type="hidden" name="id" value="${user.id}"/>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

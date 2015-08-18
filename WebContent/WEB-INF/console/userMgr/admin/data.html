@@ -1,0 +1,14 @@
+{Rows:[
+   <#list p.content as admin>
+   {
+     "id":"${admin.id}",
+     "u.username":"${admin.user.username!}",
+     "departName":"<#if admin.getDepart(siteId)??>${admin.getDepart(siteId).name!}</#if>",
+     "roleName":"<#if admin.getRole(siteId)??>${admin.getRole(siteId).name!}</#if>",
+     "lastLoginTime":"<#if admin.lastLoginTime??>${admin.lastLoginTime?string('yyyy-MM-dd HH:mm:ss')}</#if>",
+     "loginCount":"${admin.loginCount!}",
+     "status":"${admin.statusString!}"
+   }<#if admin_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

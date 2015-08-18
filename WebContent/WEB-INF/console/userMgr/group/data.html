@@ -1,0 +1,12 @@
+{Rows:[
+   <#list list as group>
+   {
+     "id":"${group.id!}",
+     "name":"${group.name!}",
+     "allPerm":"${group.allPerm?string("<span style='color:red'>是</span>","<span style='color:blue'>否</span>")}",
+     "registShow":"${group.registShow?string("<span style='color:red'>是</span>","<span style='color:blue'>否</span>")}",
+     "priority":"${group.priority!}"
+   }<#if group_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

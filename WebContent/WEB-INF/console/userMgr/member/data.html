@@ -1,0 +1,16 @@
+{Rows:[
+   <#list p.content as member>
+   {
+     "id":"${member.id}",
+     "u.username":"${member.user.username!?html}",
+     "u.realName":"${member.user.realName!?html}",
+     "g.name":"${member.getGroup(siteId).name!}",
+     "u.email":"${member.user.email!?html}",
+     "u.mobile":"${member.user.mobile!}",
+     "lastLoginTime":"<#if member.lastLoginTime??>${member.lastLoginTime?string('yyyy-MM-dd HH:mm:ss')}</#if>",
+     "loginCount":"${member.loginCount!}",
+     "status":"${member.statusString!}"
+   }<#if member_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

@@ -1,0 +1,13 @@
+{Rows:[
+   <#list list as site>
+   {
+     "id":"${site.id}",
+     "name":"${site.name!?html}",
+     "domain":"${site.domain!}",
+     "path":"${site.path!}",
+     "contextPath":"${site.contextPath!}",
+     "port":"${site.port!}"
+   }<#if site_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../../liger.html"/>
+<script language="javascript">
+var dirsetting = {
+		async : {enable : true,url : "../tpl/v_tpl_dirtree.do",autoParam : ["path"],type:"get"},
+		check: {enable: false}
+};
+$(function (){
+	$("#siteForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	$.fn.zTree.init($("#dirList"), dirsetting);
+	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>站点修改</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="siteForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>站点名称：</td>
+              <td><input name="name" type="text" id="name" value="${site.name!}" vld="{required:true,messages:{required:'站点名称不能为空!'}}"/></td>
+              <td class="ftit">站点简称：</td>              
+              <td><input name="shortName" type="text" id="shortName" value="${site.shortName!}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>站点域名：</td>
+              <td><input name="domain" type="text" id="domain" value="${site.domain!}" vld="{required:true,messages:{required:'站点域名不能为空!'}}"/></td>
+              <td class="ftit"><span>*</span>资源路径：</td>              
+              <td><input name="path" type="text" id="path" value="${site.path!}" vld="{required:true,messages:{required:'站点资源不能为空!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">部署路径：</td>
+              <td><ul class="items"><li class="t2"><input name="contextPath" type="text" id="contextPath" value="${site.contextPath!}"/></li></ul></td>
+              <td class="ftit">端口：</td>              
+              <td><ul class="items"><li class="t2"><input name="port" type="text" id="port" value="${site.port!}" vld="{digits:true,messages:{digits:'端口号必须为数字!'}}"/></li></ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">站点风格：</td>
+              <td><ul class="items"><li class="t2"><input name="tplStyle" type="text" id="tplStyle" value="${site.tplStyle!}"/></li></ul></td>
+              <td class="ftit">静态页后缀：</td>
+              <td><ul class="items">
+              <input id="staticSuffix_0" type="radio" name="staticSuffix" value="1" <#if site.staticSuffix>checked="checked"</#if>/><label for="staticSuffix_0">有</label> 
+              <input id="staticSuffix_1" type="radio" name="staticSuffix" value="0" <#if !site.staticSuffix>checked="checked"</#if>/><label for="staticSuffix_1">无</label>
+              </ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">栏目静态页方案：</td>              
+              <td><ul class="items">
+              <input id="staticChannel_0" type="radio" name="staticChannel" value="0" <#if site.staticChannel==0>checked="checked"</#if>/><label for="staticChannel_0">全部不生成</label> 
+              <input id="staticChannel_1" type="radio" name="staticChannel" value="1" <#if site.staticChannel==1>checked="checked"</#if>/><label for="staticChannel_1">全部生成</label>
+              <input id="staticChannel_2" type="radio" name="staticChannel" value="2" <#if site.staticChannel==2>checked="checked"</#if>/><label for="staticChannel_2">按照栏目设置</label>
+              </ul></td>
+              <td class="ftit">内容静态页方案：</td>              
+              <td><ul class="items">
+              <input id="staticDoc_0" type="radio" name="staticDoc" value="0" <#if site.staticDoc==0>checked="checked"</#if>/><label for="staticDoc_0">全部不生成</label> 
+              <input id="staticDoc_1" type="radio" name="staticDoc" value="1" <#if site.staticDoc==1>checked="checked"</#if>/><label for="staticDoc_1">全部生成</label>
+              <input id="staticDoc_2" type="radio" name="staticDoc" value="2" <#if site.staticDoc==2>checked="checked"</#if>/><label for="staticDoc_2">按照栏目设置</label>
+              </ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">SEO标题：</td>
+              <td colspan="3"><ul class="items"><li class="t2"><input name="title" type="text" id="title" value="${site.title!}" size="70" maxlength="100"/></li></ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">SEO关键字：</td>
+              <td colspan="3"><ul class="items"><li class="t2"><input name="keywords" type="text" id="keywords" value="${site.keywords!}" size="70" maxlength="100"/></li></ul></td>
+            </tr>
+            <tr>
+              <td class="ftit">SEO描述：</td>
+              <td colspan="3">
+               <ul class="items">
+               <li class="t2">
+               <textarea cols="70" rows="5" name="description" maxlength="255">${site.description!}</textarea>
+               </li>
+               </ul>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:sites:update">
+                <input type="hidden" name="id" value="${site.id}"/>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

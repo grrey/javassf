@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../../liger.html"/>
+<script language="javascript">
+$(function (){
+	$("#advertSlotForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+
+function showdm(){
+	if($("input[name='slotType']:checked").val()==2||$("input[name='slotType']:checked").val()==4){
+	    $("#pfshow").show();
+	    $("#tcshow").hide();
+	}else if($("input[name='slotType']:checked").val()==3){
+		$("#tcshow").show();
+	    $("#pfshow").hide();
+	}else{
+		$("#tcshow").hide();
+	    $("#pfshow").hide();
+	}
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>宣传位管理/添加</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="advertSlotForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>宣传位名称：</td>
+              <td colspan="3"> 
+              <input name="name" type="text" id="name" vld="{required:true,maxlength:50,messages:{required:'广告位名称不能为空!',maxlength:$.format('广告位名称长度不能超过{0}!')}}"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>宣传位类型：</td>
+              <td colspan="3">
+                <input type="radio" name="slotType" value="1" onclick="showdm()" checked="checked"/>固定
+                <input type="radio" name="slotType" value="2" onclick="showdm()"/>漂浮
+                <input type="radio" name="slotType" value="3" onclick="showdm()"/>弹窗
+                <input type="radio" name="slotType" value="4" onclick="showdm()"/>对联
+              </td>
+            </tr>
+            <tr style="display:none" id="tcshow">
+              <td class="ftit">停留时间：</td>
+              <td colspan="3"><input type="text" name="remain"/>秒    0或者不填代表不限制停留时间</td>
+            </tr>
+            <tr style="display:none" id="pfshow">
+              <td class="ftit">漂浮方式：</td>
+              <td colspan="3">
+              <input type="radio" name="scrollbar" value="1" checked="checked"/>跟随滚动条
+              <input type="radio" name="scrollbar" value="0"/>自由漂浮
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">尺寸大小：</td>
+              <td colspan="3">宽：<input type="text" name="width" size="8"/>&nbsp;高：<input type="text" name="height" size="8"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">轮换方式：</td>
+              <td colspan="3">
+              <select name="rotation">
+              <option value="1">均匀轮换</option>
+              <option value="0">权重轮换</option>
+              </select>&nbsp;&nbsp;如果该广告位只有一个广告可用，则该选择无任何效果
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">空闲时占位：</td>
+              <td colspan="3">
+              <input name="idleholder" type="radio" id="idleholder1" value="1"/>是
+              <input name="idleholder" type="radio" id="idleholder0" value="0" checked="checked"/>否
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">说明：</td>
+              <td colspan="3">
+              <textarea cols="80" rows="5" name="sexplain" class="l-textarea" vld="{maxlength:500,messages:{maxlength:$.format('说明长度不能超过{0}!')}}"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:advertSlot:save">
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

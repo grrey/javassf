@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+$(function (){	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>评论管理/修改</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="jvForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>文档标题：</td>
+              <td colspan="3">${comment.doc.title!}</td>
+            </tr>
+            <tr>
+              <td class="ftit">评论会员：</td>
+              <td><#if comment.user??>${comment.user.username!}<#else>匿名网友</#if></td>
+              <td class="ftit">评论时间：</td>
+              <td>${comment.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+            </tr>
+            <tr>
+              <td class="ftit">是否审核：</td>
+              <td>
+              <input id="checked_0" type="radio" name="checked" value="1" <#if comment.checked>checked="checked"</#if>/><label for="checked_0">是</label> 
+              <input id="checked_1" type="radio" name="checked" value="0" <#if !comment.checked>checked="checked"</#if>/><label for="checked_1">否</label>
+              </td>
+              <td class="ftit">评论IP：</td>
+              <td>
+                 ${comment.ip!}
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">评论内容：</td>
+              <td colspan="3"><textarea cols="80" rows="5" name="text" maxlength="255" class="l-textarea">${comment.content!}</textarea></td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:comment:update">
+                <input type="hidden" name="id" value="${comment.id}"/>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

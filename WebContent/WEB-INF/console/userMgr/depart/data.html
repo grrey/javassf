@@ -1,0 +1,13 @@
+{Rows:[
+   <#list p.content as depart>
+   {
+     "id":"${depart.id!}",
+     "name":"${depart.name!}",
+     "shortName":"${depart.shortName!}",
+     "priority":"<input type='text' name='priority' style='width:40px' onchange='updatepri(${depart.id!},this.value)' value='${depart.priority!}'/>",
+     "show":"${depart.show?string('显示','不显示')}",
+     "createTime":"${depart.createTime?string('yyyy-MM-dd HH:mm:ss')}"
+   }<#if depart_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

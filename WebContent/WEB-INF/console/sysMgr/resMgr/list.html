@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>资源管理</title>
+<#include "../../liger.html"/>
+<script src="${base}/plugin/swfupload/swfupload.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/swfupload.queue.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/fileprogress.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/handlers.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/jquery.progressbar.min.js" type="text/javascript"></script>
+<link href="${base}/plugin/swfupload/process.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">
+var grid = null;
+var resname = null;
+var filename = null;
+var t = 0;
+<#assign add = false>
+<#assign modify = false>
+<#assign del = false>
+<#assign addfile = false>
+<#assign rename = false>
+<@Perm perm="admin:res:add">
+<#assign add = true>
+</@Perm>
+<@Perm perm="admin:res:edit">
+<#assign modify = true>
+</@Perm>
+<@Perm perm="admin:res:delete">
+<#assign del = true>
+</@Perm>
+<@Perm perm="admin:res:createdir">
+<#assign addfile = true>
+</@Perm>
+<@Perm perm="admin:res:rename">
+<#assign rename = true>
+</@Perm>
+$(function () {
+ grid = $("#maingrid").ligerGrid({
+	columns : [ {
+		display : "图标",
+		name : "fileimg",
+		width : 30
+	},{
+		display : "文件名称",
+		name : "filename",
+		width : 220,
+		align : "left"
+	},{
+		display : "文件大小",
+		name : "filesize",
+		width : 220
+	},{
+		display : "最后修改时间",
+		name : "modifytime",
+		width : 160
+	}],
+	dataAction : 'server',
+	toolbar : {},
+	url : '../res/jsonData.do',
+	parms : [{name:"path",value:"${path!}"}],
+	sortName : 'id',
+	width : '100%',
+	height : '100%',
+	checkbox : true,
+	selectRowButtonOnly:true,
+	usePager : false
+});
+ 
+ <#if !del&&!add&&!modify&&!addfile&&!rename>
+ var items = null;
+ <#else>
+ <#assign first = true>
+ var items = [<#if add><#assign first = false>{click: toolbarBtnItemClick,text: '新增',id:'add',icon:'add'}</#if><#if modify><#if !first>,<#else><#assign first = false></#if>
+              {click: toolbarBtnItemClick,text: '修改',id:'modify',icon:'modify'}</#if><#if del><#if !first>,<#else><#assign first = false></#if>
+              {click: toolbarBtnItemClick,text: '删除',id:'delete',icon:'delete'}</#if><#if addfile><#if !first>,<#else><#assign first = false></#if>
+              {click: toolbarBtnItemClick,text: '新建目录',id:'createDir',icon:'addfile'}</#if><#if rename><#if !first>,</#if>
+              {click: toolbarBtnItemClick,text: '重命名',id:'rename',icon:'rename'}</#if>];
+ </#if>
+ 
+ grid.toolbarManager.set('items', items);
+ 
+ <#if !del&&!rename>
+ var menu = null;
+ <#else>
+ <#assign first = true>
+ var menu = $.ligerMenu({ top: 100, left: 100, width: 140, items:
+	    [<#if rename><#assign first = false>{click: f_rename,text: '重命名',id:'rename',icon:'rename'}</#if><#if del><#if !first>,</#if>
+	     { id:'delete',text: '删除',click: f_delete,icon:'delete' }</#if>]
+ });
+ </#if>
+ 
+ 
+//工具条事件
+ function toolbarBtnItemClick(item) {
+     switch (item.id) {
+         case "add":
+             top.f_addTab("addRes", '新增资源', 'res/v_add.do?path=${path!}');
+             break;
+         case "modify":
+             var selected = grid.getSelected();
+             if (!selected) { $.ligerDialog.error("请选择要修改的资源!"); return }
+             top.f_addTab("modifyRes", '修改资源', 'res/v_edit.do?name=' + selected.name);
+             break;
+         case "createDir":
+        	 $("#fileForm").attr("action","o_create_dir.do");
+             $("#dirName").val("");
+             $("#dirName").attr("name","dirName");
+             $("#origmsg").html("");
+             renameFile("新建目录");
+             break;
+         case "rename":
+        	 var selected = grid.getSelected();
+             if (!selected) { $.ligerDialog.error("请选择要重命名的资源文件!"); return }
+             renameFile("重命名");
+        	 $("#fileForm").attr("action","o_rename.do");
+             $("#dirName").val(selected.filename);
+             $("#dirName").attr("name","distName");
+             $("#origmsg").html("<input type='hidden' name='origName' value='"+selected.filename+"'/>");
+             break;
+         case "delete":
+        	 var selected = grid.getCheckedRows();
+        	 if (selected!=null&&selected.length>0) {
+        		 t = 0;
+                 f_delete();
+             }else{
+        		 $.ligerDialog.error("请选择要删除的资源!");
+        	 }
+             break;
+     }
+ };
+ 
+ grid.bind('dblClickRow', function (rowdata, rowindex, rowDomElement){
+	 if(rowdata.directory=='true'){
+		 top.f_addTab("resMgr", '资源管理', 'res/v_list.do?path=' + rowdata.name);
+	 }else{
+		 if(rowdata.editable=='true'){
+			 <#if modify>
+	         top.f_addTab("modifyRes", '修改资源', 'res/v_edit.do?name=' + rowdata.name);
+	         </#if>
+		 }
+	 }
+ });
+ 
+ <#if del>
+ grid.bind('contextmenu', function (parm, e){
+	 resname = parm.data.name;
+	 filename = parm.data.filename;
+	 t = 1;
+	 menu.show({ top: e.pageY, left: e.pageX });
+	 return false;
+ });
+ </#if>
+ 
+ function f_reload() {
+     grid.loadData();
+ };
+ 
+ function f_rename(){
+     renameFile("重命名");
+	 $("#fileForm").attr("action","o_rename.do");
+     $("#dirName").val(filename);
+     $("#dirName").attr("name","distName");
+     $("#origmsg").html("<input type='hidden' name='origName' value='"+filename+"'/>");
+ }
+ 
+ function f_delete() {
+	 closeall();
+	 jQuery.ligerDialog.confirm('确定删除吗?', function (confirm) {
+	 if (confirm){
+	 var selected = grid.getCheckedRows();
+     var names = [];
+     if(t==0){
+         for(var i=0;i<selected.length;i++){
+        	 names[i] = selected[i].name;
+         }
+     }else{
+    	 names[0] = resname;
+     }
+     JP.ajax({
+         url: '../res/o_ajax_delete.do',
+         loading: '正在删除中...',
+         data: { names: names },
+         success: function () {
+        	 f_reload();
+        	 refreshTree();
+         },
+         error: function () {
+        	 $.ligerDialog.error("删除资源失败!");
+         }
+     });
+	 }
+     });
+ };
+ 
+ function closeall(){
+	 if(menu!=null){
+	    menu.hide();
+	 }
+ }
+ 
+ <#if msg??>
+	$.ligerDialog.success('${msg}');
+ </#if>
+ 
+});
+
+var dialog = null;
+function renameFile(title){
+	dialog = $.ligerDialog.open({
+    	title:title,
+    	width:500,
+    	target: $("#target")
+    });
+}
+
+function closeDia(){
+	dialog.hide();
+}
+
+function refreshTree(){
+	var ztree = self.parent.restree;
+	<#if path??>
+	var node = ztree.getNodeByParam("path","${path!}");
+	<#else>
+	var node = null;
+	</#if>
+	if(node!=null){
+	if(node.isParent==false){
+		ztree.reAsyncChildNodes(node.getParentNode(),"refresh",!node.getParentNode().open);
+	}else{
+	if(node.children!=null){
+	    ztree.reAsyncChildNodes(node, "refresh",!node.open);
+	}
+	}}else{
+		ztree.reAsyncChildNodes(null, "refresh");
+	}
+}
+</script>
+</head>
+<#include "attupload.html"/>
+<body style="padding:2px;overflow:hidden;">
+<div id="mainsearch">
+    <span id="spanButtonPlaceHolder"></span>
+    <span class="progressBar" id="attpb"></span>
+</div>
+<div id="maingrid"></div>
+
+<div id="target" style="display:none;">
+<span style="display:none"><input id="btnCancel" type="button" value="取消" onclick="swfu.cancelQueue();" disabled="disabled" /></span>
+<form method="post" action="" id="fileForm" onsubmit="refreshTree()">
+   <table width="99%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+       <tr>
+         <td class="ftit" width="30%"><span>*</span>名称：</td>
+         <td><input name="dirName" type="text" id="dirName"/></td>
+       </tr>
+       <tr>
+         <td colspan="2" class="fctrl">
+           <span id="origmsg"></span>
+           <input type="hidden" name="path" value="${path!}"/>
+           <input type="submit" value="提交" class="l-button" />
+           <input type="button" value="取消" class="l-button" onclick="closeDia()"/>
+         </td>
+       </tr>
+   </table>
+  </form>
+</div>
+</body>
+</html>

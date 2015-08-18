@@ -1,0 +1,55 @@
+package #{manager_impl_p};
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import #{dao_p}.#{Entity}Dao;
+import #{entity_p}.#{Entity};
+import #{manager_p}.#{Entity}Service;
+
+@Service
+@Transactional
+public class #{Entity}ServiceImpl implements #{Entity}Service {
+	@Transactional(readOnly = true)
+	public Page<#{Entity}> getPage(int pageNo, int pageSize) {
+		return dao.getPage(pageNo, pageSize);
+	}
+
+	@Transactional(readOnly = true)
+	public #{Entity} findById(Integer id) {
+		#{Entity} entity = dao.findById(id);
+		return entity;
+	}
+
+	public #{Entity} save(#{Entity} bean) {
+		dao.save(bean);
+		return bean;
+	}
+
+	public #{Entity} update(#{Entity} bean) {
+		bean = dao.update(bean);
+		return bean;
+	}
+
+	public #{Entity} deleteById(Integer id) {
+		#{Entity} bean = dao.deleteById(id);
+		return bean;
+	}
+	
+	public #{Entity}[] deleteByIds(Integer[] ids) {
+		#{Entity}[] beans = new #{Entity}[ids.length];
+		for (int i = 0,len = ids.length; i < len; i++) {
+			beans[i] = deleteById(ids[i]);
+		}
+		return beans;
+	}
+
+	private #{Entity}Dao dao;
+
+	@Autowired
+	public void setDao(#{Entity}Dao dao) {
+		this.dao = dao;
+	}
+}

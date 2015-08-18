@@ -1,0 +1,232 @@
+<script src="${base}/plugin/swfupload/swfupload.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/swfupload.queue.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/fileprogress.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/handlers.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/jquery.progressbar.min.js" type="text/javascript"></script>
+<script src="${base}/skin/comm/js/autoZoomLoadImage.js" type="text/javascript"></script>
+<link href="${base}/plugin/swfupload/process.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">
+var swfu;
+var swfu1;
+var swfu2;
+window.onload=function() {
+	var uploadUrl = "../o_upload_img.do";
+	var uploadUrl1 = "../o_upload_attach.do";
+	swfu=new SWFUpload({
+		upload_url : uploadUrl,
+		flash_url : "${base}/plugin/swfupload/swfupload.swf",
+		file_size_limit : "10 MB",
+		file_types : "*.jpg;*.gif;*.png;*.bmp",
+		file_post_name:"imgFile",
+		file_types_description : "图片",
+		file_queue_limit : 0,
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel"
+		},
+		debug: false,
+		
+		button_image_url : "${base}/plugin/swfupload/swfbtn.png",
+		button_placeholder_id : "spanButtonPlaceHolder",
+		button_text: "<span class='abtn'>上传图片</span>",
+		button_window_mode:"transparent",
+		button_width: 80,
+		button_height: 24,
+		button_text_left_padding: 22,
+		button_text_top_padding: 2,
+		
+		file_queued_handler : fileQueued2,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart2,
+		upload_progress_handler : uploadProgress2,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess2,
+		upload_complete_handler : uploadComplete2,
+		queue_complete_handler : queueComplete2
+	});
+	swfu1=new SWFUpload({
+		upload_url : uploadUrl1,
+		flash_url : "${base}/plugin/swfupload/swfupload.swf",
+		file_size_limit : "100 MB",
+		file_types : "*.doc;*.rar;*.zip;*.xls;*.jpg;*.docx;*.pdf",
+		file_post_name:"attachFile",
+		file_types_description : "附件",
+		file_queue_limit : 0,
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel"
+		},
+		debug: false,
+		
+		button_image_url : "${base}/plugin/swfupload/swfbtn.png",
+		button_placeholder_id : "spanButtonPlaceHolder1",
+		button_text: "<span class='abtn'>上传附件</span>",
+		button_window_mode:"transparent",
+		button_width: 80,
+		button_height: 24,
+		button_text_left_padding: 22,
+		button_text_top_padding: 2,
+		
+		file_queued_handler : fileQueued1,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart1,
+		upload_progress_handler : uploadProgress1,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess1,
+		upload_complete_handler : uploadComplete1,
+		queue_complete_handler : queueComplete2
+	});
+	swfu2=new SWFUpload({
+		upload_url : uploadUrl,
+		flash_url : "${base}/plugin/swfupload/swfupload.swf",
+		file_size_limit : "10 MB",
+		file_types : "*.jpg;*.gif;*.png;*.bmp",
+		file_post_name:"imgFile",
+		file_types_description : "图片",
+		file_queue_limit : 0,
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel"
+		},
+		debug: false,
+		
+		button_image_url : "${base}/plugin/swfupload/swfbtn.png",
+		button_placeholder_id : "spanButtonPlaceHolder2",
+		button_text: "<span class='abtn'>上传图片</span>",
+		button_window_mode:"transparent",
+		button_width: 80,
+		button_height: 24,
+		button_text_left_padding: 22,
+		button_text_top_padding: 2,
+		
+		file_queued_handler : fileQueued2,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart3,
+		upload_progress_handler : uploadProgress3,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess3,
+		upload_complete_handler : uploadComplete2,
+		queue_complete_handler : queueComplete2
+	});
+};
+<#if article??&&article.pics??>
+var imgIndex = 0;
+var imgIndex1 = 0;
+<#list article.pics as p>
+<#if p.thumb??&&p.thumb>
+imgIndex1++;
+<#else>
+imgIndex++;
+</#if>
+</#list>
+<#else>
+var imgIndex = 0;
+var imgIndex1 = 0;
+</#if>
+<#if article??&&article.atts??>
+var attIndex = ${article.atts?size};
+<#else>
+var attIndex = 0;
+</#if>
+
+function fileQueued2(file) {
+	
+}
+function uploadStart2(file) {
+	$("#imgshow").append($.format($("#imgList").html(),imgIndex++));
+}
+function uploadProgress2(file, bytesLoaded, bytesTotal) {
+	var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
+	var index = imgIndex - 1;
+	var p = "width:"+percent+"%;";
+	$("#imgpercent"+index).attr("style",p);
+	$("#imgpercent"+index).html(percent+"%");
+}
+function uploadComplete2(file) {
+	
+}
+function queueComplete2(file) {
+	
+}
+function uploadSuccess2(file,serverData) {
+	var index = imgIndex - 1;
+	$("#img"+index).attr("src","${base}"+serverData);
+	$("#img"+index).autoZoomLoadImage(150, 150);
+	$("#imgpath"+index).val(serverData);
+	$("#imgdel"+index).bind("click",function(){
+		$.get("o_delete_file.do",{"path":$("#img"+index).attr("src")});
+		$("#imgList"+index).remove();
+	});
+	$("#imgprocess"+index).remove();
+}
+
+function uploadStart3(file) {
+	$("#aimgshow").append($.format($("#aimgList").html(),imgIndex1++));
+}
+
+function uploadProgress3(file, bytesLoaded, bytesTotal) {
+	var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
+	var index = imgIndex1 - 1;
+	var p = "width:"+percent+"%;";
+	$("#aimgpercent"+index).attr("style",p);
+	$("#aimgpercent"+index).html(percent+"%");
+}
+
+function uploadSuccess3(file,serverData) {
+	var index = imgIndex1 - 1;
+	if(index==0){
+		$("#typevalue0").val(",0,");
+		$("#seltype00").attr("checked",true);
+	}
+	$("#aimg"+index).attr("src","${base}"+serverData);
+	$("#aimg"+index).autoZoomLoadImage(150, 150);
+	$("#aimgpath"+index).val(serverData);
+	$("#aimgdel"+index).bind("click",function(){
+		$.get("o_delete_file.do",{"path":$("#aimg"+index).attr("src")});
+		$("#aimgList"+index).remove();
+	});
+	$("#aimgprocess"+index).remove();
+}
+
+
+function fileQueued1(file) {
+	
+}
+function uploadStart1(file) {
+	$("#attshow").append($.format($("#attList").html(),attIndex++));
+	var index = attIndex - 1;
+	var size = (file.size/1024).toFixed(2);
+	$("#attname"+index).html(file.name+"("+size+"KB)");
+}
+function uploadProgress1(file, bytesLoaded, bytesTotal) {
+	var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
+	var index = attIndex - 1;
+	$("#attpb"+index).progressBar(percent,{ barImage: '${base}/plugin/swfupload/progressbg_green.gif'});
+}
+function uploadComplete1(file) {
+	
+}
+function uploadSuccess1(file,serverData) {
+	var index = attIndex - 1;
+	$("#atturl"+index).val(serverData);
+	$("#attachname"+index).val(file.name);
+	$("#attdel"+index).bind("click",function(){
+		$.get("o_delete_file.do",{"path":$("#atturl"+index).val()});
+		$("#att"+index).remove();
+	});
+}
+
+
+function delimg(index){
+	$("#imgList"+index).remove();
+}
+function delimg1(index){
+	$("#aimgList"+index).remove();
+}
+function delatt(index){
+	$("#att"+index).remove();
+}
+</script>

@@ -1,0 +1,7 @@
+package #{dao_p};
+
+import com.javassf.basic.hibernate4.QueryDao;
+import #{entity_p}.#{Entity};
+
+public interface #{Entity}Dao extends QueryDao<#{Entity}>{
+}

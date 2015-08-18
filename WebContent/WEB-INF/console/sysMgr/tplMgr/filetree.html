@@ -1,0 +1,10 @@
+[
+<#list tplList as tpl>
+	{
+	"path": "${tpl.name}",
+	"name": "${tpl.filename}",
+	"click":"checkTpl('${tpl.name}','${tpl.name!?url}')",
+	"open": false
+	}<#if tpl_has_next>,</#if>
+</#list>
+]

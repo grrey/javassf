@@ -1,0 +1,14 @@
+{Rows:[
+   <#list p.content as questionnaire>
+   {
+     "id":"${questionnaire.id}",
+     "name":"${questionnaire.name!}",
+     "startTime":"${questionnaire.startTime!?string('yyyy-MM-dd')}",
+     "endTime":"<#if questionnaire.endTime??>${questionnaire.endTime!?string('yyyy-MM-dd')}</#if>",
+     "needLogin":"${questionnaire.needLogin?string("<span style='color:blue'>是</span>","<span style='color:red'>否</span>")}",
+     "enable":"${questionnaire.enable?string("<span style='color:blue'>启用</span>","<span style='color:red'>关闭</span>")}",
+     "createTime":"${questionnaire.createTime!?string('yyyy-MM-dd HH:mm:ss')}"
+   }<#if questionnaire_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

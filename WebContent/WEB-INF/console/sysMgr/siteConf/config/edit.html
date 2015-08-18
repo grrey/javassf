@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../../liger.html"/>
+<script language="javascript">
+$(function (){
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>系统常用设置</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="configForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit">评论是否需审核：</td>
+              <td><input type="radio" name="commentCheck" id="commentCheck0" value="0" <#if config??&&!config.commentCheck>checked="checked"</#if>/>否
+              <input type="radio" name="commentCheck" id="commentCheck1" value="1" <#if config??&&config.commentCheck>checked="checked"</#if>/>是
+              </td>
+              <td class="ftit">评论是否需登录：</td>
+              <td><input type="radio" name="commentLogin" id="commentLogin0" value="0" <#if config??&&!config.commentLogin>checked="checked"</#if>/>否
+              <input type="radio" name="commentLogin" id="commentLogin1" value="1" <#if config??&&config.commentLogin>checked="checked"</#if>/>是
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">留言是否需审核：</td>
+              <td><input type="radio" name="messageCheck" id="messageCheck0" value="0" <#if config??&&!config.messageCheck>checked="checked"</#if>/>否
+              <input type="radio" name="messageCheck" id="messageCheck1" value="1" <#if config??&&config.messageCheck>checked="checked"</#if>/>是
+              </td>
+              <td class="ftit">留言是否需登录：</td>
+              <td><input type="radio" name="messageLogin" id="messageLogin0" value="0" <#if config??&&!config.messageLogin>checked="checked"</#if>/>否
+              <input type="radio" name="messageLogin" id="messageLogin1" value="1" <#if config??&&config.messageLogin>checked="checked"</#if>/>是
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">留言是否需填真实姓名：</td>
+              <td><input type="radio" name="messageName" id="messageName0" value="0" <#if config??&&!config.messageName>checked="checked"</#if>/>否
+              <input type="radio" name="messageName" id="messageName1" value="1" <#if config??&&config.messageName>checked="checked"</#if>/>是
+              </td>
+              <td class="ftit">留言是否需填手机：</td>
+              <td><input type="radio" name="messageMobile" id="messageMobile0" value="0" <#if config??&&!config.messageMobile>checked="checked"</#if>/>否
+              <input type="radio" name="messageMobile" id="messageMobile1" value="1" <#if config??&&config.messageMobile>checked="checked"</#if>/>是
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">留言是否需填E-MAIL：</td>
+              <td><input type="radio" name="messageEmail" id="messageEmail0" value="0" <#if config??&&!config.messageEmail>checked="checked"</#if>/>否
+              <input type="radio" name="messageEmail" id="messageEmail1" value="1" <#if config??&&config.messageEmail>checked="checked"</#if>/>是
+              </td>
+              <td class="ftit">留言是否需填住址：</td>
+              <td><input type="radio" name="messageAddress" id="messageAddress0" value="0" <#if config??&&!config.messageAddress>checked="checked"</#if>/>否
+              <input type="radio" name="messageAddress" id="messageAddress1" value="1" <#if config??&&config.messageAddress>checked="checked"</#if>/>是
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">留言是否需填邮编：</td>
+              <td><input type="radio" name="messageZipcode" id="messageZipcode0" value="0" <#if config??&&!config.messageZipcode>checked="checked"</#if>/>否
+              <input type="radio" name="messageZipcode" id="messageZipcode1" value="1" <#if config??&&config.messageZipcode>checked="checked"</#if>/>是
+              </td>
+              <td class="ftit">注册是否开启：</td>
+              <td><input type="radio" name="regOpen" id="regOpen0" value="0" <#if config??&&!config.regOpen>checked="checked"</#if>/>关闭
+              <input type="radio" name="regOpen" id="regOpen1" value="1" <#if config??&&config.regOpen>checked="checked"</#if>/>开启
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">会员名最小长度：</td>
+              <td><input type="text" name="regMin" id="regMin" <#if config??>value="${config.regMin!}"</#if>/>&nbsp;为空则不做限制
+              </td>
+              <td class="ftit">会员名最大长度：</td>
+              <td><input type="text" name="regMax" id="regMax" <#if config??>value="${config.regMax!}"</#if>/>&nbsp;为空则不做限制
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">注册会员是否需审核：</td>
+              <td><input type="radio" name="regCheck" id="regCheck0" value="0" <#if config??&&!config.regCheck>checked="checked"</#if>/>否
+              <input type="radio" name="regCheck" id="regCheck1" value="1" <#if config??&&config.regCheck>checked="checked"</#if>/>是
+              </td>
+              <td class="ftit">登录失败最大次数：</td>
+              <td><input type="text" name="loginCount" id="loginCount" <#if config??>value="${config.loginCount!}"</#if>/>&nbsp;为空或者为0则不做限制
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:partyConfig:update">
+                <#if config??>
+                <input type="hidden" name="id" value="${config.id!}"/>
+                </#if>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

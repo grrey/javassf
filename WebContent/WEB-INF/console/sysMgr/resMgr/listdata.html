@@ -1,0 +1,14 @@
+{Rows:[
+   <#list list as res>
+   {
+     "name" : "${res.name!}",
+     "directory" : "${res.directory?string('true','false')}",
+     "editable" : "${res.editable?string('true','false')}",
+     "fileimg" : "<img src='${base}/skin/comm/img/file/${res.ico}.gif' style='padding-top:3px;'/>",
+     "filename":"${res.filename}",
+     "filesize":"${res.size} KB",
+     "modifytime":"${res.lastModifiedDate?string('yyyy-MM-dd HH:mm:ss')}"
+   }<#if res_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

@@ -1,0 +1,69 @@
+<script type="text/javascript">
+var swfu;
+window.onload=function() {
+	var uploadUrl = "../o_upload_attach.do";
+	swfu=new SWFUpload({
+		upload_url : uploadUrl,
+		flash_url : "${base}/plugin/swfupload/swfupload.swf",
+		file_size_limit : "10 MB",
+		file_types : "*.jpg;*.gif;*.png;*.bmp;*.swf",
+		file_post_name:"attachFile",
+		file_types_description : "图片和FLASH",
+		file_queue_limit : 1,
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel"
+		},
+		debug: false,
+		
+		button_image_url : "${base}/plugin/swfupload/swfbtn.png",
+		button_placeholder_id : "spanButtonPlaceHolder",
+		button_text: "<span class='abtn'>上传图片</span>",
+		button_window_mode:"transparent",
+		button_width: 80,
+		button_height: 24,
+		button_text_left_padding: 22,
+		button_text_top_padding: 2,
+		
+		file_queued_handler : fileQueued1,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart1,
+		upload_progress_handler : uploadProgress1,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess1,
+		upload_complete_handler : uploadComplete1,
+		queue_complete_handler : queueComplete1
+	});
+};
+
+function fileQueued1(file) {
+	
+}
+function uploadStart1(file) {
+	$("#ggtxq").html($.format($("#atthtml").html(),0));
+	$("#attname0").html(file.name);
+}
+function uploadProgress1(file, bytesLoaded, bytesTotal) {
+	var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
+	$("#attpb0").progressBar(percent,{ barImage: '${base}/plugin/swfupload/progressbg_green.gif'});
+}
+function uploadComplete1(file) {
+	
+}
+function queueComplete1(file) {
+	
+}
+function uploadSuccess1(file,serverData) {
+	$("#atturl0").val(serverData);
+	$("#attachname0").val(file.name);
+	$("#attdel0").bind("click",function(){
+		$.get("../doc/o_delete_file.do",{"path":$("#atturl0").val()});
+		$("#att0").remove();
+	});
+}
+
+function delatt(){
+	$("#att0").remove();
+}
+</script>

@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+var art;
+function checkfile(){
+	art = $.dialog({title:'选择还原文件',content:$('#dblist').html(),padding:0,lock: true});
+}
+
+function chosefile(){
+	$("#filename").val($("#dbfile").val());
+	art.close();
+}
+
+function beginBackup(){
+	$.post("o_revert.do",{filename:$("#filename").val()},function(data){
+		alert("还原成功!");
+	},"json");
+}
+</script>
+</head>
+<body>
+<div class="blk c">
+	<h2>数据库还原</h2>
+	<div class="c">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit">SQL文件：</td>
+              <td><input type="text" name="filename" id="filename"/> <input type="button" class="l-button" value="选择文件" onclick="checkfile()"/></td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:dbconfig:oexp">
+                <input type="button" value="还原" class="l-button" onclick="beginBackup()"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+	</div>
+</div>
+<div id="dblist" style="display:none">
+<select name="dbfile" id="dbfile">
+<#list dbfiles as file>
+<option value="${file.filename!}">${file.filename!}</option>
+</#list>
+</select>
+<input type="button" value="确定" onclick="chosefile()"/>
+</div>
+</body>
+</html>

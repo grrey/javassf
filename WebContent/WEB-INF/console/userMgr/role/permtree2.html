@@ -1,0 +1,956 @@
+<script language="javascript">
+var zNodes =[{ id:"admin:all,admin:workspace:index,admin:workspace:right",
+	           name:"所有权限",
+	           open:true,
+	           <#if perms??&&perms?seq_contains("admin:all")>
+	           checked:true,
+	           </#if>
+	           children:[
+ 			   {id:"admin:myworkspace",
+ 				name:"我的工作台",
+ 				<#if perms??&&perms?seq_contains("admin:myworkspace")>
+ 	            checked:true,
+ 	            </#if>
+ 				children: [
+ 					{   name:"个人资料",
+ 						<#if perms??&&(perms?seq_contains("admin:workspace:info")||perms?seq_contains("admin:workspace:infoupdate"))>
+ 	 	                checked:true,
+ 	 	                </#if>
+ 						children: [
+ 		 							{ id:"admin:workspace:info",
+ 		 							<#if perms??&&perms?seq_contains("admin:workspace:info")>
+ 		 	 	 	                checked:true,
+ 		 	 	 	                </#if>name:"查看"},
+ 		 							{ id:"admin:workspace:infoupdate",
+ 		 	 	 	                <#if perms??&&perms?seq_contains("admin:workspace:infoupdate")>
+ 		 	 	 	                checked:true,
+ 		 	 	 	                </#if>name:"修改"}
+ 		 						]
+ 					},
+ 					{   name:"修改密码",
+ 						<#if perms??&&(perms?seq_contains("admin:workspace:passedit")||perms?seq_contains("admin:workspace:passupdate"))>
+	 	                checked:true,
+	 	                </#if>
+ 						children: [
+ 							{ id:"admin:workspace:passedit",
+ 							<#if perms??&&perms?seq_contains("admin:workspace:passedit")>
+ 		 	                checked:true,
+ 		 	                </#if>name:"查看"},
+ 		 					{ id:"admin:workspace:passupdate",
+ 		 	                <#if perms??&&perms?seq_contains("admin:workspace:passupdate")>
+ 		 	                checked:true,
+ 		 	                </#if>name:"提交"}
+ 					]}
+ 				]},
+ 			  { id:"admin:doccenter",
+ 				name:"文档中心",
+ 				<#if perms??&&perms?seq_contains("admin:doccenter")>
+                checked:true,
+                </#if>
+ 				children: [
+ 					{   id:"admin:channel:edittree,admin:channel:tree",
+ 						name:"栏目管理",
+ 						<#if perms??&&perms?seq_contains("admin:channel:tree")>
+ 		                checked:true,
+ 		                </#if>
+ 						children: [
+ 							{   name:"添加",
+ 								<#if perms??&&(perms?seq_contains("admin:channel:add")||perms?seq_contains("admin:channel:save"))>
+	 	 		                checked:true,
+	 	 		                </#if>
+ 								children: [
+ 						 						{ id:"admin:channel:add",
+ 						 						<#if perms??&&perms?seq_contains("admin:channel:add")>
+ 					 	 		                checked:true,
+ 					 	 		                </#if>name:"查看"},
+ 						 		 				{ id:"admin:channel:save",
+ 					 	 		                <#if perms??&&perms?seq_contains("admin:channel:save")>
+ 					 	 		                checked:true,
+ 					 	 		                </#if>name:"提交"}
+ 						 					]},
+ 							{   name:"修改",
+			 					<#if perms??&&(perms?seq_contains("admin:channel:edit")||perms?seq_contains("admin:channel:update"))>
+	 	 		                checked:true,
+	 	 		                </#if>
+		 						children: [
+				 						{ id:"admin:channel:edit",
+				 						<#if perms??&&perms?seq_contains("admin:channel:edit")>
+			 	 		                checked:true,
+			 	 		                </#if>name:"查看"},
+				 		 				{ id:"admin:channel:update",
+			 	 		                <#if perms??&&perms?seq_contains("admin:channel:update")>
+			 	 		                checked:true,
+			 	 		                </#if>name:"提交"}
+				 					]},
+ 							{ id:"admin:channel:delete",
+				 					<#if perms??&&perms?seq_contains("admin:channel:delete")>
+		 	 		                checked:true,
+		 	 		                </#if>name:"删除"},
+ 							{ id:"admin:channel:list",
+		 	 		                <#if perms??&&perms?seq_contains("admin:channel:list")>
+		 	 		                checked:true,
+		 	 		                </#if>name:"列表"}
+ 						]},
+ 						{   id : "admin:doc:tree,admin:doc:addtree",
+ 							name:"文档管理",
+ 							<#if perms??&&perms?seq_contains("admin:doc:tree")>
+ 	 		                checked:true,
+ 	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:doc:add")||perms?seq_contains("admin:doc:save"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:doc:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:doc:add")>
+ 	 				 	 	 		                checked:true,
+ 	 				 	 	 		                </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:doc:save",
+ 	 				 	 	 		                <#if perms??&&perms?seq_contains("admin:doc:save")>
+ 	 				 	 	 		                checked:true,
+ 	 				 	 	 		                </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:doc:edit")||perms?seq_contains("admin:doc:update"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:doc:edit",
+ 					 						<#if perms??&&perms?seq_contains("admin:doc:edit")>
+ 			 	 	 		                checked:true,
+ 			 	 	 		                </#if>name:"查看"},
+ 					 		 				{ id:"admin:doc:update",
+ 			 	 	 		                <#if perms??&&perms?seq_contains("admin:doc:update")>
+ 			 	 	 		                checked:true,
+ 			 	 	 		                </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:doc:delete",
+			 					<#if perms??&&perms?seq_contains("admin:doc:delete")>
+ 	 	 		                checked:true,
+ 	 	 		                </#if>name:"删除"},
+ 	 							{ id:"admin:doc:list",
+ 	 	 		                <#if perms??&&perms?seq_contains("admin:doc:list")>
+ 	 	 		                checked:true,
+ 	 	 		                </#if>name:"列表"},
+ 	 	 		                { id:"admin:doc:check",
+ 	 	 	 		                <#if perms??&&perms?seq_contains("admin:doc:check")>
+ 	 	 	 		                checked:true,
+ 	 	 	 		                </#if>name:"审核"}
+ 	 					]},
+ 	 					{   id:"admin:docconfig",
+ 							name:"模型管理",
+ 							<#if perms??&&(perms?seq_contains("admin:model:add")||perms?seq_contains("admin:model:save")
+									||perms?seq_contains("admin:model:edit")||perms?seq_contains("admin:model:update")
+											||perms?seq_contains("admin:model:delete")||perms?seq_contains("admin:model:list"))>
+	 		                checked:true,
+	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:model:add")||perms?seq_contains("admin:model:save"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:model:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:model:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:model:save",
+ 	 					 	 		                <#if perms??&&perms?seq_contains("admin:model:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:model:edit")||perms?seq_contains("admin:model:update"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:model:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:model:edit")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"查看"},
+ 					 		 				{ id:"admin:model:update",
+	 					 	 		            <#if perms??&&perms?seq_contains("admin:model:update")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:model:delete",
+ 					 				<#if perms??&&perms?seq_contains("admin:model:delete")>
+			 	 		            checked:true,
+					 	 		    </#if>name:"删除"},
+ 	 							{ id:"admin:model:list",
+					 	 		    <#if perms??&&perms?seq_contains("admin:model:list")>
+			 	 		            checked:true,
+					 	 		    </#if>name:"列表"}
+ 	 					]},
+ 	 					{   id:"admin:docconfig",
+ 							name:"模型字段管理",
+ 							<#if perms??&&(perms?seq_contains("admin:field:add")||perms?seq_contains("admin:field:save")
+									||perms?seq_contains("admin:field:edit")||perms?seq_contains("admin:field:update")
+											||perms?seq_contains("admin:field:delete")||perms?seq_contains("admin:field:list")
+													||perms?seq_contains("admin:field:priority")||perms?seq_contains("admin:field:single"))>
+	 		                checked:true,
+	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:field:add")||perms?seq_contains("admin:field:save"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:field:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:field:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:field:save",
+ 	 					 	 		                <#if perms??&&perms?seq_contains("admin:field:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:field:edit")||perms?seq_contains("admin:field:update"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:field:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:field:edit")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"查看"},
+ 					 		 				{ id:"admin:field:update",
+	 					 	 		            <#if perms??&&perms?seq_contains("admin:field:update")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:field:delete",
+ 					 					<#if perms??&&perms?seq_contains("admin:field:delete")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"删除"},
+ 	 							{ id:"admin:field:list",
+					 	 		        <#if perms??&&perms?seq_contains("admin:field:list")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"列表"},
+ 	 							{ id:"admin:field:priority",
+					 	 		        <#if perms??&&perms?seq_contains("admin:field:priority")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"排序"},
+ 	 							{ id:"admin:field:single,admin:field:show",
+					 	 		        <#if perms??&&perms?seq_contains("admin:field:single")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"布局"}
+ 	 					]},
+ 	 					{   id:"admin:docconfig",
+ 							name:"文档类型管理",
+ 							<#if perms??&&(perms?seq_contains("admin:doctype:add")||perms?seq_contains("admin:doctype:save")
+									||perms?seq_contains("admin:doctype:edit")||perms?seq_contains("admin:doctype:update")
+											||perms?seq_contains("admin:doctype:delete")||perms?seq_contains("admin:doctype:list"))>
+	 		                checked:true,
+	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:doctype:add")||perms?seq_contains("admin:doctype:save"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:doctype:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:doctype:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:doctype:save",
+ 	 					 	 		                <#if perms??&&perms?seq_contains("admin:doctype:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:doctype:edit")||perms?seq_contains("admin:doctype:update"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:doctype:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:doctype:edit")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"查看"},
+ 					 		 				{ id:"admin:doctype:update",
+	 					 	 		            <#if perms??&&perms?seq_contains("admin:doctype:update")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:doctype:delete",
+ 					 					<#if perms??&&perms?seq_contains("admin:doctype:delete")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"删除"},
+ 	 							{ id:"admin:doctype:list",
+					 	 		        <#if perms??&&perms?seq_contains("admin:doctype:list")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"列表"}
+ 	 				 ]},
+ 	 				 {      id:"admin:docconfig",
+							name:"工作流管理",
+							<#if perms??&&(perms?seq_contains("admin:workflow:add")||perms?seq_contains("admin:workflow:save")
+									||perms?seq_contains("admin:workflow:edit")||perms?seq_contains("admin:workflow:update")
+											||perms?seq_contains("admin:workflow:delete")||perms?seq_contains("admin:workflow:list"))>
+	 		                checked:true,
+	 		                </#if>
+	 						children: [
+	 							{   name:"添加",
+	 								<#if perms??&&(perms?seq_contains("admin:workflow:add")||perms?seq_contains("admin:workflow:save"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+	 								children: [
+	 						 						{ id:"admin:workflow:add",
+	 						 						<#if perms??&&perms?seq_contains("admin:workflow:add")>
+	 					 	 		                checked:true,
+	 							 	 		        </#if>name:"查看"},
+	 						 		 				{ id:"admin:workflow:save",
+	 							 	 		        <#if perms??&&perms?seq_contains("admin:workflow:save")>
+	 					 	 		                checked:true,
+	 							 	 		        </#if>name:"提交"}
+	 						 					]},
+	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:workflow:edit")||perms?seq_contains("admin:workflow:update"))>
+	 	 	 		                checked:true,
+	 	 	 		                </#if>
+			 						children: [
+					 						{ id:"admin:workflow:edit",
+					 						    <#if perms??&&perms?seq_contains("admin:workflow:edit")>
+					 	 		                checked:true,
+ 							 	 		        </#if>name:"查看"},
+					 		 				{ id:"admin:workflow:update",
+ 							 	 		        <#if perms??&&perms?seq_contains("admin:workflow:update")>
+					 	 		                checked:true,
+ 							 	 		        </#if>name:"提交"}
+					 					]},
+	 							{ id:"admin:workflow:delete",
+					 					<#if perms??&&perms?seq_contains("admin:workflow:delete")>
+			 	 		                checked:true,
+						 	 		    </#if>name:"删除"},
+	 							{ id:"admin:workflow:list",
+						 	 		    <#if perms??&&perms?seq_contains("admin:workflow:list")>
+			 	 		                checked:true,
+						 	 		    </#if>name:"列表"}
+	 				 ]}
+ 			]},
+ 			  { id:"admin:extrafunc", 
+ 				name:"功能组件",
+ 				<#if perms??&&perms?seq_contains("admin:extrafunc")>
+                checked:true,
+                </#if>
+ 				children: [
+ 					{   
+ 						name:"评论管理",
+ 						<#if perms??&&(perms?seq_contains("admin:comment:add")||perms?seq_contains("admin:comment:save")
+								||perms?seq_contains("admin:comment:edit")||perms?seq_contains("admin:comment:update")
+										||perms?seq_contains("admin:comment:delete")||perms?seq_contains("admin:comment:list"))>
+ 		                checked:true,
+ 		                </#if>
+ 						children: [
+ 							{   name:"添加",
+ 								<#if perms??&&(perms?seq_contains("admin:comment:add")||perms?seq_contains("admin:comment:save"))>
+	 	 		                checked:true,
+	 	 		                </#if>
+ 								children: [
+ 						 						{ id:"admin:comment:add",
+ 						 						<#if perms??&&perms?seq_contains("admin:comment:add")>
+ 						 		                checked:true,
+ 						 		                </#if>name:"查看"},
+ 						 		 				{ id:"admin:comment:save",
+ 						 		                <#if perms??&&perms?seq_contains("admin:comment:save")>
+ 						 		                checked:true,
+ 						 		                </#if>name:"提交"}
+ 						 					]},
+ 							{   name:"修改",
+			 					<#if perms??&&(perms?seq_contains("admin:comment:edit")||perms?seq_contains("admin:comment:save"))>
+	 	 		                checked:true,
+	 	 		                </#if>
+		 						children: [
+				 						{ id:"admin:comment:edit",
+				 							<#if perms??&&perms?seq_contains("admin:comment:edit")>
+					 		                checked:true,
+						 		            </#if>name:"查看"},
+				 		 				{ id:"admin:comment:update",
+						 		            <#if perms??&&perms?seq_contains("admin:comment:update")>
+					 		                checked:true,
+						 		            </#if>name:"提交"}
+				 					]},
+ 							{ id:"admin:comment:delete",
+				 					<#if perms??&&perms?seq_contains("admin:comment:delete")>
+			 		                checked:true,
+				 		            </#if>name:"删除"},
+ 							{ id:"admin:comment:list",
+				 		            <#if perms??&&perms?seq_contains("admin:comment:list")>
+			 		                checked:true,
+				 		            </#if>name:"列表"},
+				 		    { id:"admin:comment:check",
+					 		            <#if perms??&&perms?seq_contains("admin:comment:check")>
+				 		                checked:true,
+					 		            </#if>name:"审核"}
+ 						]},
+ 						{   
+ 							name:"留言管理",
+ 							<#if perms??&&(perms?seq_contains("admin:gbook:add")||perms?seq_contains("admin:gbook:save")
+									||perms?seq_contains("admin:gbook:edit")||perms?seq_contains("admin:gbook:update")
+											||perms?seq_contains("admin:gbook:delete")||perms?seq_contains("admin:gbook:list"))>
+	 		                checked:true,
+	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:gbook:add")||perms?seq_contains("admin:gbook:save"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:gbook:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:gbook:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:gbook:save",
+ 	 					 	 		                <#if perms??&&perms?seq_contains("admin:gbook:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:gbook:edit")||perms?seq_contains("admin:gbook:update"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:gbook:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:gbook:edit")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"查看"},
+ 					 		 				{ id:"admin:gbook:update",
+	 					 	 		            <#if perms??&&perms?seq_contains("admin:gbook:update")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:gbook:delete",
+ 					 					<#if perms??&&perms?seq_contains("admin:gbook:delete")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"删除"},
+ 	 							{ id:"admin:gbook:list",
+					 	 		        <#if perms??&&perms?seq_contains("admin:gbook:list")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"列表"}
+ 	 					]},
+ 	 					{   
+ 							name:"留言分类管理",
+ 							<#if perms??&&(perms?seq_contains("admin:gbook_type:add")||perms?seq_contains("admin:gbook_type:save")
+									||perms?seq_contains("admin:gbook_type:edit")||perms?seq_contains("admin:gbook_type:update")
+											||perms?seq_contains("admin:gbook_type:delete")||perms?seq_contains("admin:gbook_type:list"))>
+	 		                checked:true,
+	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:gbook_type:add")||perms?seq_contains("admin:gbook_type:save"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:gbook_type:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:gbook_type:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:gbook_type:save",
+ 	 					 	 		                <#if perms??&&perms?seq_contains("admin:gbook_type:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		                </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:gbook_type:edit")||perms?seq_contains("admin:gbook_type:update"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:gbook_type:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:gbook_type:edit")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"查看"},
+ 					 		 				{ id:"admin:gbook_type:update",
+	 					 	 		            <#if perms??&&perms?seq_contains("admin:gbook_type:update")>
+					 	 		                checked:true,
+	 					 	 		            </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:gbook_type:delete",
+ 					 					<#if perms??&&perms?seq_contains("admin:gbook_type:delete")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"删除"},
+ 	 							{ id:"admin:gbook_type:list",
+					 	 		        <#if perms??&&perms?seq_contains("admin:gbook_type:list")>
+			 	 		                checked:true,
+					 	 		        </#if>name:"列表"}
+ 	 					]}
+ 			]},
+ 			{   id:"admin:usermgr",
+ 				name:"用户管理",
+ 				<#if perms??&&perms?seq_contains("admin:usermgr")>
+                checked:true,
+ 		        </#if>
+ 				children: [
+ 					{   
+ 						name:"会员管理",
+ 						<#if perms??&&(perms?seq_contains("admin:member:add")||perms?seq_contains("admin:member:save")
+								||perms?seq_contains("admin:member:edit")||perms?seq_contains("admin:member:update")
+										||perms?seq_contains("admin:member:delete")||perms?seq_contains("admin:member:list"))>
+ 		                checked:true,
+ 		                </#if>
+ 						children: [
+ 							{   name:"添加",
+ 								<#if perms??&&(perms?seq_contains("admin:member:add")||perms?seq_contains("admin:member:save"))>
+	 	 		                checked:true,
+	 	 		                </#if>
+ 								children: [
+ 						 						{ id:"admin:member:add",
+ 						 						<#if perms??&&perms?seq_contains("admin:member:add")>
+ 						 		                checked:true,
+ 						 		 		        </#if>name:"查看"},
+ 						 		 				{ id:"admin:member:save",
+ 						 		 		        <#if perms??&&perms?seq_contains("admin:member:save")>
+ 						 		                checked:true,
+ 						 		 		        </#if>name:"提交"}
+ 						 					]},
+ 							{   name:"修改",
+			 					<#if perms??&&(perms?seq_contains("admin:member:edit")||perms?seq_contains("admin:member:update"))>
+	 	 		                checked:true,
+	 	 		                </#if>
+		 						children: [
+				 						{ id:"admin:member:edit",
+				 							<#if perms??&&perms?seq_contains("admin:member:edit")>
+					 		                checked:true,
+						 		 		    </#if>name:"查看"},
+				 		 				{ id:"admin:member:update",
+						 		 		    	<#if perms??&&perms?seq_contains("admin:member:update")>
+ 						 		                checked:true,
+ 						 		 		        </#if>name:"提交"}
+				 					]},
+ 							{ id:"admin:member:delete",
+				 						<#if perms??&&perms?seq_contains("admin:member:delete")>
+				 		                checked:true,
+					 		 		    </#if>name:"删除"},
+ 							{ id:"admin:member:list",
+					 		 		    	<#if perms??&&perms?seq_contains("admin:member:list")>
+					 		                checked:true,
+						 		 		    </#if>name:"列表"}
+ 						]},
+ 						{   
+ 							name:"会员组管理",
+ 							<#if perms??&&(perms?seq_contains("admin:group:add")||perms?seq_contains("admin:group:save")
+									||perms?seq_contains("admin:group:edit")||perms?seq_contains("admin:group:update")
+											||perms?seq_contains("admin:group:delete")||perms?seq_contains("admin:group:list")
+													||perms?seq_contains("admin:group:priority"))>
+	 		                checked:true,
+	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:group:add")||perms?seq_contains("admin:group:save"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:group:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:group:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:group:save",
+ 	 					 	 		 		        <#if perms??&&perms?seq_contains("admin:group:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:group:edit")||perms?seq_contains("admin:group:update"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:group:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:group:edit")>
+					 	 		                checked:true,
+	 					 	 		 		    </#if>name:"查看"},
+ 					 		 				{ id:"admin:group:update",
+	 					 	 		 		    	<#if perms??&&perms?seq_contains("admin:group:update")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:group:delete",
+ 					 						<#if perms??&&perms?seq_contains("admin:group:delete")>
+				 	 		                checked:true,
+					 	 		 		    </#if>name:"删除"},
+ 	 							{ id:"admin:group:list",
+					 	 		 		    	<#if perms??&&perms?seq_contains("admin:group:list")>
+					 	 		                checked:true,
+	 					 	 		 		    </#if>name:"列表"},
+ 	 							{ id:"admin:group:priority",
+	 					 	 		 		    	<#if perms??&&perms?seq_contains("admin:group:priority")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"排序"}
+ 	 					]},
+ 	 					{   
+ 							name:"管理员管理",
+ 							<#if perms??&&(perms?seq_contains("admin:admin:add")||perms?seq_contains("admin:admin:save")
+									||perms?seq_contains("admin:admin:edit")||perms?seq_contains("admin:admin:update")
+											||perms?seq_contains("admin:admin:delete")||perms?seq_contains("admin:admin:list"))>
+	 		                checked:true,
+	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:admin:add")||perms?seq_contains("admin:admin:save"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:admin:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:admin:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:admin:save",
+ 	 					 	 		 		        <#if perms??&&perms?seq_contains("admin:admin:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:admin:edit")||perms?seq_contains("admin:admin:update"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:admin:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:admin:edit")>
+					 	 		                checked:true,
+	 					 	 		 		    </#if>name:"查看"},
+ 					 		 				{ id:"admin:admin:update",
+	 					 	 		 		    	<#if perms??&&perms?seq_contains("admin:admin:update")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:admin:delete",
+ 					 						<#if perms??&&perms?seq_contains("admin:admin:delete")>
+				 	 		                checked:true,
+					 	 		 		    </#if>name:"删除"},
+ 	 							{ id:"admin:admin:list",
+					 	 		 		    	<#if perms??&&perms?seq_contains("admin:admin:list")>
+					 	 		                checked:true,
+	 					 	 		 		    </#if>name:"列表"}
+ 	 					]},
+ 	 					{   
+ 							name:"角色管理",
+ 							<#if perms??&&(perms?seq_contains("admin:role:add")||perms?seq_contains("admin:role:save")
+									||perms?seq_contains("admin:role:edit")||perms?seq_contains("admin:role:update")
+											||perms?seq_contains("admin:role:delete")||perms?seq_contains("admin:role:list"))>
+	 		                checked:true,
+	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:role:add")||perms?seq_contains("admin:role:save"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:role:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:role:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:role:save",
+ 	 					 	 		 		        <#if perms??&&perms?seq_contains("admin:role:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:role:edit")||perms?seq_contains("admin:role:edit"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:role:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:role:edit")>
+					 	 		                checked:true,
+	 					 	 		 		    </#if>name:"查看"},
+ 					 		 				{ id:"admin:role:update",
+	 					 	 		 		    	<#if perms??&&perms?seq_contains("admin:role:update")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:role:delete",
+ 					 						<#if perms??&&perms?seq_contains("admin:role:delete")>
+				 	 		                checked:true,
+					 	 		 		    </#if>name:"删除"},
+ 	 							{ id:"admin:role:list",
+					 	 		 		    	<#if perms??&&perms?seq_contains("admin:role:list")>
+					 	 		                checked:true,
+	 					 	 		 		    </#if>name:"列表"}
+ 	 					]},
+ 	 					{   
+ 							name:"部门管理",
+ 							<#if perms??&&(perms?seq_contains("admin:depart:add")||perms?seq_contains("admin:depart:save")
+									||perms?seq_contains("admin:depart:edit")||perms?seq_contains("admin:depart:update")
+											||perms?seq_contains("admin:depart:delete")||perms?seq_contains("admin:depart:list"))>
+	 		                checked:true,
+	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:depart:add")||perms?seq_contains("admin:depart:save"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:depart:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:depart:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:depart:save",
+ 	 					 	 		 		        <#if perms??&&perms?seq_contains("admin:depart:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:depart:edit")||perms?seq_contains("admin:depart:update"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:depart:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:depart:edit")>
+					 	 		                checked:true,
+	 					 	 		 		    </#if>name:"查看"},
+ 					 		 				{ id:"admin:depart:update",
+	 					 	 		 		    	<#if perms??&&perms?seq_contains("admin:depart:update")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:depart:delete",
+ 					 						<#if perms??&&perms?seq_contains("admin:depart:delete")>
+				 	 		                checked:true,
+					 	 		 		    </#if>name:"删除"},
+ 	 							{ id:"admin:depart:list",
+					 	 		 		    	<#if perms??&&perms?seq_contains("admin:depart:list")>
+					 	 		                checked:true,
+	 					 	 		 		    </#if>name:"列表"}
+ 	 					]}
+ 			]},
+ 			{   id:"admin:datacenter",
+ 				name:"数据中心",
+ 				<#if perms??&&perms?seq_contains("admin:datacenter")>
+                checked:true,
+ 		        </#if>
+ 				children: [
+ 						{   id:"admin:docdata",
+ 							name:"关键词管理",
+ 							<#if perms??&&(perms?seq_contains("admin:keyword:add")||perms?seq_contains("admin:keyword:save")
+ 									||perms?seq_contains("admin:keyword:edit")||perms?seq_contains("admin:keyword:update")
+ 											||perms?seq_contains("admin:keyword:delete")||perms?seq_contains("admin:keyword:list"))>
+ 	 		                checked:true,
+ 	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:keyword:add")||perms?seq_contains("admin:keyword:save"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:keyword:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:keyword:add")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:keyword:save",
+ 	 					 	 		 		        <#if perms??&&perms?seq_contains("admin:keyword:save")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:keyword:edit")||perms?seq_contains("admin:keyword:update"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:keyword:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:keyword:edit")>
+					 	 		                checked:true,
+	 					 	 		 		    </#if>name:"查看"},
+ 					 		 				{ id:"admin:keyword:update",
+	 					 	 		 		    	<#if perms??&&perms?seq_contains("admin:keyword:update")>
+ 	 					 	 		                checked:true,
+ 	 					 	 		 		        </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:keyword:delete",
+ 					 					<#if perms??&&perms?seq_contains("admin:keyword:delete")>
+ 			 	 		                checked:true,
+ 			 	 		 		        </#if>name:"删除"},
+ 	 							{ id:"admin:keyword:list",
+ 			 	 		 		        <#if perms??&&perms?seq_contains("admin:keyword:list")>
+ 			 	 		                checked:true,
+ 			 	 		 		        </#if>name:"列表"}
+ 	 					]},
+ 	 					{   id:"admin:docdata",
+ 							name:"敏感词管理",
+ 							<#if perms??&&(perms?seq_contains("admin:sensitivity:add")||perms?seq_contains("admin:sensitivity:save")
+ 									||perms?seq_contains("admin:sensitivity:edit")||perms?seq_contains("admin:sensitivity:update")
+ 											||perms?seq_contains("admin:sensitivity:delete")||perms?seq_contains("admin:sensitivity:list"))>
+ 	 		                checked:true,
+ 	 		                </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:sensitivity:add")||perms?seq_contains("admin:sensitivity:save"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 	 								children: [
+ 	 						 						{ id:"admin:sensitivity:add",
+ 	 						 						<#if perms??&&perms?seq_contains("admin:sensitivity:add")>
+ 	 		 			 	 		                checked:true,
+ 	 		 			 	 		 		        </#if>name:"查看"},
+ 	 						 		 				{ id:"admin:sensitivity:save",
+ 	 		 			 	 		 		        <#if perms??&&perms?seq_contains("admin:sensitivity:save")>
+ 	 		 			 	 		                checked:true,
+ 	 		 			 	 		 		        </#if>name:"提交"}
+ 	 						 					]},
+ 	 							{   name:"修改",
+				 					<#if perms??&&(perms?seq_contains("admin:sensitivity:edit")||perms?seq_contains("admin:sensitivity:update"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:sensitivity:edit",
+ 					 							<#if perms??&&perms?seq_contains("admin:sensitivity:edit")>
+		 			 	 		                checked:true,
+	 		 			 	 		 		    </#if>name:"查看"},
+ 					 		 				{ id:"admin:sensitivity:update",
+	 		 			 	 		 		    <#if perms??&&perms?seq_contains("admin:sensitivity:update")>
+		 			 	 		                checked:true,
+	 		 			 	 		 		    </#if>name:"提交"}
+ 					 					]},
+ 	 							{ id:"admin:sensitivity:delete",
+ 					 					<#if perms??&&perms?seq_contains("admin:sensitivity:delete")>
+ 			 	 		                checked:true,
+		 			 	 		 		</#if>name:"删除"},
+ 	 							{ id:"admin:sensitivity:list",
+		 			 	 		 		<#if perms??&&perms?seq_contains("admin:sensitivity:list")>
+ 			 	 		                checked:true,
+		 			 	 		 		</#if>name:"列表"}
+ 	 					]},
+ 	 					{   id:"admin:docdata",
+ 							name:"全文检索",
+ 							<#if perms??&&perms?seq_contains("admin:lucene:index")>
+ 	 		                checked:true,
+ 	 		                </#if>
+ 	 					    children: [
+			 						{ id:"admin:lucene:index",
+			 						<#if perms??&&perms?seq_contains("admin:lucene:index")>
+		 	 		                checked:true,
+		 	 		 		        </#if>name:"查看"},
+			 		 				{ id:"admin:lucene:create",
+		 	 		 		        <#if perms??&&perms?seq_contains("admin:lucene:create")>
+		 	 		                checked:true,
+		 	 		 		        </#if>name:"提交"}
+			 			]}
+ 			]},
+ 			{   id:"admin:sysmgr",
+ 				name:"系统管理",
+ 				<#if perms??&&perms?seq_contains("admin:sysmgr")>
+                checked:true,
+ 		        </#if>
+ 				children: [
+ 					{   id:"admin:tpl:tree,admin:tpl:filetree,admin:tpl:dirtree",
+ 						name:"模板管理",
+ 						<#if perms??&&perms?seq_contains("admin:tpl:tree")>
+ 		                checked:true,
+ 		 		        </#if>
+ 						children: [
+ 							{   name:"添加",
+ 								<#if perms??&&(perms?seq_contains("admin:tpl:add")||perms?seq_contains("admin:tpl:save"))>
+	 	 		                checked:true,
+	 	 		                </#if>
+ 								children: [
+					 						{ id:"admin:tpl:add",
+					 						<#if perms??&&perms?seq_contains("admin:tpl:add")>
+					 		                checked:true,
+					 		 		        </#if>name:"查看"},
+					 		 				{ id:"admin:tpl:save",
+					 		 		        <#if perms??&&perms?seq_contains("admin:tpl:save")>
+					 		                checked:true,
+					 		 		        </#if>name:"提交"}
+ 						 	]},
+ 							{   name:"修改",
+ 						 		<#if perms??&&(perms?seq_contains("admin:tpl:edit")||perms?seq_contains("admin:tpl:update"))>
+	 	 		                checked:true,
+	 	 		                </#if>
+		 						children: [
+				 						{ id:"admin:tpl:edit",
+				 						<#if perms??&&perms?seq_contains("admin:tpl:edit")>
+				 		                checked:true,
+				 		 		        </#if>name:"查看"},
+				 		 				{ id:"admin:tpl:update",
+				 		 		        <#if perms??&&perms?seq_contains("admin:tpl:update")>
+				 		                checked:true,
+				 		 		        </#if>name:"提交"}
+				 			]},
+ 							{ id:"admin:tpl:delete",
+				 			<#if perms??&&perms?seq_contains("admin:tpl:delete")>
+	 		                checked:true,
+	 		 		        </#if>name:"删除"},
+ 							{ id:"admin:tpl:list",
+	 		 		        <#if perms??&&perms?seq_contains("admin:tpl:list")>
+	 		                checked:true,
+	 		 		        </#if>name:"列表"},
+ 							{ id:"admin:tpl:createdir",
+	 		 		        <#if perms??&&perms?seq_contains("admin:tpl:createdir")>
+	 		                checked:true,
+	 		 		        </#if>name:"新建目录"},
+ 							{ id:"admin:tpl:rename",
+	 		 		        <#if perms??&&perms?seq_contains("admin:tpl:rename")>
+	 		                checked:true,
+	 		 		        </#if>name:"重命名"}
+ 						]},
+ 						{   id:"admin:res:tree",
+ 	 						name:"资源管理",
+ 	 						<#if perms??&&perms?seq_contains("admin:res:tree")>
+ 	 		                checked:true,
+ 	 		 		        </#if>
+ 	 						children: [
+ 	 							{   name:"添加",
+ 	 								<#if perms??&&(perms?seq_contains("admin:res:add")||perms?seq_contains("admin:res:save"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 	 								children: [
+ 						 						{ id:"admin:res:add",
+ 						 						<#if perms??&&perms?seq_contains("admin:res:add")>
+ 					 	 		                checked:true,
+ 					 	 		 		        </#if>name:"查看"},
+ 						 		 				{ id:"admin:res:save",
+ 					 	 		 		        <#if perms??&&perms?seq_contains("admin:res:save")>
+ 					 	 		                checked:true,
+ 					 	 		 		        </#if>name:"提交"}
+ 	 						 	]},
+ 	 							{   name:"修改",
+ 	 						 		<#if perms??&&(perms?seq_contains("admin:res:edit")||perms?seq_contains("admin:res:update"))>
+		 	 		                checked:true,
+		 	 		                </#if>
+ 			 						children: [
+ 					 						{ id:"admin:res:edit",
+ 					 						<#if perms??&&perms?seq_contains("admin:res:edit")>
+ 				 	 		                checked:true,
+ 				 	 		 		        </#if>name:"查看"},
+ 					 		 				{ id:"admin:res:update",
+ 				 	 		 		        <#if perms??&&perms?seq_contains("admin:res:update")>
+ 				 	 		                checked:true,
+ 				 	 		 		        </#if>name:"提交"}
+ 					 			]},
+ 	 							{ id:"admin:res:delete",
+ 					 			<#if perms??&&perms?seq_contains("admin:res:delete")>
+ 	 	 		                checked:true,
+ 	 	 		 		        </#if>name:"删除"},
+ 	 							{ id:"admin:res:list",
+ 	 	 		 		        <#if perms??&&perms?seq_contains("admin:res:list")>
+ 	 	 		                checked:true,
+ 	 	 		 		        </#if>name:"列表"},
+ 	 							{ id:"admin:res:createdir",
+ 	 	 		 		        <#if perms??&&perms?seq_contains("admin:res:createdir")>
+ 	 	 		                checked:true,
+ 	 	 		 		        </#if>name:"新建目录"},
+ 	 							{ id:"admin:res:rename",
+ 	 	 		 		        <#if perms??&&perms?seq_contains("admin:res:rename")>
+ 	 	 		                checked:true,
+ 	 	 		 		        </#if>name:"重命名"},
+ 	 							{ id:"admin:res:o_swfupload",
+ 	 	 		 		        <#if perms??&&perms?seq_contains("admin:res:o_swfupload")>
+ 	 	 		                checked:true,
+ 	 	 		 		        </#if>name:"上传"}
+ 	 					]},
+ 	 					{   id:"admin:sitesconfig",
+ 							name:"系统设置",
+ 							<#if perms??&&perms?seq_contains("admin:sitesconfig")>
+ 	 		                checked:true,
+ 	 		 		        </#if>
+ 	 						children: [
+ 					 						{ id:"admin:sites:sys_edit",
+ 					 						<#if perms??&&perms?seq_contains("admin:sites:sys_edit")>
+ 				 	 		                checked:true,
+ 				 	 		 		        </#if>name:"查看"},
+ 					 		 				{ id:"admin:sites:sys_update",
+ 				 	 		 		        <#if perms??&&perms?seq_contains("admin:sites:sys_update")>
+ 				 	 		                checked:true,
+ 				 	 		 		        </#if>name:"提交"}
+ 					 					]
+ 	 					}
+ 			]}
+]}];
+</script>

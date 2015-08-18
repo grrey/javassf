@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>  
+<script src="${base}/plugin/highcharts/highcharts.js" type="text/javascript"></script>
+<script type="text/javascript">
+var chart;
+$(function () {
+    chart = $('#container').highcharts({
+        chart: {
+            type: 'spline',
+            events:{load:getdata}
+        },
+        title: {
+            text: '网站日访问统计'
+        },
+        subtitle: {
+            text: '24小时制'
+        },
+        xAxis: {
+            reversed: false,
+            title: {
+                enabled: true,
+                text: '时间'
+            },
+            categories: ['0', '1', '2', '3', '4', '5','6', '7', '8', '9', '10', '11','12','13','14','15','16','17','18','19','20','21','22','23'],
+            maxPadding: 1,
+            showLastLabel: true
+        },
+        yAxis: {
+            title: {
+                text: '访问量'
+            },
+            labels: {
+                formatter: function() {
+                    return this.value + '次';
+                }
+            },
+            min:0,
+            maxPadding: 0.25,
+            lineWidth: 2
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            headerFormat: '<b>{series.name}</b><br/>',
+            pointFormat: '{point.x} 时内: 访问{point.y}次'
+        },
+        plotOptions: {
+            spline: {
+                marker: {
+                    enable: false
+                }
+            }
+        },
+        series: [{
+            name: '网站统计',
+            data: [0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,178,0,0,0,300,0,0]
+        }]
+    });
+});
+
+function getdata(){
+	$.get('views/jsonData.do', function(data){
+        chart.series[0].setData(data.data);
+    },"json");
+}
+</script>
+</head>
+<body>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</body>
+</html>

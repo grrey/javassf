@@ -1,0 +1,10 @@
+{Rows:[
+   <#list list as type>
+   {
+     "id":"${type.id}",
+     "name":"${type.name!}",
+     "priority":"${type.priority!}"
+   }<#if type_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

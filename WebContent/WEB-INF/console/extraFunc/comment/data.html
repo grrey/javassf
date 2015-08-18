@@ -1,0 +1,14 @@
+{Rows:[
+   <#list p.content as comment>
+   {
+     "id":"${comment.id}",
+     "content":"<#if comment.content?length gt 25>${comment.content[0..24]?html}..<#else>${comment.content?html}</#if>",
+     "doc":"${comment.doc.title!}",
+     "user":"<#if comment.user??>${comment.user.username!}<#else>匿名网友</#if>",
+     "ip":"${comment.ip}",
+     "createTime":"${comment.createTime?string('yyyy-MM-dd HH:mm:ss')}",
+     "status":"${comment.checked?string("<span style='color:blue'>已审核</span>","<span style='color:red'>未审核</span>")}"
+   }<#if comment_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

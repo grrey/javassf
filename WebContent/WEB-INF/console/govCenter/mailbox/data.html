@@ -1,0 +1,17 @@
+{Rows:[
+   <#list p.content as mailbox>
+   {
+     "id":"${mailbox.id}",
+     "title":"<span style='color:blue'>[${mailbox.type.name!}]</span>${mailbox.title!?html}",
+     "name":"${mailbox.name!?html}",
+     "mobile":"${mailbox.mobile!}",
+     "email":"${mailbox.email!}",
+     "depart":"<#if mailbox.depart??>${mailbox.depart.name!}</#if>",
+     "status":"${mailbox.statusString!}",
+     "status1":"${mailbox.status!}",
+     "show":"${mailbox.show?string("<span style='color:blue'>公开</span>","<span style='color:red'>不公开</span>")}",
+     "createTime":"${mailbox.createTime!?string('yyyy-MM-dd HH:mm:ss')}"
+   }<#if mailbox_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

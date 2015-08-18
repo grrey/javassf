@@ -1,0 +1,13 @@
+{Rows:[
+   <#list p.content as links>
+   {
+     "id":"${links.id}",
+     "name":"${links.name!}",
+     "url":"${links.url!}",
+     "priority":"${links.priority!}",
+     "show":"${links.show?string("<span style='color:blue'>显示</span>","<span style='color:red'>不显</span>")}",
+     "showIcon":"${links.showIcon?string("<span style='color:blue'>显示图标</span>","<span style='color:blue'>显示文字</span>")}"
+   }<#if links_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

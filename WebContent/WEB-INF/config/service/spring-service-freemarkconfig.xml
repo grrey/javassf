@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd"
+	default-lazy-init="true">
+	
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="StrLimit" value-ref="StrLimit"/>
+				<entry key="Pages" value-ref="Pages"/>
+				<entry key="IndustryList" value-ref="IndustryList"/>
+				<entry key="MetierList" value-ref="MetierList"/>
+				<entry key="Program" value-ref="Program"/>
+				<entry key="Doc" value-ref="Doc"/>
+				<entry key="DocList" value-ref="DocList"/>
+				<entry key="DocPage" value-ref="DocPage"/>
+				<entry key="Channel" value-ref="Channel"/>
+				<entry key="ChannelList" value-ref="ChannelList"/>
+				<entry key="ChannelPage" value-ref="ChannelPage"/>
+				<entry key="ModelList" value-ref="ModelList"/>
+				<entry key="SearchPage" value-ref="SearchPage"/>
+				<entry key="Comment" value-ref="Comment"/>
+				<entry key="Advert" value-ref="Advert"/>
+				<entry key="Category" value-ref="Category"/>
+				<entry key="Links" value-ref="Links"/>
+				<entry key="Forum" value-ref="Forum"/>
+				<entry key="Posts" value-ref="Posts"/>
+				<entry key="Theme" value-ref="Theme"/>
+				<entry key="ForumCount" value-ref="ForumCount"/>
+				<entry key="ForumStatis" value-ref="ForumStatis"/>
+				<entry key="ThemeStatis" value-ref="ThemeStatis"/>
+				<entry key="SurveyTheme" value-ref="SurveyTheme"/>
+				<entry key="Questionnaire" value-ref="Questionnaire"/>
+				<entry key="SurveyDetail" value-ref="SurveyDetail"/>
+				<entry key="QuestionCount" value-ref="QuestionCount"/>
+				<entry key="Page" value-ref="Page"/>
+				<entry key="MessagePage" value-ref="MessagePage"/>
+				<entry key="Depart" value-ref="Depart"/>
+				<entry key="SignCount" value-ref="SignCount"/>
+				<entry key="ArticleCount" value-ref="ArticleCount"/>
+			</map>
+		</property>
+		<property name="templateLoaderPath" value=""/>
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="tag_syntax">auto_detect</prop>
+				<prop key="template_update_delay">0</prop>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="boolean_format">true,false</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="number_format">0.######</prop>
+				<prop key="whitespace_stripping">true</prop>
+			</props>
+		</property>
+	</bean>
+</beans>

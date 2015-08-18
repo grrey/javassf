@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../../../liger.html"/>
+<script language="javascript">
+$(function (){
+	$("#fieldForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+<body>
+<div class="blk c">
+	<h2>字段管理/修改</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="fieldForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>字段名称：</td>
+              <td><#if !field.economy><input name="name" type="text" id="name" value="${field.name!}" vld="{required:true,messages:{required:'字段名称不能为空!'}}"/>
+              <#else>${field.name!}</#if>
+              </td>
+              <td class="ftit"><span>*</span>字段别名：</td>
+              <td><input name="label" type="text" id="label" value="${field.label!}" vld="{required:true,messages:{required:'字段别名不能为空!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>字段类型：</td>
+              <td>
+              <#if !field.economy>
+              <select name="dataType">
+              <option value="1" <#if field.dataType==1>selected="selected"</#if>>文本输入框</option>
+              <option value="2" <#if field.dataType==2>selected="selected"</#if>>多行文本框</option>
+              <option value="3" <#if field.dataType==3>selected="selected"</#if>>编辑器</option>
+              <option value="4" <#if field.dataType==4>selected="selected"</#if>>下拉选项</option>
+              <option value="5" <#if field.dataType==5>selected="selected"</#if>>数字</option>
+              <option value="6" <#if field.dataType==6>selected="selected"</#if>>日期</option>
+              <option value="7" <#if field.dataType==7>selected="selected"</#if>>单选框</option>
+              <option value="8" <#if field.dataType==8>selected="selected"</#if>>复选框</option>
+              </select>
+              <#else>${field.dataTypeString!}</#if>
+              </td>
+              <td class="ftit"><span>*</span>是否必填：</td>
+              <td>
+              <#if !field.economy>
+              <input name="required" type="radio" id="required_1" value="1" <#if field.required>checked="checked"</#if>/>是
+              <input name="required" type="radio" id="required_0" value="0" <#if !field.required>checked="checked"</#if>/>否
+              <#else>${field.required?string("是","否")}</#if>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">文本框长度：</td>
+              <td><input name="size" type="text" id="size" value="${field.size!}"/></td>
+              <td class="ftit">最大字符数：</td>
+              <td><input name="maxlength" type="text" id="maxlength" value="${field.maxlength!}"/></td>
+            </tr>
+            <tr style="display:none">
+              <td class="ftit">显示的宽度：</td>
+              <td><input name="width" type="text" id="width" value="${field.width!}"/></td>
+              <td class="ftit">显示的高度：</td>
+              <td><input name="height" type="text" id="height" value="${field.height!}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">独自一行：</td>
+              <td>
+              <input name="single" type="radio" id="single_1" value="1" <#if field.single>checked="checked"</#if>/>是
+              <input name="single" type="radio" id="single_0" value="0" <#if !field.single>checked="checked"</#if>/>否
+              <td class="ftit">是否显示：</td>
+              <td>
+              <input name="show" type="radio" id="show_1" value="1" <#if field.show>checked="checked"</#if>/>是
+              <input name="show" type="radio" id="show_0" value="0" <#if !field.show>checked="checked"</#if>/>否
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">可选项：</td>
+              <td colspan="3"><input name="valueList" type="text" id="valueList" size="50" maxlength="100" value="${field.valueList!}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">字段提示：</td>
+              <td colspan="3"><input name="tip" type="text" id="tip" size="40" maxlength="100" value="${field.tip!}"/></td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <input type="hidden" name="id" value="${field.id}"/>
+                <@Perm perm="admin:field:update">
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

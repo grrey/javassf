@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+$(function (){
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>资源管理/修改</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="resForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>资源名称：</td>
+              <td><input type="hidden" name="filename" id="filename" value="${filename!}"/>${filename!}</td>
+            </tr>
+            <tr>
+              <td class="ftit">内容：</td>
+              <td>
+              <textarea wrap="off" name="source" style="width:90%;height:350px" maxlength="1240000">${source?html}</textarea>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:res:update">
+                <input type="hidden" name="name" value="${name!}"/>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

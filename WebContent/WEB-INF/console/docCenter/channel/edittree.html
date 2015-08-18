@@ -1,0 +1,41 @@
+<#if !parentId??>
+[{
+	"name": "根栏目",
+	"click":"setChannele('根栏目','')",
+	"open": true
+	<#if list?size gt 0>,
+	"isParent": true,
+	"children": [
+	<#list list as channel>
+		{
+		"parentId": "${channel.id}",
+		"name": "${channel.name}",
+		"click":"setChannele('${channel.name}','${channel.id}')",
+		<#if channel.child?size gt 0>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if channel_has_next>,</#if>
+	</#list>
+	]
+	</#if>
+}]
+<#else>
+	[
+	<#list list as channel>
+		{
+		"parentId": "${channel.id}",
+		"name": "${channel.name}",
+		"click":"setChannele('${channel.name}','${channel.id}')",
+		<#if channel.child?size gt 0>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if channel_has_next>,</#if>
+	</#list>
+	]
+</#if>

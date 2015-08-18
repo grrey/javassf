@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>文档类型列表</title>
+<#include "../../../liger.html"/>
+<script type="text/javascript">
+var grid = null;
+var typeId = null;
+var t = 0;
+<#assign add = false>
+<#assign modify = false>
+<#assign del = false>
+<@Perm perm="admin:doctype:add">
+<#assign add = true>
+</@Perm>
+<@Perm perm="admin:doctype:edit">
+<#assign modify = true>
+</@Perm>
+<@Perm perm="admin:doctype:delete">
+<#assign del = true>
+</@Perm>
+$(function () {
+ grid = $("#maingrid").ligerGrid({
+	columns : [ {
+		display : "ID",
+		name : "id",
+		width : 50
+	},{
+		display : "类型名称",
+		name : "name",
+		width : 200
+	},{
+		display : "是否有图片",
+		name : "hasImage",
+		width : 200
+	},{
+		display : "是否禁用",
+		name : "disabled",
+		width : 200
+	}],
+	dataAction : 'server',
+	pageSize : 15,
+	pageSizeOptions : [10,15,20,25,30],
+	toolbar : {},
+	url : '../type/jsonData.do',
+	width : '100%',
+	height : '100%',
+	checkbox : true,
+	selectRowButtonOnly:true
+});
+ 
+ <#if !del&&!add&&!modify>
+ var items = null;
+ <#else>
+ <#assign first = true>
+ var items = [<#if add><#assign first = false>{click: toolbarBtnItemClick,text: '新增',id:'add',icon:'add'}</#if><#if modify><#if !first>,<#else><#assign first = false></#if>
+              {click: toolbarBtnItemClick,text: '修改',id:'modify',icon:'modify'}</#if><#if del><#if !first>,</#if>
+              {click: toolbarBtnItemClick,text: '删除',id:'delete',icon:'delete'}</#if>];
+ </#if>
+ 
+ grid.toolbarManager.set('items', items);
+ 
+ <#if !del>
+ var menuc = null;
+ <#else>
+ var menuc = $.ligerMenu({ top: 100, left: 100, width: 160, items:
+	    [{ id:'typeDel',text: '删除',click: f_delete,icon:'delete' }]
+ });
+ </#if>
+ 
+//工具条事件
+ function toolbarBtnItemClick(item) {
+     switch (item.id) {
+         case "add":
+             top.f_addTab("addType", '新增文档类型', 'type/v_add.do');
+             break;
+         case "modify":
+             var selected = grid.getSelected();
+             if (!selected) { $.ligerDialog.error("请选择要修改的专题!"); return }
+             top.f_addTab("modifyType", '修改文档类型信息', 'type/v_edit.do?id=' + selected.id);
+             break;
+         case "delete":
+        	 var selected = grid.getCheckedRows();
+        	 if (selected!=null&&selected.length>0) {
+        		 t = 0;
+                 f_delete();
+             }else{
+        		 $.ligerDialog.error("请选择要删除的文档类型!");
+        	 }
+             break;
+     }
+ };
+ 
+ <#if modify>
+ grid.bind('dblClickRow', function (rowdata, rowindex, rowDomElement){
+	 top.f_addTab("modifyType", '修改文档类型信息', 'type/v_edit.do?id=' + rowdata.id);
+ });
+ </#if>
+ 
+ <#if del>
+ grid.bind('contextmenu', function (parm, e){
+	 typeId = parm.data.id;
+	 t = 1;
+	 menuc.show({ top: e.pageY, left: e.pageX });
+	 return false;
+ });
+ </#if>
+ 
+ function f_reload() {
+     grid.loadData();
+ };
+ 
+ function f_delete() {
+	 closeall();
+	 jQuery.ligerDialog.confirm('确定要删除吗?', function (confirm) {
+	 if (confirm){
+	 var selected = grid.getCheckedRows();
+     var ids = [];
+     if(t==0){
+         for(var i=0;i<selected.length;i++){
+        	 ids[i] = selected[i].id;
+         }
+     }else{
+    	 ids[0] = typeId;
+     }
+     JP.ajax({
+         url: '../type/o_ajax_delete.do',
+         loading: '正在删除中...',
+         data: { ids: ids },
+         success: function () {
+        	 f_reload();
+         },
+         error: function () {
+        	 $.ligerDialog.error("删除文档类型失败!");
+         }
+     });
+     }
+	 });
+ };
+ 
+ function closeall(){
+	 if(menuc!=null){
+	    menuc.hide();
+	 }
+ }
+ 
+});
+
+</script>
+</head>
+<body style="padding:2px;overflow:hidden;">
+<div id="maingrid"></div>
+</body>
+</html>

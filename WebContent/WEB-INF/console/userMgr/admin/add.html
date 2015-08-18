@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+var setting = {async : {enable : true,url : "../depart/v_addtree.do",autoParam : ["parentId"]},
+		check: {enable: false}
+};
+var csetting = {
+		async : {enable : true,url : "../admin/v_chnltree.do",type:"get"},
+		check: {enable: true}
+};
+
+$(function (){
+	$("#adminForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	$.fn.zTree.init($("#departTree"), setting);
+	ztree = $.fn.zTree.init($("#tree1"), csetting);
+	
+	<#if msg??>
+	<#if status==1>
+	$.ligerDialog.success('${msg}');
+	<#else>
+	$.ligerDialog.error('${msg}');
+	</#if>
+	</#if>
+});
+
+function setDepart(name,id) {
+	$("#menuContent").fadeOut("fast");
+	$("#selectdepartId").val(name);
+	$("#departId").val(id);
+	$.get("../role/v_roleop.do",{"departId":$("#departId").val()},function(data) {
+		$("#roleId").html(data);
+	});
+}
+
+function checksubmit(){
+	var nodes = ztree.getCheckedNodes(true);
+	var str = "";
+	for(var i=0;i<nodes.length;i++){
+		if(nodes[i].id!=null){
+		    str += "<input type='hidden' name='channelIds' value='" +nodes[i].id+ "'/>";
+		}
+	}
+	$("#allids").empty().append(str);
+	$("#adminForm").submit();
+}
+
+function showchannel(){
+	if($(":radio[name='takeDepart']:checked").val()=="true"){
+		$("#channelshow").hide();
+	}else{
+		$("#channelshow").show();
+	}
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>管理员/新增</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="adminForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>用户名：</td>
+              <td><input name="username" type="text" id="username" ltype="text" size="25" vld="{required:true,remote:'o_checkuser.do',messages:{required:'用户名不能为空!',remote:'该用户名已经存在!'}}"/></td>
+              <td class="ftit">电子邮箱：</td>
+              <td><input name="email" type="text" id="email" value=" " ltype="text" size="25"/></td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>密码：</td>
+              <td><input name="password" type="password" id="password" size="26" vld="{required:true,messages:{required:'密码不能为空!'}}"/></td>
+              <td class="ftit"><span>*</span>确认密码：</td>
+              <td><input name="repassword" type="password" id="repassword" size="26" vld="{equalTo:'#password',messages:{equalTo:'2次密码输入不一致'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">真实姓名：</td>
+              <td><input name="realName" type="text" id="realName" ltype="text" size="25"/>
+              </td>
+              <td class="ftit"><span>*</span>所属部门：</td>
+              <td>
+				<ul class="pms-comboBox">
+				<li><input type="text" name="selectdepartId" onclick="showMenu('selectdepartId','menuContent')" id="selectdepartId" readonly="readonly" <#if depart??>value="${depart.name!}"</#if> vld="{required:true,messages:{required:'所在部门不能为空!'}}"/></li>
+			    <li class="pms-trigger" onclick="showMenu('selectdepartId','menuContent')"><div class="pms-trigger-icon"></div></li>
+				</ul>
+				<input type="hidden" name="departId" id="departId" <#if depart??>value="${depart.id!}"</#if>/>
+				<div id="menuContent" class="menuContent" style="display:none; width:280px; position:absolute; background:#fff; border:1px solid #ccc;">
+					<ul id="departTree" class="ztree" style="height:220px;width:270px;overflow-y:scroll;"></ul>
+				</div>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">手机：</td>
+              <td><input name="mobile" type="text" id="mobile" ltype="text" size="25" vld="{digits:true,messages:{digits:'手机号码必须为数字!'}}"/></td>
+              <td class="ftit">电话：</td>
+              <td><input name="phone" type="text" id="phone" ltype="text" size="25"/>
+              </td>
+            </tr>
+            <#if user.username=="admin">
+            <tr>
+              <td class="ftit"><span>*</span>管理员属性：</td>
+              <td colspan="3">
+				<input id="manageStatus_1" type="radio" value="1" name="manageStatus"><label for="manageStatus_1">自己数据</label>
+				<input id="manageStatus_2" type="radio" value="2" checked="checked" name="manageStatus"><label for="manageStatus_2">可审核数据</label>
+				<input id="manageStatus_3" type="radio" value="3" name="manageStatus"><label for="manageStatus_3">部门数据</label>
+				<input id="manageStatus_4" type="radio" value="4" name="manageStatus"><label for="manageStatus_4">所有数据</label>
+              </td>
+            </tr>
+            <#else>
+            <input type="hidden" name="manageStatus" value="2"/>
+            </#if>
+            <tr>
+              <td class="ftit"><span>*</span>管理员角色：</td>
+              <td>
+	              <select name="roleId" id="roleId" vld="{required:true,messages:{required:'请选择角色!'}}">
+	              	<#list roleList as role>
+					<option value="${role.id!}">${role.name!}</option>
+					</#list>
+	              </select>
+              </td>
+              <td class="ftit"><span>*</span>采用部门栏目权限：</td>
+              <td>
+	              <input id="takeDepart_0" type="radio" name="takeDepart" value="true" checked="checked" onclick="showchannel()"/>是 
+                  <input id="takeDepart_1" type="radio" name="takeDepart" value="false" onclick="showchannel()"/>否
+              </td>
+            </tr>
+            <tr id="channelshow" style="display:none">
+              <td class="ftit">栏目权限：</td>
+              <td colspan="3">
+              <div class="l-scroll" style="height:300px;overflow-y:scroll;">
+              <ul id="tree1" class="ztree">
+              </ul>
+              </div>
+              <div style="display:none;" id="allids"></div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:admin:save">
+                <input type="button" value="提交" class="l-button" onclick="checksubmit()"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+var setting = {
+		async : {
+			enable : true,
+			url : "../channel/v_inserttree.do",
+			autoParam : ["parentId"]
+		},
+		check: {
+			enable: false
+		}
+};
+$(function (){
+	$("#tplForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	refreshTree();
+	</#if>
+});
+
+function setChannelo(name,id) {
+	$("input[name^='chnlname']").val(name);
+	$("#channelId").val(id);
+	art1.close();
+}
+
+function refreshTree(){
+	var ztree = self.parent.tpltree;
+	<#if path??>
+	var node = ztree.getNodeByParam("path","${path!}");
+	<#else>
+	var node = null;
+	</#if>
+	if(node!=null){
+	if(node.isParent==false){
+		ztree.reAsyncChildNodes(node.getParentNode(),"refresh",!node.getParentNode().open);
+	}else{
+	if(node.children!=null){
+	    ztree.reAsyncChildNodes(node, "refresh",!node.open);
+	}
+	}}else{
+		ztree.reAsyncChildNodes(null, "refresh");
+	}
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>模板管理/添加</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="tplForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>模板名称：</td>
+              <td><input name="filename" type="text" id="filename" ltype="text" vld="{required:true,messages:{required:'模板名称不能为空!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">内容：</td>
+              <td>
+              <textarea wrap="off" name="source" id="tplcontent" style="width:90%;height:350px" maxlength="1232896"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">快捷插入:</td>
+              <td>
+               <a href="javascript:void(0);" onclick="insertArt()">插入新闻 </a>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:tpl:save">
+                <input type="hidden" name="path" value="${path!}"/>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+<#include "operate.html"/>
+</body>
+</html>

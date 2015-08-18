@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+/* Elements
+----------------------------------------*/
+body{margin:0;padding:0;}
+body,html{font:12px/1.5 arial;color:#ffffff;background:#0d8dd8;}
+.in{height:20px;line-height:20px;border:1px solid #D4D0C8;color:#090;}
+.in:focus{border:1px solid #FF0;}
+.ubg{width:125px;background:url(../img/login/ubg.jpg) top left no-repeat;padding-left:25px;}
+.pbg{width:125px;background:url(../img/login/pbg.jpg) top left no-repeat;padding-left:25px;}
+.cbg{width:125px;background:url(../img/login/cbg.jpg) top left no-repeat;padding-left:25px;}

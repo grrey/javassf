@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../../liger.html"/>
+<script language="javascript">
+$(function (){
+	$("#typeForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+<body>
+<div class="blk c">
+	<h2>文档类型/修改</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="typeForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit" width="15%"><span>*</span>类型名称：</td>
+              <td width="35%" colspan="3"><input name="name" type="text" id="name" value="${type.name!}" vld="{required:true,messages:{required:'类型名称不能为空!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>是否有图片：</td>
+              <td colspan="3">
+              <input id="hasImage_0" type="radio" name="hasImage" value="1" <#if type.hasImage>checked="checked"</#if>/><label for="hasImage_0">是</label> 
+              <input id="hasImage_1" type="radio" name="hasImage" value="0" <#if !type.hasImage>checked="checked"</#if>/><label for="hasImage_1">否</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>是否禁用：</td>
+              <td colspan="3">
+              <input id="disabled_0" type="radio" name="disabled" value="1" <#if type.disabled>checked="checked"</#if>/><label for="disabled_0">是</label> 
+              <input id="disabled_1" type="radio" name="disabled" value="0" <#if !type.disabled>checked="checked"</#if>/><label for="disabled_1">否</label>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <input type="hidden" name="id" value="${type.id}"/>
+                <@Perm perm="admin:doctype:update">
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<#if !parentId??>
+[{
+	"name": "根栏目",
+	"parentId": "",
+	<@Perm perm="admin:channel:list">
+	"click":"f_addTab('chnlMgr','栏目管理','channel/v_list.do')",
+	</@Perm>
+	"open": true
+	<#if list?size gt 0>,
+	"isParent": true,
+	"children": [
+	<#list list as channel>
+		{
+		"parentId": "${channel.id}",
+		"name": "${channel.name!}",
+		<@Perm perm="admin:channel:edit">
+		"click":"f_addTab('modifyChannel', '修改栏目信息', 'channel/v_edit.do?id=${channel.id}')",
+		</@Perm>
+		<#if channel.child?size gt 0>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if channel_has_next>,</#if>
+	</#list>
+	]
+	</#if>
+}]
+<#else>
+	[
+	<#list list as channel>
+		{
+		"parentId": "${channel.id}",
+		"name": "${channel.name!}",
+		<@Perm perm="admin:channel:edit">
+		"click":"f_addTab('modifyChannel', '修改栏目信息', 'channel/v_edit.do?id=${channel.id}')",
+		</@Perm>
+		<#if channel.child?size gt 0>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if channel_has_next>,</#if>
+	</#list>
+	]
+</#if>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>portal</display-name>
+	<!-- 加载spring配置文件 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/config/app/spring-app*.xml
+			/WEB-INF/config/forum/spring-forum*.xml
+			/WEB-INF/config/dao/spring-dao*.xml
+			/WEB-INF/config/shiro/spring-shiro*.xml
+			/WEB-INF/config/service/spring-service*.xml
+			/WEB-INF/config/tag/spring-tag*.xml
+			/WEB-INF/config/cache/spring-*.xml
+			/WEB-INF/config/captcha/spring-*.xml
+		</param-value>
+	</context-param>
+	<!-- spring配置文件加载监听器-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	
+	<!-- 链接分发过滤 -->
+	<filter>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	
+	<!-- 编码过滤器 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+
+	<filter>
+		<filter-name>sessionViewFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+	</filter>
+	<filter>
+		<filter-name>executeTime</filter-name>
+		<filter-class>com.javassf.basic.filters.ExecuteTimeFilter</filter-class>
+	</filter>
+	<!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 
+     	 这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/>   
+    	使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤  -->  
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>  
+		    <!-- 该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理 -->  
+		    <param-name>targetFilterLifecycle</param-name>  
+		    <param-value>false</param-value>  
+	    </init-param> 
+	</filter>
+
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>sessionViewFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>executeTime</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>Admin</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config/admin/spring-admin*.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>View</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config/fnt/spring-fnt*.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/admin/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>executeTime</filter-name>
+		<url-pattern>/admin/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>sessionViewFilter</filter-name>
+		<url-pattern>/admin/*</url-pattern>
+	</filter-mapping>
+	<servlet-mapping>
+		<servlet-name>Admin</servlet-name>
+		<url-pattern>/admin/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>View</servlet-name>
+		<url-pattern>*.jsp</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ConnectorServlet</servlet-name>
+		<servlet-class>com.ckfinder.connector.ConnectorServlet</servlet-class>
+		<init-param>
+			<param-name>XMLConfig</param-name>
+			<param-value>/WEB-INF/config/ckfinder/config.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>SessionServlet</display-name>
+		<servlet-name>SessionServlet</servlet-name>
+		<servlet-class>com.javassf.basic.servlet.SessionServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ConnectorServlet</servlet-name>
+		<url-pattern>/plugin/ckfinder/core/connector/java/connector.java</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SessionServlet</servlet-name>
+		<url-pattern>/session.servlet</url-pattern>
+	</servlet-mapping>
+	<filter>
+		<filter-name>UserFileUploadFilter</filter-name>
+		<filter-class>com.javassf.basic.filters.UserFileUploadFilter</filter-class>
+		<init-param>
+			<param-name>sessionCookieName</param-name>
+			<param-value>JSESSIONID</param-value>
+		</init-param>
+		<init-param>
+			<param-name>sessionParameterName</param-name>
+			<param-value>jsessionid</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<description>
+		</description>
+		<display-name>SiteFilter</display-name>
+		<filter-name>SiteFilter</filter-name>
+		<filter-class>com.portal.sysmgr.filter.SiteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>UserFileUploadFilter</filter-name>
+		<url-pattern>/plugin/ckfinder/core/connector/java/connector.java</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>SiteFilter</filter-name>
+		<url-pattern>/SiteFilter</url-pattern>
+	</filter-mapping>
+
+	<session-config>
+		<session-timeout>20</session-timeout>
+	</session-config>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/WEB-INF/error/403.html</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/error/404.html</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/error/500.html</location>
+	</error-page>
+	<mime-mapping>
+		<extension>rar</extension>
+		<mime-type>application/zip</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>doc</extension>
+		<mime-type>application/zip</mime-type>
+	</mime-mapping>
+</web-app>

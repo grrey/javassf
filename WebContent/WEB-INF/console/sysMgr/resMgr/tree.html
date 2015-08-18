@@ -1,0 +1,41 @@
+<#if path?length==0>
+[{
+	"name": "资源",
+	"click":"f_addTab('resMgr','资源管理','res/v_list.do')",
+	"open": true
+	<#if resList?size gt 0>,
+	"isParent": true,
+	"children": [
+	<#list resList as res>
+		{
+		"path": "${res.name}",
+		"name": "${res.filename}",
+		"click":"f_addTab('resMgr','资源管理','${res.directory?string("res/v_list.do?path=${res.name!}","res/v_edit.do?name=${res.name!}")}')",
+		<#if res.directory>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if res_has_next>,</#if>
+	</#list>
+	]
+	</#if>
+}]
+<#else>
+	[
+	<#list resList as res>
+		{
+		"path": "${res.name}",
+		"name": "${res.filename}",
+		"click":"f_addTab('resMgr','资源管理','${res.directory?string("res/v_list.do?path=${res.name!}","res/v_edit.do?name=${res.name!}")}')",
+		<#if res.directory>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if res_has_next>,</#if>
+	</#list>
+	]
+</#if>

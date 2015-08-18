@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script src="${base}/plugin/swfupload/swfupload.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/swfupload.queue.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/fileprogress.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/handlers.js" type="text/javascript"></script>
+<script src="${base}/plugin/swfupload/jquery.progressbar.min.js" type="text/javascript"></script>
+<link href="${base}/plugin/swfupload/process.css" rel="stylesheet" type="text/css"/>
+<script language="javascript">
+$(function (){
+	$("#linksForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+<body>
+<div class="blk c">
+	<h2>友情链接管理/添加</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="linksForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>链接名称：</td>
+              <td colspan="3"> 
+              <input name="name" type="text" id="name" size="35" vld="{required:true,maxlength:50,messages:{required:'友情链接名称不能为空!',maxlength:$.format('友情链接名称长度不能超过{0}!')}}"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>链接类型：</td>
+              <td>
+              <select name="typeId">
+              <#list typeList as type>
+              <option value="${type.id!}">${type.name!}</option>
+              </#list>
+              </select>
+              </td>
+              <td class="ftit"><span>*</span>URL：</td>
+              <td>
+               <input type="text" name="url" size="35" value="http://"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">链接图标：</td>
+              <td>
+              <span id="ggtxq"></span>
+			  <span id="spanButtonPlaceHolder"></span>
+              </td>
+              <td class="ftit">序号：</td>
+              <td>
+              <input type="text" name="priority" value="10" vld="{required:true,digits:true,messages:{required:'序号不能为空!',digits:'序号必须为数字!'}}"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">是否显示：</td>
+              <td>
+                <input id="show_0" type="radio" name="show" value="true" checked="checked"/>是 
+                <input id="show_1" type="radio" name="show" value="false"/>否
+              </td>
+              <td class="ftit">显示方式：</td>
+              <td>
+                <input id="showIcon_1" type="radio" name="showIcon" value="false" checked="checked"/>文字显示
+                <input id="showIcon_0" type="radio" name="showIcon" value="true"/>图标显示
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:links:save">
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+
+<ul id="atthtml" style="display:none">
+   <li id="att{0}"><span id="attname{0}"></span>
+	   <span class="progressBar" id="attpb{0}"></span>
+	   <input type="hidden" name="icon" id="atturl{0}"/>
+	   <a href="javascript:void(0);" id="attdel{0}" onclick="swfu.cancelQueue();" title="删除">
+	   <img src="${base}/skin/sys/img/admin/del.gif"/></a>
+   </li>
+</ul>
+<span style="display:none"><input id="btnCancel" type="button" value="取消" onclick="swfu.cancelQueue();" disabled="disabled" /></span>
+<#include "attupload.html"/>
+</body>
+</html>

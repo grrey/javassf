@@ -1,0 +1,14 @@
+{Rows:[
+   <#list p.content as advert>
+   {
+     "id":"${advert.id}",
+     "name":"${advert.name!}",
+     "slot":"${advert.slot.name!}",
+     "advType":"${advert.advTypeString!}",
+     "weights":"${advert.weights!}",
+     "clicks":"${advert.clicks!}",
+     "enable":"${advert.enable?string("<span style='color:blue'>启用</span>","<span style='color:red'>关闭</span>")}"
+   }<#if advert_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

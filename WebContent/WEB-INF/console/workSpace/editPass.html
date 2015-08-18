@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../liger.html"/>
+<script language="javascript">
+$(function (){
+	$("#editPassForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	<#if result??&&result=="1">
+	$.ligerDialog.success('${msg!}');
+	<#elseif result??&&result=="0">
+	$.ligerDialog.error('${msg!}');
+	</#if>
+});
+</script>
+
+</head>
+
+<body>
+<div class="blk c">
+	<h2>修改密码</h2>
+	<div class="c">
+    	<form method="post" action="o_pass_update.do" id="editPassForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit2" width="30%">用户名：</td>
+              <td>${user.username!}</td>
+            </tr>
+            <tr>
+              <td class="ftit2"><span>*</span>原密码：</td>
+              <td><input name="password" type="password" id="password" size="35" maxlength="50" vld="{required:true,messages:{required:'原密码不能为空!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit2"><span>*</span>新密码：</td>
+              <td><input name="newPwd" type="password" id="newPwd" size="35" maxlength="50" vld="{required:true,messages:{required:'新密码不能为空!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit2"><span>*</span>确认密码：</td>
+              <td><input name="newPwd2" type="password" size="35" maxlength="50" vld="{equalTo:'#newPwd',messages:{equalTo:'2次密码输入不一致'}}"/></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="fctrl">
+                <input type="submit" value="提交" id="Button1" class="l-button" /> 
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>      
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

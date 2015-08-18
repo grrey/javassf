@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+$(function (){
+	$("#memberForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	<#if msg??>
+	<#if status==1>
+	$.ligerDialog.success('${msg}');
+	<#else>
+	$.ligerDialog.error('${msg}');
+	</#if>
+	</#if>
+});
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>会员管理/新增</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="memberForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>用户名：</td>
+              <td><input name="username" type="text" id="username" vld="{required:true,remote:'o_checkuser.do',messages:{required:'用户名不能为空!',remote:'该用户名已经存在!'}}"/></td>
+              <td class="ftit">电子邮箱：</td>
+              <td><input name="email" type="text" id="email" value=" "/></td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>密码：</td>
+              <td><input name="password" type="password" id="password" vld="{required:true,messages:{required:'密码不能为空!'}}"/></td>
+              <td class="ftit"><span>*</span>确认密码：</td>
+              <td><input name="repassword" type="password" id="repassword" vld="{equalTo:'#password',messages:{equalTo:'2次密码输入不一致'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">会员组：</td>
+              <td colspan="3">
+	              <select name="groupId" id="groupId">
+	              	<#list groupList as group>
+	              	  <option value="${group.id}">${group.name!}</option>
+	                </#list>
+	              </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">真实姓名：</td>
+              <td><input name="realName" type="text" id="realName" /></td>
+              <td class="ftit">性别：</td>
+              <td>
+                <input id="gender_1" type="radio" name="gender" value="1" checked="checked" /><label for="gender_1">男</label>
+                <input id="gender_0" type="radio" name="gender" value="0" /><label for="gender_0">女</label>
+                <input id="gender_2" type="radio" name="gender" value="2"/><label for="gender_2">保密</label>
+                </td>
+            </tr>
+            <tr>
+              <td class="ftit">出生日期：</td>
+              <td><input name="birthday" type="text" id="birthday" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
+              <td class="ftit">所在地：</td>
+              <td><input name="address" type="text" id="address" /></td>
+            </tr>
+            <tr>
+              <td class="ftit">固定电话：</td>
+              <td><input name="phone" type="text" id="phone" /></td>
+              <td class="ftit" width="20%">手机号码：</td>
+              <td><input name="mobile" type="text" id="mobile" vld="{digits:true,messages:{digits:'手机号码必须为数字!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">个性签名：</td>
+              <td colspan="3">
+                <textarea cols="70" rows="5" name="signature" maxlength="255" class="l-textarea"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:member:save">
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

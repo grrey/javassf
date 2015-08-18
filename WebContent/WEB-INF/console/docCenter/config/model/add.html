@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../../liger.html"/>
+<script language="javascript">
+var dirsetting = {
+		async : {enable : true,url : "../tpl/v_tpl_dirtree.do",autoParam : ["path"],type:"get"},
+		check: {enable: false}
+};
+$(function (){
+	$("#modelForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+	
+	$.fn.zTree.init($("#dirList"), dirsetting);
+});
+
+var dig;
+
+function showTpl(idstr){
+    $("#tplid").val(idstr);
+    dig = $.ligerDialog.open({
+    	title:"选择模板",
+    	width:650,
+    	target: $("#target")
+    });
+}
+
+function editTpl(idstr){
+    var tpl = $("#tpl"+idstr+"_url").val();
+    if(tpl!=null&&tpl.length>0){
+        top.f_addTab("modifyTpl", '修改模板', 'tpl/v_edit.do?name=' + tpl);
+    }
+}
+
+function checkTpl(tpl,tplurl){
+	var id = "tpl" + $("#tplid").val();
+	dig.hidden();
+	$("#"+id).val(tpl);
+	$("#"+id+"_url").val(tplurl);
+}
+
+function loadTpl(path){
+	var filesetting = {
+			async : {enable : true,url : "../tpl/v_tpl_filetree.do?path="+path,type:"get"},
+			check: {enable: false}
+	};
+	$.fn.zTree.init($("#tplList"), filesetting);
+}
+
+function setIcon(o) {
+	$("#menuContent").fadeOut("fast");
+	var s = "<img src='"+o.src+"'/>";
+	$("#iconshow").html(s);
+	$("#icon").val(o.title);
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>模型管理/添加</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="modelForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>模型名称：</td>
+              <td><input name="name" type="text" id="name" size="35" maxlength="50" vld="{required:true,messages:{required:'模型名称不能为空!'}}"/></td>
+              <td class="ftit"><span>*</span>模型图标：</td>
+              <td>
+              	<ul class="items">
+					<li class="t2"><input type="hidden" name="icon" id="icon" value="/img/icon/cp.gif"/><span id="iconshow"><img src="${base}/skin/sys/img/icon/cp.gif"/></span>
+					</li>
+					<li style="position:relative"><a href="javascript:void(0);" onclick="showMenu('iconImg','menuContent');" class="abtn"><img src="${base}/skin/sys/img/admin/search.gif"/> <b>选择图标</b></a>
+					<div id="menuContent" class="menuContent" style="display:none; width:140px; position:absolute;background:#fff; border:1px solid #ccc;">
+						<#list iconList as icon>
+						<img src="${base}/skin/sys${icon.name!}" title="${icon.name!}" onclick="setIcon(this)" class="micons"/>
+						</#list>
+					</div>
+					</li>
+				</ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">是否可用：</td>
+              <td>
+              <input id="disabled_0" type="radio" name="disabled" value="0" checked="checked" /><label for="disabled_0">是</label> 
+              <input id="disabled_1" type="radio" name="disabled" value="1" /><label for="disabled_1">否</label>
+              </td>
+              <td class="ftit">排列顺序：</td>
+              <td><input name="priority" type="text" id="priority" value="10" size="25" maxlength="5" vld="{digits:true,messages:{digits:'排列顺序只能是数字!'}}"/></td>              
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>内容页模板：</td>
+              <td colspan="3">
+	              <ul class="items">
+					<li class="t2">
+					<input id="tplDoc" name="tplDoc" type="text" size="35" maxlength="50" readonly="readonly" vld="{required:true,messages:{required:'内容页模板不能为空!'}}"/>
+					<input id="tplDoc_url" type="hidden"/>
+					</li>
+					<li><a href="javascript:void(0);" onclick="showTpl('Doc')" class="abtn"><img src="${base}/skin/sys/img/admin/search.gif"/> <b>选择模板</b></a></li>
+					<@Perm perm="admin:tpl:edit">
+					<li><a href="javascript:void(0);" onclick="editTpl('Doc')" class="abtn"><img src="${base}/skin/sys/img/admin/edit.gif"/> <b>编辑模板</b></a></li>
+					</@Perm>
+				  </ul>
+              </td>
+            </tr>
+            <tr> 
+              <td class="ftit">打印页模板：</td>
+              <td colspan="3">
+	              <ul class="items">
+					<li class="t2">
+					<input id="tplPrint" name="tplPrint" type="text" size="35" maxlength="50" readonly="readonly"/>
+					<input id="tplPrint_url" type="hidden"/>
+					</li>
+					<li><a href="javascript:void(0);" onclick="showTpl('Print')" class="abtn"><img src="${base}/skin/sys/img/admin/search.gif"/> <b>选择模板</b></a></li>
+					<@Perm perm="admin:tpl:edit">
+					<li><a href="javascript:void(0);" onclick="editTpl('Print')" class="abtn"><img src="${base}/skin/sys/img/admin/edit.gif"/> <b>编辑模板</b></a></li>
+					</@Perm>
+				  </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">搜索页模板：</td>
+              <td colspan="3">
+	              <ul class="items">
+					<li class="t2">
+					<input id="tplSearch" name="tplSearch" type="text" size="35" maxlength="50" readonly="readonly"/>
+					<input id="tplSearch_url" type="hidden"/>
+					</li>
+					<li><a href="javascript:void(0);" onclick="showTpl('Search')" class="abtn"><img src="${base}/skin/sys/img/admin/search.gif"/> <b>选择模板</b></a></li>
+					<@Perm perm="admin:tpl:edit">
+					<li><a href="javascript:void(0);" onclick="editTpl('Search')" class="abtn"><img src="${base}/skin/sys/img/admin/edit.gif"/> <b>编辑模板</b></a></li>
+					</@Perm>
+				  </ul>
+              </td>
+            </tr>
+            <tr>  
+              <td class="ftit">高级搜索页模板：</td>
+              <td colspan="3">
+	              <ul class="items">
+					<li class="t2">
+					<input id="tplAdvSearch" name="tplAdvSearch" type="text" size="35" maxlength="50" readonly="readonly"/>
+					<input id="tplAdvSearch_url" type="hidden"/>
+					</li>
+					<li><a href="javascript:void(0);" onclick="showTpl('AdvSearch')" class="abtn"><img src="${base}/skin/sys/img/admin/search.gif"/> <b>选择模板</b></a></li>
+					<@Perm perm="admin:tpl:edit">
+					<li><a href="javascript:void(0);" onclick="editTpl('AdvSearch')" class="abtn"><img src="${base}/skin/sys/img/admin/edit.gif"/> <b>编辑模板</b></a></li>
+					</@Perm>
+				  </ul>
+             </td>
+            </tr>
+            <tr>
+              <td class="ftit">评论页模板：</td>
+              <td colspan="3">
+	              <ul class="items">
+					<li class="t2">
+					<input id="tplComment" name="tplComment" type="text" size="35" maxlength="50" readonly="readonly"/>
+					<input id="tplComment_url" type="hidden"/>
+					</li>
+					<li><a href="javascript:void(0);" onclick="showTpl('Comment')" class="abtn"><img src="${base}/skin/sys/img/admin/search.gif"/> <b>选择模板</b></a></li>
+					<@Perm perm="admin:tpl:edit">
+					<li><a href="javascript:void(0);" onclick="editTpl('Comment')" class="abtn"><img src="${base}/skin/sys/img/admin/edit.gif"/> <b>编辑模板</b></a></li>
+					</@Perm>
+				  </ul>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:model:save">
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+	
+	<div id="target" style="margin:3px; display:none;">
+	    <div style="width: 300px; height: 400px; margin: 10px; margin-right: 1px; float: left;
+            border: 1px solid #ccc; overflow: auto;">
+            <ul id="dirList" class="ztree">
+            </ul>
+        </div>
+        <div style="width: 300px; height: 400px; margin: 10px; margin-left: 1px; float: left;
+            border: 1px solid #ccc; overflow: auto;">
+            <ul id="tplList" class="ztree">
+            </ul>
+        </div>
+        <input type="hidden" id="tplid" />
+    </div>
+	
+</div>
+</body>
+</html>

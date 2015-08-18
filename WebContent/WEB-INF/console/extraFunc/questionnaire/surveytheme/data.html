@@ -1,0 +1,14 @@
+{Rows:[
+   <#list p.content as theme>
+   {
+     "id":"${theme.id}",
+     "title":"${theme.title!}",
+     "naire":"${theme.naire.name!}",
+     "surveyType":"${theme.surveyTypeString!}",
+     "totalCount":"${theme.totalCount!}",
+     "showType":"${theme.ShowString!}",
+     "priority":"${theme.priority!}"
+   }<#if theme_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

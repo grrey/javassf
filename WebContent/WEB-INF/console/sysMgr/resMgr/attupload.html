@@ -1,0 +1,65 @@
+<script type="text/javascript">
+var swfu;
+window.onload=function() {
+	var uploadUrl = "o_swfupload.do";
+	var jsessionid = $.cookie("JSESSIONID");
+	if(jsessionid) {
+		uploadUrl += ";jsessionid="+jsessionid;
+	}
+	swfu=new SWFUpload({
+		upload_url : uploadUrl,
+		flash_url : "${base}/plugin/swfupload/swfupload.swf",
+		file_size_limit : "10 MB",
+		post_params: {"path" : "${path!}"},
+		file_types : "*.*",
+		file_post_name:"resatt",
+		file_types_description : "资源上传",
+		file_queue_limit : 0,
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel"
+		},
+		debug: false,
+		
+		button_image_url : "${base}/plugin/swfupload/swfbtn.png",
+		button_placeholder_id : "spanButtonPlaceHolder",
+		button_text: "<span class='abtn'>上传资源</span>",
+		button_window_mode:"transparent",
+		button_width: 80,
+		button_height: 24,
+		button_text_left_padding: 22,
+		button_text_top_padding: 2,
+		
+		file_queued_handler : fileQueued2,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart2,
+		upload_progress_handler : uploadProgress2,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess2,
+		upload_complete_handler : uploadComplete2,
+		queue_complete_handler : queueComplete2
+	});
+};
+
+function fileQueued2(file) {
+	
+}
+function uploadStart2(file) {
+	
+}
+function uploadProgress2(file, bytesLoaded, bytesTotal) {
+	var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
+	$("#attpb").progressBar(percent,{ barImage: '${base}/plugin/swfupload/progressbg_green.gif'});
+}
+function uploadComplete2(file) {
+	
+}
+function queueComplete2(numFilesUploaded) {
+	location.href="v_list.do?path=${path!}";
+	refreshTree();
+}
+function uploadSuccess2(file,serverData) {
+	
+}
+</script>

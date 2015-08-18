@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script charset="utf-8" src="${base}/plugin/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="${base}/plugin/kindeditor/lang/zh_CN.js"></script>
+<script language="javascript">
+var setting = {async : {enable : true,url : "../doc/v_addtree.do?modelId=${model.id}&cid=${cid!}",autoParam : ["parentId"]},
+		check: {enable: false}
+};
+var dirsetting = {
+		async : {enable : true,url : "../tpl/v_tpl_dirtree.do",autoParam : ["path"],type:"get"},
+		check: {enable: false}
+};
+var editor;
+KindEditor.options.formatUploadUrl = false;
+KindEditor.ready(function(K) {
+    editor = K.create('#txt',{cssPath :'../plugins/code/prettify.css',uploadJson : '../kind/o_upload_file.do',allowFileManager : true,newlineTag:'p'});
+});
+$(function (){
+	$("#docForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	$.fn.zTree.init($("#channelTree"), setting);
+	$.fn.zTree.init($("#dirList"), dirsetting);
+	$("#titleColor").colorPicker();
+	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+<body>
+<#include "attupload.html"/>
+<div class="blk c">
+	<h2>文档/添加</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="docForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+        <#assign u = false/>
+        <#assign u1 = false/>
+        <#assign u2 = false/>
+        <#assign count=0/>
+        <#assign i=0/>
+		<#list fieldList as field>
+        <#assign cols=false>
+		<#assign i=i+1/>
+		<#assign first=true/>
+		<#assign last=true/>
+		<#if !field.single&&field_has_next&&!fieldList[i].single&&count%2==0><#assign last=false/></#if>
+		<#if !field.single&&i gt 1&&!fieldList[i-2].single&&count%2==1><#assign first=false/></#if>
+		<#if field.single||(!field.single&&field_has_next&&fieldList[i].single&&count%2==0)||(!field.single&&!field_has_next&&count%2==0)><#assign cols=true><#else><#assign count=count+1/></#if>
+		<#if field.economy>
+		    <#if field.name=="channelId">
+		    <#if first>
+            <tr>
+            </#if>
+              <td class="ftit"><span>*</span>所属栏目:</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+					<li class="t2">
+					<ul class="pms-comboBox">
+						<li><input type="text" name="selectchannelId" id="selectchannelId" onclick="showMenu('selectchannelId','menuContent')" readonly="readonly" <#if channel??>value="${channel.name!}"</#if> vld="{required:true,checkchannel:true,messages:{required:'${field.label!}不能为空!',checkchannel:'请选择末级栏目添加信息!'}}"/></li>
+					    <li class="pms-trigger" onclick="showMenu('selectchannelId','menuContent')"><div class="pms-trigger-icon"></div></li>
+					</ul>
+					<input type="hidden" name="channelId" id="channelId" <#if channel??>value="${channel.id!}"</#if>/>
+					<input type="hidden" name="childsize" id="childsize" <#if channel??>value="${channel.child?size!}"</#if>/>
+					<div id="menuContent" class="menuContent" style="display:none; width:180px; position:absolute; background:#fff; border:1px solid #ccc;">
+						<ul id="channelTree" class="ztree" style="height:180px;width:170px;overflow-y:scroll;"></ul>
+					</div>
+		            <li>
+		            <li><a href="javascript:void(0);" class="abtn"><img src="${base}/skin/sys/img/admin/fchnl.gif"/> <b>关联栏目</b></a></li>
+		            <li><a href="javascript:void(0);" class="abtn" onclick="purgroup()"><img src="${base}/skin/sys/img/admin/authority.gif"/> <b>浏览权限</b></a>
+		            <span id="groupIds"></span>
+		            </li>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="title">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit"><span>*</span>${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+					<li class="t2"><input id="title" name="title" type="text" <#if field.size??>size="${field.size!}"<#else>size="60"</#if> maxlength="${field.maxlength!127}" onchange="titleTag()" vld="{required:true,messages:{required:'${field.label!}不能为空!'}}"/><li>
+		            <li class="t"><input onclick="$('.linkLi').toggle(this.checked);if(!this.checked){$('#link').val('');}" type="checkbox"/>外部链接</li>
+		            <li class="linkLi" style="display:none;">URL:</li>
+		            <li class="linkLi" style="display:none;"><input id="link" name="link" type="text" size="35" maxlength="100"/></li>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="redTape">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit"><#if field.required><span>*</span></#if>${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+					<li class="t2">
+					<input id="redTape" name="redTape" type="hidden" value="1"/>
+					<input id="redtapeOrigin" name="redtapeOrigin" type="text" <#if field.size??>size="${field.size!}"<#else>size="60"</#if> <#if field.maxlength??>maxlength="${field.maxlength!}"<#else>maxlength="50"</#if> <#if field.required>vld="{required:true,messages:{required:'${field.label!}不能为空!'}}"</#if>/>
+					<li>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="subTitle">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit"><#if field.required><span>*</span></#if>${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+					<li class="t2">
+					<input id="subTitle" name="subTitle" type="text" <#if field.size??>size="${field.size!}"<#else>size="60"</#if> <#if field.maxlength??>maxlength="${field.maxlength!}"<#else>maxlength="50"</#if> <#if field.required>vld="{required:true,messages:{required:'${field.label!}不能为空!'}}"</#if>/>
+					<li>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="shortTitle">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit"><#if field.required><span>*</span></#if>${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>><input id="shortTitle" name="shortTitle" type="text" <#if field.size??>size="${field.size!}"<#else>size="35"</#if> <#if field.maxlength??>maxlength="${field.maxlength!}"<#else>maxlength="30"</#if> <#if field.required>vld="{required:true,messages:{required:'${field.label!}不能为空!'}}"</#if>/></td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="titleColor">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+					<li class="t2"><input id="titleColor" name="titleColor" type="text" readonly="readonly"/><li>
+		            <li><input onclick="$('#bold').val(this.checked)" type="checkbox"/>加粗<input type="hidden" id="bold" name="bold" value="false"/></li>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="tagStr">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+					<li class="t2"><input id="tagStr" name="tagStr" type="text" <#if field.size??>size="${field.size!}"<#else>size="35"</#if> maxlength="25" vld="{maxlength:25,messages:{maxlength:'${field.label!}长度不能超过25!'}}"/><li>
+		            <li class="t">用","分隔</li>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="description">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit"><#if field.required><span>*</span></#if>${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<textarea style="width:600px;height:80px;" name="description" class="l-textarea" vld="{<#if field.required>required:true,</#if>maxlength:255,messages:{<#if field.required>required:'${field.label!}不能为空!',</#if>maxlength:$.format('内容过长，${field.label!}长度不能超过{0}!')}}"></textarea>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="author">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit"><#if field.required><span>*</span></#if>${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>><input name="author" type="text" size="${field.size!20}" maxlength="${field.maxlength!50}" <#if field.required>vld="{required:true,messages:{required:'${field.label!}不能为空!'}}"</#if>/></td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="origin">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit"><#if field.required><span>*</span></#if>${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+					<li class="t2"><input name="origin" type="text" size="${field.size!20}" maxlength="${field.maxlength!50}" <#if field.required>vld="{required:true,messages:{required:'${field.label!}不能为空!'}}"</#if>/><li>
+		            <li class="t2">来源链接:</li>
+		            <li class="t2"><input name="originUrl" type="text" size="${field.size!20}" maxlength="${field.maxlength!50}"/></li>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="style">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+				    <#list typeList as type><li class="t2"><input type="checkbox" name="style" value="${type.id!}" id="type${type.id}" onclick="checktype(${type.id});" <#if type_index==0>checked="checked"</#if>/>${type.name!}</li>&nbsp;</#list>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="recommend">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+		            <li class="t2"><input type="checkbox" onclick="$('#recommend').val(this.checked)"/>推荐<input type="hidden" id="recommend" name="recommend" value="false"/></li>
+		            <li class="t2"><input type="checkbox" onclick="$('#top').val(this.checked)"/>置顶<input type="hidden" id="top" name="top" value="false"/></li>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="commentControl">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				  <input type="radio" name="commentControl" value="1" checked="checked"/>开启评论
+				  <input type="radio" name="commentControl" value="0"/>关闭评论
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="tplContent">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+			  	<ul class="items">
+					<li class="t2">
+					<input name="tplContent" id="tplContent" type="text" readonly="readonly"/>
+					<input id="tplContent_url" type="hidden"/>
+					</li>
+					<li><a href="javascript:void(0);" onclick="showTpl('Content')" class="abtn"><img src="${base}/skin/sys/img/admin/search.gif"/> <b>浏览</b></a></li>
+					<@Perm perm="admin:tpl:edit">
+					<li><a href="javascript:void(0);" onclick="editTpl('Content')" class="abtn"><img src="${base}/skin/sys/img/admin/edit.gif"/> <b>编辑</b></a></li>
+					</@Perm>
+				</ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="atts">
+            <#assign u1 = true/>
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<span id="spanButtonPlaceHolder1"></span>
+				<ul class="attachment" id="attshow">
+					
+				</ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="txt">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+              <textarea name="txt" id="txt" style="width:850px;height:300px;" class="l-textarea"></textarea>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="picture">
+            <#assign u2 = true/>
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if> id="aimgshow">
+			  	<span id="spanButtonPlaceHolder2"></span><br/>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="pics">
+            <#assign u = true/>
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if> id="imgshow">
+				<span id="spanButtonPlaceHolder"></span>
+				<span></span>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            <#elseif field.name=="releaseDate">
+            <#if first>
+            <tr>
+            </#if>
+              <td class="ftit">${field.label!}：</td>
+              <td <#if cols>colspan="3"</#if>>
+				<ul class="items">
+					<li class="t2"><input name="releaseDate" type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/><li>
+		            <li>留空则为当前时间</li>
+		         </ul>
+              </td>
+            <#if last>
+            </tr>
+            </#if>
+            </#if>
+            <#else>
+            <#include "custom.html"/>
+            </#if>
+            </#list>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <input type="hidden" name="modelId" value="${model.id}"/>
+                <@Perm perm="admin:doc:save">
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+	<#include "divc.html"/>
+</div>
+</body>
+</html>

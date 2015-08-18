@@ -1,0 +1,11 @@
+{Rows:[
+   <#list list as type>
+   {
+     "id":"${type.id}",
+     "name":"${type.name!?html}",
+     "hasImage":"${type.hasImage?string("<span style='color:blue'>是</span>","<span style='color:red'>否</span>")}",
+     "disabled":"${type.disabled?string("<span style='color:red'>禁用</span>","<span style='color:blue'>正常</span>")}"
+   }<#if type_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

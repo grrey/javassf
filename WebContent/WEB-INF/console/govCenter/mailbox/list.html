@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>局长信箱列表</title>
+<#include "../../liger.html"/>
+<script type="text/javascript">
+var grid = null;
+var t = 0;
+var mailboxId = null;
+<#assign show = false>
+<#assign modify = false>
+<#assign del = false>
+<@Perm perm="admin:mailbox:show">
+<#assign show = true>
+</@Perm>
+<@Perm perm="admin:mailbox:edit">
+<#assign modify = true>
+</@Perm>
+<@Perm perm="admin:mailbox:delete">
+<#assign del = true>
+</@Perm>
+$(function () {
+ grid = $("#maingrid").ligerGrid({
+	columns : [ {
+		display : "ID",
+		name : "id",
+		width : 70
+	},{
+		display : "标题",
+		name : "title",
+		width : 200,
+		align : "left"
+	},{
+		display : "姓名",
+		name : "name",
+		width : 120
+	},{
+		display : "电话",
+		name : "mobile",
+		width : 120
+	},{
+		display : "email",
+		name : "email",
+		width : 150
+	},{
+		display : "受理部门",
+		name : "depart",
+		width : 150
+	},{
+		display : "信件状态",
+		name : "status",
+		width : 120
+	},{
+		display : "是否公开",
+		name : "show",
+		width : 80
+	},{
+		display : "来信时间",
+		name : "createTime",
+		width : 200
+	}],
+	dataAction : 'server',
+	pageSize : 15,
+	pageSizeOptions : [10,15,20,25,30],
+	toolbar : {},
+	url : '../mailbox/jsonData.do',
+	width : '100%',
+	height : '100%',
+	checkbox : true,
+	selectRowButtonOnly:true
+});
+
+ <#assign first = true>
+ var items = [<#if all>{click: toolbarBtnItemClick,text: '转批',id:'outbox',icon:'outbox'}<#else>
+              {click: toolbarBtnItemClick,text: '退回',id:'back',icon:'back'}</#if>
+              <#if modify>,<#assign first = false>{click: toolbarBtnItemClick,text: '回复',id:'modify',icon:'modify'}</#if><#if del><#if !first>,</#if>
+              {click: toolbarBtnItemClick,text: '删除',id:'delete',icon:'delete'}</#if>];
+ 
+ grid.toolbarManager.set('items', items);
+ 
+ var menu = null;
+ var fdig;
+ var c;
+ 
+//工具条事件
+ function toolbarBtnItemClick(item) {
+     switch (item.id) {
+         case "modify":
+             var selected = grid.getSelected();
+             if (!selected) { $.ligerDialog.error("请选择要回复的信件!"); return }
+             top.f_addTab("modifyMailbox", '回复信件', 'mailbox/v_edit.do?id=' + selected.id);
+             break;
+         case "delete":
+        	 var selected = grid.getCheckedRows();
+        	 if (selected!=null&&selected.length>0) {
+        	     t = 0;
+                 f_delete();
+             }else{
+        		 $.ligerDialog.error("请选择要删除的信件!");
+        	 }
+             break;
+     }
+ };
+ 
+ <#if modify>
+ grid.bind('dblClickRow', function (rowdata, rowindex, rowDomElement){
+	 top.f_addTab("modifyMailbox", '回复信件', 'mailbox/v_edit.do?id=' + rowdata.id);
+ });
+ </#if>
+ 
+ grid.bind('contextmenu', function (parm, e){
+	 closeall();
+	 t = 1;
+	 mailboxId = parm.data.id;
+	 menu = $.ligerMenu({ top: 100, left: 100, width: 160});
+	 if(parm.data.status1!=-2&&parm.data.status1!=3){
+		 <#if all>
+		 menu.addItem({click: forward,text: '转批',id:'outbox',icon:'outbox'});
+		 <#else>
+		 menu.addItem({click: back,text: '退回',id:'back',icon:'back'});
+		 </#if>
+	 }
+	 <#if show>
+	 if(parm.data.show=="<span style='color:blue'>公开</span>"){
+		 menu.addItem({ id:'mailboxShow',text: '不公开',click: f_show,icon:'prev' });
+	 }else{
+		 menu.addItem({ id:'mailboxShow',text: '公开',click: f_show,icon:'logout' });
+	 }
+	 </#if>
+	 <#if del>
+	 menu.addItem({ id:'mailboxDel',text: '删除',click: f_delete,icon:'delete' });
+	 </#if>
+	 menu.show({ top: e.pageY, left: e.pageX });
+	 return false;
+ });
+ 
+ function f_reload() {
+     grid.loadData();
+ };
+ 
+ function forward(){
+	 fdig = $.dialog({
+			title : '转批:',
+			content : $('#forward').html(),
+			padding : "0px 0px"
+	});
+	$("#forwardid").val(mailboxId);
+ }
+ 
+ function back(){
+	 fdig = $.dialog({
+			title : '退回:',
+			content : $('#back').html(),
+			padding : "0px 0px"
+	});
+ }
+ 
+ function f_show() {
+	 closeall();
+	 jQuery.ligerDialog.confirm('确定公开吗?', function (confirm) {
+     if (confirm){
+     JP.ajax({
+         url: '../mailbox/o_ajax_show.do',
+         loading: '正在删除中...',
+         data: { id: mailboxId },
+         success: function () {
+        	 f_reload();
+         },
+         error: function () {
+        	 $.ligerDialog.error("公开信件失败!");
+         }
+     });
+     }
+     });
+ };
+ 
+ function f_delete() {
+	 closeall();
+	 jQuery.ligerDialog.confirm('确定删除吗?', function (confirm) {
+     if (confirm){
+     var selected = grid.getCheckedRows();
+     var ids = [];
+     if(t==0){
+         for(var i=0;i<selected.length;i++){
+        	 ids[i] = selected[i].id;
+         }
+     }else{
+    	 ids[0] = mailboxId;
+     }
+     JP.ajax({
+         url: '../mailbox/o_ajax_delete.do',
+         loading: '正在删除中...',
+         data: { ids: ids },
+         success: function () {
+        	 f_reload();
+         },
+         error: function () {
+        	 $.ligerDialog.error("删除信件失败!");
+         }
+     });
+     }
+     });
+ };
+ 
+ function closeall(){
+	 if(menu!=null){
+	    menu.hide();
+	 }
+ }
+ 
+});
+
+function f_search() {
+	 var name = $("#name").val();
+	 var parms = [{name:"name",value:name}];
+	 grid.set('parms', parms);
+	 grid.set('newPage',1);
+	 grid.loadData();
+}
+</script>
+</head>
+<body style="padding:2px;overflow:hidden;">
+<div id="mainsearch">
+    <div class="searchtitle">
+        <span>搜索</span><img src="${base}/skin/sys/img/admin/searchtool.gif" />
+        <div class="togglebtn"></div> 
+    </div>
+    <div class="searchbox">
+    	<form id="formsearch">
+    	<ul class="sform">
+    	<li class="t">关键字：</li>
+    	<li><input type="text" name="name" id="name"/></li>
+        <li class="b"><input type="button" name="search" value="搜索" onclick="f_search();" class="l-button"/></li>
+        </ul>
+        </form>
+    </div>
+</div>
+<div id="maingrid"></div>
+<div>
+<script language="javascript">
+var departsetting = {async : {enable : true,url : "../depart/v_addtree.do",autoParam : ["parentId"]},
+		check: {enable: false}
+};
+var d;
+function showDepart(){
+	d = $.dialog({
+		title : '选择部门:',
+		content : $('#menuContento').html(),
+		padding : "0px 0px"
+	});
+	$.fn.zTree.init($("#departTree"), departsetting);
+}
+function setDepart(name,id) {
+	d.close();
+	$("#dname").val(name);
+	$("#departId").val(id);
+}
+</script>
+<div id="forward" class="blk c" style="display:none;">
+<form method="post" action="o_forward.do" id="forwardForm">
+    <table width="99%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+        <tr>
+          <td class="ftit" width="30%"><span>*</span>转批部门：</td>
+          <td>
+            <input name="dname" type="text" id="dname" vld="{required:true,messages:{required:'转批部门不能为空!'}}"/>
+            <input type="button" class="l-button" value="选择部门" onclick="showDepart()"/>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="fctrl">
+            <input type="hidden" name="id" id="forwardid"/>
+            <input type="hidden" name="departId" id="departId"/>
+            <input type="hidden" name="typeId" value="${typeId!}"/>
+            <input type="submit" value="提交" class="l-button" />
+          </td>
+        </tr>
+    </table>
+</form>
+</div>
+<div id="back" class="blk c" style="display:none;">
+<form method="post" action="o_back.do" id="backForm">
+    <table width="99%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+        <tr>
+          <td class="ftit" width="30%"><span>*</span>退回原因：</td>
+          <td>
+            <textarea cols="50" rows="5" name="reason" maxlength="1000" class="l-textarea"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="fctrl">
+            <input type="hidden" name="id" id="backid"/>
+            <input type="hidden" name="typeId" value="${typeId!}"/>
+            <input type="submit" value="提交" class="l-button" />
+          </td>
+        </tr>
+    </table>
+</form>
+</div>
+<div id="menuContento" class="menuContent" style="display:none; width:260px; position:absolute; background:#fff; border:1px solid #ccc;">
+	<ul id="departTree" class="ztree" style="height:180px;width:210px;overflow-y:scroll;"></ul>
+</div>
+</div>
+</body>
+</html>

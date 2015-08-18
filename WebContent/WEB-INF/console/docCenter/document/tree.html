@@ -1,0 +1,47 @@
+<#if !parentId??>
+[{
+	"name": "根栏目",
+	<@Perm perm="admin:doc:list">
+	"click":"f_addTab('docMgr','文档管理','doc/v_list.do')",
+	</@Perm>
+	"open": true
+	<#if list?size gt 0>,
+	"isParent": true,
+	"children": [
+	<#list list as channel>
+		{
+		"parentId": "${channel.id}",
+		"name": "${channel.name!}",
+		<@Perm perm="admin:doc:list">
+		"click":"f_addTab('docMgr','文档管理','doc/v_list.do?chnlId=${channel.id!}')",
+		</@Perm>
+		<#if channel.child?size gt 0>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if channel_has_next>,</#if>
+	</#list>
+	]
+	</#if>
+}]
+<#else>
+	[
+	<#list list as channel>
+		{
+		"parentId": "${channel.id}",
+		"name": "${channel.name!}",
+		<@Perm perm="admin:doc:list">
+		"click":"f_addTab('docMgr','文档管理','doc/v_list.do?chnlId=${channel.id!}')",
+		</@Perm>
+		<#if channel.child?size gt 0>
+		"isParent": true,
+		"open": false
+		<#else>
+		"isParent": false
+		</#if>
+		}<#if channel_has_next>,</#if>
+	</#list>
+	]
+</#if>

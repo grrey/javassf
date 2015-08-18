@@ -1,0 +1,10 @@
+{Rows:[
+   <#list list as sensitivity>
+   {
+     "id":"${sensitivity.id}",
+     "search":"${sensitivity.search!?html}",
+     "replacement":"${sensitivity.replacement!}"
+   }<#if sensitivity_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

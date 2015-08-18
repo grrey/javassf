@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd"
+	default-lazy-init="true">
+
+	<bean id="forumQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="statisTrigger" />
+				<ref bean="statisOndayTrigger" />
+				<ref bean="forumTrigger" />
+				<ref bean="forumOndayTrigger" />
+				<ref bean="themeStatisTrigger" />
+				<ref bean="postsCheckTrigger" />
+				<ref bean="themeJobTrigger" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="forumexecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="10" />
+		<property name="maxPoolSize" value="100" />
+		<property name="queueCapacity" value="500" />
+	</bean>
+
+	<bean id="statisDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="forumStatisAct" />
+		<property name="targetMethod" value="statisToDb" />
+	</bean>
+
+	<bean id="statisTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="statisDetail" />
+		<!-- 统计每5分钟入库一次，减少频繁更新数据库带来的压力 -->
+		<property name="cronExpression" value="0 0/5 * * * ?" />
+	</bean>
+	
+	<bean id="statisOndayDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="forumStatisAct" />
+		<property name="targetMethod" value="statisOneday" />
+	</bean>
+
+	<bean id="statisOndayTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="statisOndayDetail" />
+		<!-- 每天凌晨0点更新数据库，把当日发帖数量等清空 -->
+		<property name="cronExpression" value="0 0 0 * * ?" />
+	</bean>
+	
+	<bean id="forumDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="forumStatisAct" />
+		<property name="targetMethod" value="forumToDb" />
+	</bean>
+
+	<bean id="forumTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="forumDetail" />
+		<!-- 统计每5分钟入库一次，减少频繁更新数据库带来的压力 -->
+		<property name="cronExpression" value="0 0/5 * * * ?" />
+	</bean>
+	
+	<bean id="forumOndayDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="forumStatisAct" />
+		<property name="targetMethod" value="forumOneday" />
+	</bean>
+
+	<bean id="forumOndayTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="forumOndayDetail" />
+		<!-- 每天凌晨0点更新数据库，把版块中当日发帖数量、回帖数量等清空 -->
+		<property name="cronExpression" value="0 0 0 * * ?" />
+	</bean>
+	
+	<bean id="themeStatisDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="themeStatisAct" />
+		<property name="targetMethod" value="statisToDb" />
+	</bean>
+
+	<bean id="themeStatisTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="themeStatisDetail" />
+		<!-- 主题访问统计每5分钟入库一次，减少频繁更新数据库带来的压力 -->
+		<property name="cronExpression" value="0 0/5 * * * ?" />
+	</bean>
+	
+	<bean id="postsCheckDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="postsCheckAct" />
+		<property name="targetMethod" value="refreshCheck" />
+	</bean>
+
+	<bean id="postsCheckTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="postsCheckDetail" />
+		<!-- 灌水缓存每5分钟清空一次，清空长时间未发帖的会员占用缓存空间 -->
+		<property name="cronExpression" value="0 0/5 * * * ?" />
+	</bean>
+	
+	<bean id="themeJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="themeJobAct" />
+		<property name="targetMethod" value="themeStatusCheck" />
+	</bean>
+
+	<bean id="themeJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="themeJobDetail" />
+		<!-- 每天凌晨0点更新数据库，检查置顶、高亮、锁定等帖子 -->
+		<property name="cronExpression" value="0 0 0 * * ?" />
+	</bean>
+
+	<bean id="forumStatisAct" class="com.portal.extrafunc.action.fnt.ForumStatisAct" />
+	<bean id="themeStatisAct" class="com.portal.extrafunc.action.fnt.ThemeStatisAct" />
+	<bean id="postsCheckAct" class="com.portal.extrafunc.action.fnt.PostsCheckAct" />
+	<bean id="themeJobAct" class="com.portal.extrafunc.action.fnt.ThemeJobAct" />
+	
+	<bean id="forumCache" class="com.portal.extrafunc.action.cache.ForumCacheImpl"/>
+	<bean id="forumStatisCache" class="com.portal.extrafunc.action.cache.ForumStatisCacheImpl"/>
+	<bean id="themeStatisCache" class="com.portal.extrafunc.action.cache.ThemeStatisCacheImpl"/>
+	<bean id="postsCheckCache" class="com.portal.extrafunc.action.cache.PostsCheckCacheImpl">
+	     <!-- 设置灌水间隔,单位秒 -->
+	     <property name="interval" value="30"/>
+	</bean>
+
+</beans>

@@ -1,0 +1,11 @@
+1、在mysql客户端执行javassf.sql语句
+2、修改mysql数据库账号、密码和端口，本项目默认账号：root  密码：root 端口：3306，
+   若需修改可在/WEB-INF/config/jdbc/jdbc.properties 中修改
+3、可直接将 javassf.zip解压导入eclipse中
+
+4、 启动tomcat，访问网站前台首页：http://localhost:8080/javassf/ 
+    后台首页：http://localhost:8080/javassf/admin/ 账号：admin 密码：123456
+
+若有问题可以联系
+网站： http://item.taobao.com/item.htm?spm=a1z10.1-c.w5003-7119585494.1.xN853A&id=44723976981&scene=taobao_shop
+旺旺ID:风程序 QQ：910879195

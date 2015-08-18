@@ -1,0 +1,13 @@
+{Rows:[
+   <#list list as keyword>
+   {
+     "id":"${keyword.id}",
+     "name":"${keyword.name!?html}",
+     "url":"${keyword.url!}",
+     "bold":"${keyword.bold?string('是','否')}",
+     "underline":"${keyword.underline?string('是','否')}",
+     "enable":"${keyword.enable?string("<span style='color:blue'>启用</span>","<span style='color:red'>禁用</span>")}"
+   }<#if keyword_has_next>,</#if>
+   </#list>
+   ],Total:"${list?size!}"
+}

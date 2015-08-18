@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;font-size:12px;}
+fieldset,img{border:0;}
+address,caption,cite,code,dfn,em,th,var,b,i,s{font-style:normal;font-weight:normal}
+li{list-style:none}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
+abbr,acronym{border:0;font-variant:normal}
+a{blr:expression(this.onFocus=this.blur())}
+:focus{outline:0;}
+.clear {clear:both;height:0;width:0;margin:0;padding:0;line-height:0;font-size:0;}
+a:link, a:visited{color:#333;text-decoration:none;}
+a:hover, a:active{color:#ff3300;text-decoration:underline;}
+a.red:link,a.red:visited{color:#ff3300;text-decoration:none;}
+a.red:hover,a.red:active{color:#0082cb;text-decoration:none;}
+
+.h10{height:10px; line-height:10px;}
+.h20{height:20px; line-height:20px;}
+.bgfff{background:#fff;}
+.mt20{margin-top:20px;}
+.plr20{padding-left:20px; padding-right:20px;}
+.red{color:red;}
+
+label.error{background:url(../img/ico6.gif) no-repeat 5px; padding-left:25px;font-size:12px;color:#ff3300;}
+input[type=text].error {border: solid 1px red; display: inline-block;}
+textarea.error {border: solid 1px red; display: inline-block;}
+
+body{background:url(../img/reg/zhuce_02.jpg) repeat-x top;}
+header{width:948px; height:90px; margin:0 auto; position:relative; background:url(../img/reg/zhuce_04.jpg) repeat-x;}
+.logo_reg{width:260px; height:90px; position:absolute; left:-58px;}
+.top_right{padding:60px 5px 0 0; width:100px; height:30px; float:right; line-height:30px;}
+.top_right a{color:#FFF; padding:0 5px;}
+.top_right a:hover{color:#F00;}
+
+.regmain{width:958px; height:auto; background:url(../img/reg/zhuce_67.jpg) repeat-y; margin:0 auto;}
+.regmain_b{width:5px; height:396px; float:left;}
+.regmain_m{width:948px; height:auto; float:left;}
+.dh_reg{height:55px;line-height:55px;background:url(../img/reg/zhuce_10.jpg) repeat-x;text-indent:2em;font-size:18px;color:#2a83c8;font-family:"微软雅黑";}
+
+.regdetal{width:648px; border-right:1px  dashed #9ebcc8; min-height:305px; float:left;}
+.reg_right{ width:270px; float:right;}
+.reg_right_title{color:#2a83c8; font-size:14px; height:40px; line-height:40px; font-weight:bold;}
+.reg_right_title a{color:#2a83c8; font-size:14px;}
+.reg_right_title a:hover{color:#F00;}
+.reg_right_title span{padding-right:35px; float:right;}
+.reg_right_title span a{color:#666; font-size:12px; font-weight:normal;}
+.reg_right_title span a:hover{color:#F00;}
+.login_reg{padding-left:20px;}
+.login_reg a{background:url(../img/reg/zhuce_37.jpg) no-repeat;width:147px;height:48px;display:block;}
+.login_reg a:hover{background:url(../img/reg/zhuce_48.jpg) no-repeat;width:147px;height:48px;}
+.questionli li{background:url(../img/ico4.gif) no-repeat 5px;line-height:24px; padding-left:20px;}
+
+.reg_load{height:24px;padding:15px 0 8px 10px; border:1px solid #DEF2D1; background-color:#FBFFF9;}
+.reg_load span{padding:4px 8px;height:16px;line-height:16px;font-size:14px;font-weight:bold;color:#258bd9; display:inline-table;}
+.reg_load .yuan_x{width:24px;background:url(../img/reg/zhuce_29.jpg) no-repeat center;color:#FFF;text-indent:9px;}
+.reg_load .yuan_y{width:24px;background:url(../img/reg/zhuce_32.jpg) no-repeat center;text-indent:9px;}
+.reg_load .light{color:#b3b3b3;}
+.reg_load .green{color:#3E8B01;}
+.detail_list li{background:none; list-style:none; line-height:30px; display:inline-block; min-height:40px;}
+.detail_list li h3{width:115px; padding-right:15px; font-size:14px; color:#3D3D3D; font-weight:bold; float:left; font-weight:normal; text-align:right;}
+.detail_list li label{background:url(../img/reg/ico_form_ok.gif) no-repeat left bottom; padding:2px 8px 0 8px; height:16px;  line-height:16px; display:inline-table; margin-left:5px; float:none; }
+.detail_list li input{width:200px; height:19px; }
+.detail_list li font{color:#F00; padding-left:5px; font-size:12px;  }
+.detail_list li span{color:#999999; font-size:13px; font-family:"微软雅黑";}
+.detail_list li p{ float:left; width:470px;}
+.detail_list li select{ margin-right:5px;}
+.detail_list .sex input{width:14px; height:14px; float:left; margin:0; padding:0; }
+.detail_list .sex font{ padding:8px 5px 8px 0; height:14px; line-height:14px; float:left; color:#000; display:block;}
+.detail_list .sex span{ line-height:10px; height:10px;}
+.hid_det{line-height:36px; margin-bottom:10px;  color:#666; margin-left:60px; height:36px;}
+.hid_det .but a{padding:0 0 0 13px; width:151px; height:32px; float:left; background:url(../img/reg/zhuce_54.jpg) no-repeat; line-height:32px; color:#2A83C8; margin-right:6px; font-weight:bold;}
+.hid_det .but a:hover{padding:0 0 0 13px; width:151px; height:32px; float:left; background:url(../img/reg/zhuce_57.jpg) no-repeat; line-height:32px; color:#FF3000; margin-right:6px; font-weight:bold; text-decoration:none;}
+.regType{width:300px; margin:10px auto;}
+.regType li{line-height:80px;margin:15px;text-align:center;}
+.regType li a{font-size:30px;font-family:"微软雅黑";font-weight:bold;color:#fff;display:block;padding:5px 20px; text-decoration:none;}
+.regType li a:hover{color:#fff;background:#F30;}
+.regType li.gr{background:#79d975}
+.regType li.qy{background:#3da4e4}
+.regType li.zj{background:#66F;}
+.success{width:560px;;margin:50px auto;}
+.success dt{height:90px;line-height:90px;color:#ff3300;font-size:35px;font-family:"微软雅黑";background:url(../img/reg/smail.gif) no-repeat;padding-left:120px;}
+.success dt span{text-decoration:underline;}
+.success dd{height:30px;padding-left:120px;font-size:14px;}
+
+.detail_list li .queren_but{width:140px; height:36px;}
+.detail_list li .queren_butx{width:140px; height:36px;}
+.queren_but{width:140px; height:36px; line-height:36px; color:#FFF; font-size:14px; font-weight:bold; background:url(../img/reg/zhuce_63.jpg) no-repeat; text-align:center; border:none; cursor:pointer;}
+.queren_butx{width:140px; height:36px;line-height:36px; color:#FFF; font-size:14px; font-weight:bold; background:url(../img/reg/zhuce_60.jpg) no-repeat; text-align:center; border:none; cursor:pointer;}
+
+footer{padding:15px 0 0 0; width:958px; height:40px; line-height:20px; background:url(../img/reg/zhuce_68.gif) top no-repeat; margin:0 auto; text-align:center; color:#666;}
+footer a{color:#666;text-decoration:underline;}
+footer a:hover{color:#f00;} 

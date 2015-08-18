@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>全文检索</title>
+<#include "../../../liger.html"/>
+<script language="javascript">
+var setting = {async : {enable : true,url : "../channel/v_seltree.do",autoParam : ["parentId"]},
+		check: {enable: false}
+};
+
+$(function (){
+	$.fn.zTree.init($("#channelTree"), setting);
+});
+
+function luceneSubmit() {
+	$.post("o_create.do", {
+		"startDate" : $("#startDate").val(),
+		"endDate" : $("#endDate").val(),
+		"channelId" : $("#channelId").val()
+	}, function(data) {
+		$.ligerDialog.success('索引生成成功!');
+		$("#submitButton").removeAttr("disabled");
+	}, "json");
+}
+
+function setChannele(name,id) {
+	$("#menuContent").fadeOut("fast");
+	$("#selectchannelId").val(name);
+	$("#channelId").val(id);
+}
+
+$(function (){
+	$("#lucForm").validate({
+		submitHandler : function(form) {
+			$("#submitButton").attr("disabled","disabled");
+			$("#cancelButton").removeAttr("disabled");
+			luceneSubmit();
+		}
+	});
+});
+</script>
+</head>
+<body>
+<div class="blk c">
+	<h2>全文检索</h2>
+	<div class="c">
+    	<form method="post" action="o_create.do" id="lucForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit2" width="30%">栏目：</td>
+              <td>
+                <ul class="pms-comboBox">
+					<li><input type="text" name="selectchannelId" id="selectchannelId" onclick="showMenu('selectchannelId','menuContent')" readonly="readonly"/></li>
+				    <li class="pms-trigger" onclick="showMenu('selectchannelId','menuContent')"><div class="pms-trigger-icon"></div></li>
+				</ul>
+				<input type="hidden" name="channelId" id="channelId"/>
+				<div id="menuContent" class="menuContent" style="display:none; width:180px; position:absolute; background:#fff; border:1px solid #ccc;">
+					<ul id="channelTree" class="ztree" style="height:180px;width:170px;overflow-y:scroll;"></ul>
+				</div>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit2">开始日期：</td>
+              <td><input name="startDate" type="text" id="startDate" size="25" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
+            </tr>
+            <tr>
+              <td class="ftit2">结束日期：</td>
+              <td><input name="endDate" type="text" id="endDate" size="25" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="fctrl">
+                <@Perm perm="admin:lucene:create">
+                <input type="submit" value="提交" id="submitButton" class="l-button" /> 
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

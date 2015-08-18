@@ -1,0 +1,15 @@
+{Rows:[
+   <#list p.content as doc>
+   <#assign i=0>
+   {
+     "id":"${doc.id}",
+     "title":"<img src='${base}/skin/sys${doc.model.icon!}' title='${doc.model.name!}'/>&nbsp;<#if doc.top??&&doc.top><span style='color:red'>[置顶]</span></#if><#if doc.recommend><span style='color:red'>[推荐]</span></#if><a id='doc${doc.id!}' href='${doc.url}' target='_blank'>${doc.title!?html}</a>",
+     "style":"<#list typeList as type><#if doc.style??&&doc.style?contains(type.id?string)><#assign i=i+1><#if i gt 1>&nbsp;&nbsp;</#if>${type.name}</#if></#list>",
+     "inputUser":"${doc.user.username!}&nbsp;(<#if doc.inputDepart??>${doc.inputDepart.name!}<#else>信息报送</#if>)",
+     "status":"${doc.statusString!}",
+     "status1":"${doc.status!}",
+     "releaseDate":"${doc.releaseDate?string('yyyy-MM-dd')}"
+   }<#if doc_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

@@ -1,0 +1,12 @@
+{Rows:[
+   <#list p.content as workflow>
+   {
+     "id":"${workflow.id}",
+     "name":"${workflow.name!?html}",
+     "description":"${workflow.description!?html}",
+     "stepCount":"${workflow.stepCount!}",
+     "createTime":"${workflow.createTime?string('yyyy-MM-dd HH:mm:ss')}"
+   }<#if workflow_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+$(function (){
+	$("#questionnaireForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+    <#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+<body>
+<div class="blk c">
+	<h2>问卷调查管理/添加</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="questionnaireForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>问卷名称：</td>
+              <td colspan="3">
+              <input name="name" type="text" id="name" size="25" vld="{required:true,maxlength:50,messages:{required:'问卷名称不能为空!',maxlength:$.format('问卷名称长度不能超过{0}!')}}"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit"><span>*</span>重复投票时间：</td>
+              <td>
+                <input type="text" id="repeateTime" name="repeateTime" value="0" vld="{digits:true,messages:{digits:'时间间隔必须为数字!'}}"/>&nbsp;小时&nbsp;&nbsp;0表示不限制时间,为空表示只能投票一次
+              </td>
+              <td class="ftit"><span>*</span>限制IP重复投票：</td>
+              <td>
+                <input type="checkbox" id="restrictIp" name="restrictIp" value="1"/>是
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">问卷描述：</td>
+              <td colspan="3">
+              <textarea cols="80" rows="5" name="description" class="l-textarea" vld="{maxlength:500,messages:{maxlength:$.format('说明长度不能超过{0}!')}}"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">开始时间：</td>
+              <td>
+              <input type="text" name="startTime" size="25" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+              </td>
+              <td class="ftit">结束时间：</td>
+              <td>
+              <input type="text" name="endTime" size="25" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">是否需登录：</td>
+              <td>
+              <input type="checkbox" name="needLogin" id="needLogin"/>是
+              </td>
+              <td class="ftit">是否启用：</td>
+              <td>
+              <input type="checkbox" name="enable" id="enable"/>启用
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<script language="javascript">
+$(function (){	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>留言管理/回复</h2>
+	<div class="c">
+    	<form method="post" action="o_update.do" id="jvForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>标题：</td>
+              <td colspan="3">${board.title!?html}</td>
+            </tr>
+            <tr>
+              <td class="ftit">姓名：</td>
+              <td>${board.name!?html}</td>
+              <td class="ftit">联系电话：</td>
+              <td>${board.mobile!?html}</td>
+            </tr>
+            <tr>
+              <td class="ftit">E-MAIL：</td>
+              <td>${board.email!?html}</td>
+              <td class="ftit">联系地址：</td>
+              <td>${board.address!?html}</td>
+            </tr>
+            <tr>
+              <td class="ftit">邮编：</td>
+              <td>${board.zipcode!?html}</td>
+              <td class="ftit">来信时间：</td>
+              <td>${board.createTime!?string("yyyy-MM-dd HH:mm:ss")}</td>
+            </tr>
+            <tr>
+              <td class="ftit">是否公开：</td>
+              <td colspan="3">
+              <input type="radio" name="show" value="1" <#if board.show>checked="checked"</#if>/>公开
+              <input type="radio" name="show" value="0" <#if !board.show>checked="checked"</#if>/>不公开
+              </td>
+            </tr>
+            <tr>
+              <td class="ftit">来信内容：</td>
+              <td colspan="3">${board.content!?html}</td>
+            </tr>
+            <tr>
+              <td class="ftit">回复：</td>
+              <td colspan="3"><textarea cols="80" rows="5" name="reply" maxlength="1500" class="l-textarea">${board.reply!}</textarea></td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:board:update">
+                <input type="hidden" name="id" value="${board.id}"/>
+                <input type="submit" value="提交" class="l-button"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<script language="javascript">
+var dig;
+
+function showTpl(idstr){
+    $("#tplid").val(idstr);
+    dig = $.ligerDialog.open({
+    	title:"选择模板",
+    	width:650,
+    	target: $("#target")
+    });
+}
+
+function editTpl(idstr){
+    var tpl = $("#tpl"+idstr+"_url").val();
+    if(tpl!=null&&tpl.length>0){
+        top.f_addTab("modifyTpl", '修改模板', 'tpl/v_edit.do?name=' + tpl);
+    }
+}
+
+function checkTpl(tpl,tplurl){
+	var id = "tpl" + $("#tplid").val();
+	dig.hidden();
+	$("#"+id).val(tpl);
+	$("#"+id+"_url").val(tplurl);
+}
+
+function setChannel(name,id) {
+	$("#menuContent").fadeOut("fast");
+	$("#selectchannelId").val(name);
+	$("#channelId").val(id);
+	$("#childsize").val(0);
+	$("#selectchannelId").focus();
+}
+
+function titleTag() {
+	$.post("v_titletags.do", {
+		"title" : $("#title").val()
+	}, function(data) {
+		if(data.success) {
+			$("#tagStr").val(data.tag);
+		}
+	}, "json");
+}
+
+function loadTpl(path){
+	var filesetting = {
+			async : {enable : true,url : "../tpl/v_tpl_filetree.do?path="+path,type:"get"},
+			check: {enable: false}
+	};
+	$.fn.zTree.init($("#tplList"), filesetting);
+}
+
+function checktype(typeid){
+	if($("#type"+typeid).attr("checked")){
+		$("li[id^='typeshow"+typeid+"']").show();
+	}else{
+		$("li[id^='typeshow"+typeid+"']").hide();
+	}
+}
+
+function selecttype(checkbox,typeid){
+	var m = "seltype"+typeid;
+	var s = ","+$(checkbox).val()+",";
+	var l = s.length;
+	var str = checkbox.id.substring(m.length);
+	if($(checkbox).attr("checked")){
+		$("input[id^='seltype"+typeid+"']").attr("checked",false);
+		$("input[id^='typevalue']").each(function(i){
+			var i = $(this).val().indexOf(s);
+			if(i>-1){
+			    $(this).val($(this).val().substring(0,i+1)+$(this).val().substring(i+l));
+			}
+		});
+		$(checkbox).attr("checked",true);
+		$("#typevalue"+str).val($("#typevalue"+str).val()+$(checkbox).val()+",");
+	}else{
+		var i = $("#typevalue"+str).val().indexOf(s);
+		$("#typevalue"+str).val($("#typevalue"+str).val().substring(0,i+1)+$("#typevalue"+str).val().substring(i+l));
+	}
+}
+
+function selectfengmian(checkbox,typeid){
+	var m = "selfengm"+typeid;
+	var s = ","+$(checkbox).val()+",";
+	var l = s.length;
+	var str = checkbox.id.substring(m.length);
+	if($(checkbox).attr("checked")){
+		$("input[id^='selfengm"+typeid+"']").attr("checked",false);
+		$("input[id^='itypevalue']").each(function(i){
+			var i = $(this).val().indexOf(s);
+			if(i>-1){
+			    $(this).val($(this).val().substring(0,i+1)+$(this).val().substring(i+l));
+			}
+		});
+		$(checkbox).attr("checked",true);
+		$("#itypevalue"+str).val($("#itypevalue"+str).val()+$(checkbox).val()+",");
+	}else{
+		var i = $("#itypevalue"+str).val().indexOf(s);
+		$("#itypevalue"+str).val($("#itypevalue"+str).val().substring(0,i+1)+$("#itypevalue"+str).val().substring(i+l));
+	}
+}
+
+function purgroup(){
+	dig = $.ligerDialog.open({
+    	title:"浏览权限",
+    	width:450,
+    	height:150,
+    	target: $("#groups")
+    });
+}
+
+function setGroups(){
+	var s = "";
+	$("input[name='groupIds']:checked").each(function(i){
+		s = s + "<input type='hidden' name='viewGroupIds' value='"+$(this).val()+"'/>";
+	});
+	$("#groupIds").html(s);
+	dig.hidden();
+}
+
+function changeprev(index){
+	var txt = $("#imgList"+index).clone();
+	var prev = $("#imgList"+index).prev();
+	if(prev.attr("id")){
+		$("#imgList"+index).remove();
+		prev.before(txt);
+	}
+}
+
+function changenext(index){
+	var txt = $("#imgList"+index).clone();
+	var next = $("#imgList"+index).next();
+	if(next.attr("id")){
+		$("#imgList"+index).remove();
+		next.after(txt);
+	}
+}
+
+$.validator.addMethod("checkchannel", function(value, element, params) {
+	if (value != "") {
+		if($("#childsize").val()!=0){
+			return false;
+		}
+		return true;
+	}
+}, "请选择末级栏目添加文档!");
+</script>
+    <ul id="attList" style="display:none">
+	   <li id="att{0}"><span id="attname{0}"></span>
+		   <a href="javascript:void(0);" id="attdel{0}" onclick="swfu1.cancelQueue();" title="删除">
+		   <img src="${base}/skin/sys/img/admin/del.gif"/></a>
+		   <span class="progressBar" id="attpb{0}"></span>
+		   <input type="hidden" name="attNames" id="attachname{0}"/>
+		   <input type="hidden" name="attPaths" id="atturl{0}"/>
+	   </li>
+	</ul>
+	
+	<div id="imgList" style="display:none">
+    <dl id="imgList{0}" class="atlas">
+		<dt>
+		<div class="ver_pic">
+		<div class="subpic"><img id="img{0}" src="${base}/skin/sys/img/admin/uploading.gif"/></div>
+		<div class="process" id="imgprocess{0}"><div class="percent" id="imgpercent{0}" style="width:0%;"></div></div>
+		</div>
+		<input type="hidden" name="imgPaths" id="imgpath{0}"/></dt>
+		<dd class="ctrl">
+			<a href="javascript:void(0);" id="imgprev{0}" onclick="changeprev({0})" title="排前"><img src="${base}/skin/sys/img/admin/front.gif"/></a>
+			<a href="javascript:void(0);" id="imgnext{0}" onclick="changenext({0})" title="排后"><img src="${base}/skin/sys/img/admin/back.gif"/></a>
+			<a href="javascript:void(0);" id="imgdel{0}" onclick="swfu.cancelQueue();" title="删除"><img src="${base}/skin/sys/img/admin/del.gif"/></a>
+		</dd>
+		<dd class="prop">
+		    <input type="hidden" name="imgStyles" value="," id="itypevalue{0}"/>
+		    <input type="hidden" name="thumbs" value="0"/>
+		    <ul class="items">
+			   <li class="t2"><input type="checkbox" value="1" id="selfengm0{0}" onclick="selectfengmian(this,0);"/>封面</li>
+	        </ul>
+		</dd>
+		<dd class="desc"><textarea name="imgDescs" id="desc{0}" maxlength="255" class="l-textarea" style="width:380px; height:120px;"></textarea></dd>
+	</dl>
+    </div>
+    <div id="aimgList" style="display:none">
+    <dl id="aimgList{0}" class="thumbnail">
+		<dt><div class="ver_pic"><div class="subpic"><img id="aimg{0}" src="${base}/skin/sys/img/admin/uploading.gif"/></div>
+		<div class="process" id="aimgprocess{0}"><div class="percent" id="aimgpercent{0}" style="width:0%;"></div></div>
+		</div><input type="hidden" name="imgPaths" id="aimgpath{0}"/></dt>
+		<dd class="ctrl">
+			<a href="javascript:void(0);" title="修改"><img src="${base}/skin/sys/img/admin/update.gif"/></a>
+			<a href="javascript:void(0);" id="aimgdel{0}" onclick="swfu2.cancelQueue();" title="删除"><img src="${base}/skin/sys/img/admin/del.gif"/></a>
+		</dd>
+		<dd class="prop">
+		    <input type="hidden" name="imgStyles" value="," id="typevalue{0}"/>
+		    <input type="hidden" name="thumbs" value="1"/>
+		    <ul class="items">
+		       <li class="t2" id="typeshow0{0}">
+			   <input type="checkbox" id="seltype0{0}" value="0" onclick="selecttype(this,0);"/>标题图</li>
+		       <#list typeList as type>
+		       <#if type.hasImage>
+			   <li class="t2" id="typeshow${type.id}{0}" <#if article??&&article.style??&&article.style?contains(type.id+"")><#else>style="display:none"</#if>>
+			   <input type="checkbox" id="seltype${type.id!}{0}" value="${type.id!}" onclick="selecttype(this,${type.id!});"/>${type.name!}</li>
+			   </#if>
+	           </#list>
+	        </ul>
+		</dd>
+		<dd class="desc" style="display:none"><textarea name="imgDescs" id="adesc{0}" maxlength="255" class="l-textarea" style="width:380px; height:60px;"></textarea></dd>
+	</dl>
+    </div>
+    <span style="display:none">
+      <#if !u><span id="spanButtonPlaceHolder"></span></#if>
+      <#if !u1><span id="spanButtonPlaceHolder1"></span></#if>
+      <#if !u2><span id="spanButtonPlaceHolder2"></span></#if>
+    </span>
+    <span style="display:none"><input id="btnCancel" type="button" value="取消" onclick="swfu.cancelQueue();" disabled="disabled" /></span>
+	
+	<div id="target" style="margin:3px; display:none;">
+	    <div style="width: 300px; height: 400px; margin: 10px; margin-right: 1px; float: left;
+            border: 1px solid #ccc; overflow: auto;">
+            <ul id="dirList" class="ztree">
+            </ul>
+        </div>
+        <div style="width: 300px; height: 400px; margin: 10px; margin-left: 1px; float: left;
+            border: 1px solid #ccc; overflow: auto;">
+            <ul id="tplList" class="ztree">
+            </ul>
+        </div>
+        <input type="hidden" id="tplid" />
+	</div>
+	
+	<div id="groups" style="display:none">
+	<#list groupList as group>
+	<input type="checkbox" name="groupIds" value="${group.id!}" <#if groupIds??&&groupIds?seq_contains(group.id)>checked="checked"</#if>/>${group.name!}
+	</#list>
+	<input type="button" value="确定" onclick="setGroups()"/>
+	</div>

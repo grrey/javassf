@@ -1,0 +1,21 @@
+#div_hylist{background:#fff}
+.four_li {width:480px;}
+.four_li ul li {float:left;margin-bottom:6px;}
+.four_li ul li a{ display:block;height:18px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;line-height:18px;width:110px;
+margin-right:6px;padding:2px;}
+.four_li ul li a.Addr_f,.four_li ul li a.Addr_uf:hover {background:#CEDFF9;color:#f00;font-weight:bold;}
+.four_li ul li a.Addr_uf {background:#EEF4FD;}
+.five_li {width:580px;}
+.five_li ul li {float:left;margin-bottom:6px;}
+.five_li ul li a{ display:block;height:18px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;line-height:18px;width:110px;
+margin-right:6px;padding:2px 0;}
+.five_li ul li a.Addr_f,.five_li ul li a.Addr_uf:hover {background:#CEDFF9;color:#f00;font-weight:bold;}
+.five_li ul li a.Addr_uf {background:#EEF4FD;}
+.div_schoose{ margin:6px 0; color:#060; font-size:14px; font-weight:bold;}
+.three_li {width:480px;}
+.three_li ul li{float:left;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;cursor:pointer;margin-right:10px;margin-bottom:6px;
+}
+.three_li ul li a{ display:block;text-overflow:ellipsis;white-space:nowrap;width:140px;height:20px;line-height:20px;padding:2px 5px;
+overflow:hidden;}
+.three_li ul li a.Addr_f,.three_li ul li a.Addr_uf:hover {background:#CEDFF9;color:#f00;font-weight:bold;}
+.three_li ul li a.Addr_uf {background:#EEF4FD;}

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd"
+	default-lazy-init="true">
+<!-- 定时任务 设置 -->
+	<bean id="startQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="viewsTrigger" />
+				<ref bean="upsTrigger" />
+				<ref bean="dataBackupTrigger" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="executor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="10" />
+		<property name="maxPoolSize" value="100" />
+		<property name="queueCapacity" value="500" />
+	</bean>
+
+	<bean id="viewsDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="docStatisAct" />
+		<property name="targetMethod" value="docViewsCount" />
+	</bean>
+
+	<bean id="viewsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="viewsDetail" />
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+
+	<bean id="upsDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="docStatisAct" />
+		<property name="targetMethod" value="upsCount" />
+	</bean>
+
+	<bean id="upsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="upsDetail" />
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	
+	<bean id="dataBackupDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="dataBackupAct" />
+		<property name="targetMethod" value="dataBackupJob" />
+	</bean>
+
+	<bean id="dataBackupTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="dataBackupDetail" />
+		<property name="cronExpression" value="0 * * * * ?" />
+	</bean>
+
+	<bean id="docStatisAct" class="com.portal.doccenter.action.fnt.DocStatisAct" />
+	<bean id="dataBackupAct" class="com.portal.sysmgr.action.job.DataBackupAct" />
+	<bean id="pwdEncoder" class="com.javassf.basic.security.encoder.Md5PwdEncoder" />
+	
+	<bean id="commentUpCache" class="com.portal.extrafunc.action.cache.CommentUpCacheImpl"/>
+	<bean id="docViewsCountCache" class="com.portal.doccenter.action.fnt.cache.DocViewsCountCacheImpl"/>
+
+	<bean id="realPathResolver"
+		class="com.javassf.basic.plugin.springmvc.ServletContextRealPathResolver" />
+	<bean id="fileRepository" class="com.javassf.basic.upload.FileRepository" />
+</beans>

@@ -1,0 +1,260 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>问卷调查 - ${site.name} - Powered by javassf</title>
+<meta http-equiv="keywords" content="问卷调查"/>
+<meta http-equiv="description" content="问卷调查"/>
+<meta name="author" content="javassf"/>
+<meta name="copyright" content="Copyright &copy; 2011 - 2013 javassf.com All Rights Reserved."/>
+<link rel="shortcut icon" href="/${skin}/img/favicon.ico">
+<link href="/${skin}/css/style.css" rel="stylesheet"/>
+<!--[if IE]><script src="/${skin}/js/html5.js"></script><![endif]-->
+</head>
+
+<body>
+<!--header-->
+<header>
+	<!--top-->
+	[#include "../include/顶栏.html"/]
+	<!--/top-->
+    
+    <!-- top_search -->
+    [#include "../include/搜索栏.html"/]
+    <!-- /top_search -->
+
+	<!-- nav -->
+	[#include "../include/导航栏.html"/]
+    <!-- /nav -->
+</header>
+<!--/header--> 
+
+<!--main-->
+<section class="s b mt5">
+	<ul class="path fl">
+        <li><a href="${base}/">首页</a></li>
+        <li><a href="#" target="_blank">问卷调查</a></li>
+        <li class="last">问卷调查详情</li>
+	</ul>
+</section>
+<section class="s b">
+	<article>
+        <h1 class="w92 mt10">全国继教网需求调查问卷</h1>
+        <div class="msgbar w92">
+            发布时间：2013-10-27 20:51:44 &nbsp; 来源：本站编辑 &nbsp; 浏览次数：<span id="views">101</span>
+        </div>
+        <div class="w92">
+			<div class="desc"> 
+				<p>尊敬的老师：</p>
+                  您好！为了了解不同类别、层次、岗位教师教育教学能力提升和专业发展的基本情况和需求我们特设计了此调查问卷，问卷内容不对外界公开，希望能够得到您的支持和协助！<br>
+                  本次调查严格按照《统计学》的要求进行，不用填写姓名，所有回答只用于统计分析。您只需要根据自己的实际情况，在每个问题所给出的几个答案中选择一个合适的答案打“√”或者在______中填写。您的回答代表众多该区域的普遍的情况。<br>
+                  衷心感谢您的支持和协助！<br>
+                  非常感谢您能花几分钟的时间帮助我们。
+			</div>
+            <form name="survey" action="">    
+			<dl class="survey mt10">
+				<dt>1、关于“您所任教的学段（　　）”的主题统计结果如下<span>*</span></dt>
+                <dd>
+                	<ul>
+						<li>
+                            <input name="q1" id="q1_1" type="radio" value="1">
+                            <label for="q1_1">小学</label>
+						</li>
+						<li>
+                            <input name="q1" id="q1_2" type="radio" value="2">
+                            <label for="q1_2">初中</label>
+                        </li>
+                        <li>
+                            <input name="q1" id="q1_3" type="radio" value="3">
+                            <label for="q1_3">高中</label>
+                        </li>
+                	</ul>
+                </dd>
+				<dt>2、关于教学设计能力中如何恰当地提问与有效追问，对于以下提供的培训内容，您的需求方向是<span>[请选择2-5项]</span></dt>
+                <dd>
+                	<ul>
+						<li>
+                         <input name="q2" id="q2_1" type="checkbox" value="1">
+                         <label for="q2_1">根据教学设计时构想的主问题，选择恰当的时机和对象、以恰当的方式提问。必要时对主问题进行变通处理</label>
+                        </li>
+                        <li>
+                            <input name="q2" id="q2_2" type="checkbox" value="2">
+                            <label for="q2_2">根据课堂上变化的学情，临时提出一些散问题，或引起学生注意，或促进知识掌握，或启发思考。</label>
+                        </li>
+                        <li>
+                            <input name="q2" id="q2_3" type="checkbox" value="3">
+                            <label for="q2_3">根据课堂上变化的学情，临时提出一些散问题，或引起学生注意，或促进知识掌握，或启发思考</label>
+                        </li>
+                        <li>
+                            <input name="q2" id="q2_4" type="checkbox" value="4">
+                            <label for="q2_4">问题本身及其表述能让学生理解。提问精当并有一定顺序，避免杂乱、肤浅等弊端。</label>
+                        </li>
+                        <li>
+                            <input name="q2" id="q2_5" type="checkbox" value="5">
+                            <label for="q2_5">根据学生回答问题的情况，进行灵活有效的追问，对困难者起支架作用，对优秀者起深化和拓展作用。</label>
+                        </li>
+                        <li>
+                            <input name="q2" id="q2_6" type="checkbox" value="6">
+                            <label for="q2_6">鼓励学生提出问题，重视培养学生的问题意识。</label>
+                        </li>
+					</ul>
+                </dd>
+				<dt>3、在以前的培训中，你感受最深的是什么形式的培训？<span>*</span></dt>
+                <dd>
+                	 <textarea name="q3" cols="70" rows="5" class="inputtext" id="q3" value=""></textarea>
+                </dd>
+                                  
+			</dl>
+            <div class="mt10">
+            	<input class="submitbutton" id="submit_button" type="button" value="提交答卷">&nbsp;&nbsp;
+            	<input class="operation" id="submittest_button" type="button" value="查看结果">                     
+            </div>
+            </form>
+        </div>
+	</article>
+	<aside>
+    <div class="bor">
+		<div class="tit"><h2>要闻推荐</h2></div>
+		<div class="cont">
+            [@DocList count='5' orderBy='3']
+            <ul class="ttList sLine w96 pb5">
+                [#if list?size gt 0]
+                [#assign a=list[0]]
+                <li class="tt2"><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='18'/]</a></li>        
+                <li>
+                [#list list as a]
+                [#if a_index gt 0]
+                <a href="${a.url}" title="${a.title}" target="_blank">[[@StrLimit s=a.title l='10'/]]</a> [/#if][#if a_index==2]<br/>[/#if]
+                [/#list]
+                </li>
+                [/#if]
+            </ul>
+            [/@DocList]
+            [@DocList count='6']
+            <ul class="nlist2 w92 mt5 pb5">
+                [#list list as a]
+                <li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></li>
+                [/#list]
+            </ul>
+            [/@DocList]      
+		</div>
+    </div>
+    <div class="bor mt5">
+        <div class="tit"><h2>热点排行</h2></div>
+        <div class="cont">
+            [@DocList count='10' orderBy='4']
+             <ol class="ph2 w92 mt5 mb5">
+                [#list list as a]
+                <li><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></li>
+                [/#list]
+             </ol>
+             [/@DocList]
+        </div>
+    </div>
+    <div class="bor mt5">
+		<div class="tit"><h2>最新视点</h2></div>
+		<div class="cont">         
+            [@DocList mId='4' count='7' orderBy='2']
+            [#if list?size gt 0]
+            [#assign a=list[0]]
+            <div class="twlist w92 mt10 pb5">
+				<a href="${a.url}" title="${a.title}" target="_blank" class="video"><img src="${base}${a.getPicStyle('0')!}"/><i></i></a>
+				<div class="in_text">
+					<h2><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='20'/]</a></h2>
+					<p>[@StrLimit s=a.description l='22'/]<a href="${a.url}" target="_blank" class="blue">[详情]</a></p>
+				</div>
+            </div>
+            <ul class="nlist2 w92">
+               [#list list as a]
+               [#if a_index gt 0]
+                <li class="m4"><a href="${a.url}" title="${a.title}" target="_blank">[@StrLimit s=a.title l='15' append=append/]</a></li>
+               [/#if]
+               [/#list]
+            </ul>
+            [/#if]
+            [/@DocList]
+        </div>      
+    </div>
+	</aside>
+</section>
+<!--/main-->
+<script src="${comm}/js/jquery.js"></script>
+<script src="/${skin}/js/com.js"></script>
+<script src="/${skin}/js/jquery.lazyload.mini.js"></script>
+<script language="javascript">
+$(function() {
+	$("#content img").lazyload({threshold:200,effect:"fadeIn"});
+  
+	var oItem = document.getElementById('item');
+	var oSpan = oItem.getElementsByTagName('span')[0];
+	var oUl = oItem.getElementsByTagName('ul')[0];
+	var aLi =oUl.getElementsByTagName('li');
+	oItem.onmouseover=function(){
+		oUl.style.display = 'block';
+		for(var i=0;i<aLi.length;i++){
+			aLi[i].index = i;
+			aLi[i].onmouseover=function(){
+				this.style.background = '#C8E1EA';
+				if(this.index!=aLi.length-1){
+					this.style.color ='#ff3300';
+				}
+			}
+			aLi[i].onmouseout=function(){
+				this.style.background = 'none';
+				this.style.color ='';
+			}
+			aLi[i].onclick=function(){
+				if(this.index!=aLi.length){
+					oSpan.innerHTML = this.innerHTML;
+					oUl.style.display = 'none';
+					var idstr = $(this).attr("id");
+					var id = idstr.substring(5);
+					$("#mId").val(id);
+				}
+			}
+		}
+	}
+	oItem.onmouseout=function(){
+		oUl.style.display = 'none';
+	}
+})
+
+function commentSubmit(id){
+	if($("#comcontent").val()==""){
+		alert("评论内容不能为空！");
+		return;
+	}
+	$.post("${base}/comment.jsp",{
+		docId : id,
+		content : $("#comcontent").val()
+	},function(data){
+		if(data.status==0){
+			alert("评论成功！");
+			$("#comcontent").val("");
+		}else if(data.status==-2){
+			alert("文档不存在！");
+		}else if(data.status==-3){
+			alert("该文档禁止评论！");
+		}else{
+			alert("该文档需登录才可以评论！");
+		}
+	},"json");
+}
+
+function checkval(){
+	if($("input[name='q']").val()=="请输入关键词"){
+		 alert("请输入关键词!");
+	   	 $("input[name='q']").focus();
+	   	 return false;
+	}
+	return true;
+}
+</script>
+<!--flink-->
+[#include "../include/友情链接栏.html"/]
+<!--flink-->
+<!--footer--> 
+[#include "../include/页脚.html"/] 
+<!--/footer-->
+</body>
+</html>

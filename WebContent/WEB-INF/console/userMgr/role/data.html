@@ -1,0 +1,10 @@
+{Rows:[
+   <#list p.content as role>
+   {
+     "id":"${role.id}",
+     "name":"${role.name!}",
+     "priority":"${role.priority!}"
+   }<#if role_has_next>,</#if>
+   </#list>
+   ],Total:"${p.totalElements!}"
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Administrator's Control Panel</title>
+<#include "../../liger.html"/>
+<#include "permtree.html"/>
+<script language="javascript">
+var setting = {async : {enable : true,url : "../depart/v_addtree.do",autoParam : ["parentId"]},
+		check: {enable: false}
+};
+var setting1 = {check: {enable: true},data: {simpleData: {enable: true}}};
+var ztree = null;
+$(function (){
+	$("#roleForm").validate({
+		errorPlacement : function(lable, element) {
+			$(element).ligerHideTip();
+            $(element).ligerTip({content:lable.html()});
+		},
+		success : function(lable,element) {
+			$(element).ligerHideTip();
+		}
+	});
+	
+	$.fn.zTree.init($("#departTree"), setting);
+	ztree = $.fn.zTree.init($("#permtree"), setting1,znodes);
+	
+	<#if msg??>
+	$.ligerDialog.success('${msg}');
+	</#if>
+});
+
+function setDepart(name,id) {
+	$("#menuContent").fadeOut("fast");
+	$("#selectdepartId").val(name);
+	$("#departId").val(id);
+}
+
+function checksubmit(){
+	var nodes = ztree.getCheckedNodes(true);
+	var str = "";
+	for(var i=0;i<nodes.length;i++){
+		if(nodes[i].id!=null){
+		    str += nodes[i].id+ ",";
+		}
+	}
+	str = "<input type='hidden' name='perms' value='" +str+ "'/>";
+	$("#allperms").empty().append(str);
+	$("#roleForm").submit();
+}
+</script>
+</head>
+
+<body>
+<div class="blk c">
+	<h2>角色管理/添加</h2>
+	<div class="c">
+    	<form method="post" action="o_save.do" id="roleForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmsTable">
+            <tr>
+              <td class="ftit"><span>*</span>角色名：</td>
+              <td colspan="3"><input type="text" id="name" name="name" size="25" maxlength="25" vld="{required:true,messages:{required:'角色名称不能为空!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">是否拥有所有权限：</td>               
+              <td>
+              <input id="allPerm_1" type="radio" name="allPerm" value="1"/>是
+              <input id="allPerm_0" type="radio" name="allPerm" value="0" checked="checked"/>否
+              </td>
+              <td class="ftit">排列顺序：</td>
+              <td><input type="text" id="priority" name="priority" size="25" maxlength="3" value="10" vld="{digits:true,messages:{digits:'排列顺序只能是数字!'}}"/></td>
+            </tr>
+            <tr>
+              <td class="ftit">功能权限：</td>
+              <td colspan="3">
+			  <div class="l-scroll" style="height:300px;overflow-y:scroll;">
+              <ul id="permtree" class="ztree">
+              </ul>
+              </div>
+              <div style="display:none;" id="allperms"></div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="fctrl">
+                <@Perm perm="admin:role:save">
+                <input type="button" value="提交" class="l-button" onclick="checksubmit();"/>
+                <input type="button" value="取消" class="l-button" onclick="JP.f_cancel()"/>
+                </@Perm>
+              </td>
+            </tr>
+        </table>
+        </form>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>portal-index</title>
+<#include "liger.html"/>
+<script type="text/javascript">
+var accordion = null;
+var tab = null;
+var chnltree = null;
+var artitree = null;
+var tpltree = null;
+var restree = null;
+var setting = {
+		async : {
+			enable : true,
+			url : "channel/v_tree.do",
+			autoParam : ["parentId"]
+		},
+		check: {
+			enable: false
+		}
+};
+var artisetting = {
+		async : {
+			enable : true,
+			url : "doc/v_tree.do",
+			autoParam : ["parentId"]
+		},
+		check: {
+			enable: false
+		}
+};
+var tplsetting = {
+		async : {
+			enable : true,
+			url : "tpl/v_tree.do",
+			autoParam : ["path"]
+		},
+		check: {
+			enable: false
+		}
+};
+var ressetting = {
+		async : {
+			enable : true,
+			url : "res/v_tree.do",
+			autoParam : ["path"]
+		},
+		check: {
+			enable: false
+		}
+};
+$(function (){
+	$("#pmsMain").ligerLayout({leftWidth:212,height:'100%',space:5,onHeightChanged: f_heightChanged}); //布局
+	var height = $(".l-layout-center").height();
+	$("#pmsMenu").ligerAccordion({ height: height - 24, speed: null }); //面板	
+    $("#framecenter").ligerTab({ height: height }); //Tab
+    
+	$("#pmsMenu > div").hide();
+	$("#pmsMenu").show();
+	$("#workSpace-1").prev().show();
+	$("#workSpace-1").show();
+
+	$(".l-link").hover(function (){$(this).addClass("l-link-over");}, function (){$(this).removeClass("l-link-over");});	
+	
+	accordion = $("#pmsMenu").ligerGetAccordionManager();
+	tab = $("#framecenter").ligerGetTabManager();
+	
+});
+
+function f_heightChanged(options){
+	if (tab)
+		tab.addHeight(options.diff);
+	if (accordion && options.middleHeight - 24 > 0){
+		accordion.setHeight(options.middleHeight - 24);
+	}
+};
+
+function f_addTab(tabid,text,url){
+	tab.addTabItem({ tabid : tabid,text: text, url: url });
+};
+
+function closeCurrentTab(tabid){
+	if (!tabid){tabid = $("#framecenter > .l-tab-content > .l-tab-content-item:visible").attr("tabid");}
+	if (tab){tab.removeTabItem(tabid);}
+};
+
+function f_reload(menuid,type){
+	$("#pmsMenu > div").hide();
+	var height = $(".l-layout-center").height();
+	var count = 1;
+	$("#pmsMenu > div[id^='"+menuid+"']").each(function(i){
+		count++;
+	});
+	if(type=="chnl"){
+		chnltree = $.fn.zTree.init($("#chnlTree"), setting);
+		artitree = $.fn.zTree.init($("#artichnlTree"), artisetting);
+	}
+	if(type=="view"){
+		tpltree = $.fn.zTree.init($("#tplTree"), tplsetting);
+		restree = $.fn.zTree.init($("#resTree"), ressetting);
+	}
+	$("#pmsMenu > div[id^='"+menuid+"']").height(height-24*count);
+	var h = height-24*count-15;
+	$(".ztree").attr("style","margin-top:3px;height:"+h+"px;");
+	$("#pmsMenu > div[id^='"+menuid+"']").prev().show();
+	$("#"+menuid+"-1").show();
+};
+
+function changecurr(div){
+	$("ul[id='top_menu'] > li > div").attr("class","");
+	$(div).attr("class","curr");
+}
+
+function togul(id){
+	$("li[id='"+id+"'] > ul").toggle();
+	$("li[id='"+id+"'] > h3").toggleClass("down");
+}
+</script>
+</head>
+<body style="background:#EAEEF5;overflow:hidden;">
+<div id="pageloading"></div>
+<!--pmsTop-->
+<#include "top.html"/>
+<!--/pmsTop-->
+
+<!--pmsMain-->
+<div id="pmsMain">
+    <!--pmsLeft-->
+    <@Perm perm="admin:workspace:index">
+	<div position="left" title="功能菜单" id="pmsMenu" style="display:none">
+		<#include "left.html"/>
+	</div>
+	</@Perm>
+    <!--/pmsLeft-->
+    
+    <!--pmsRight-->
+    <@Perm perm="admin:workspace:right">
+    <div position="center" id="framecenter">
+    	<div tabid="home" title="管理中心">
+            <iframe frameborder="0" name="home" id="home" src="right.do"></iframe>
+        </div>
+    </div>
+    </@Perm>
+    <!--pmsRight-->
+</div>
+<!--pmsMain-->
+
+
+</body>
+</html>
